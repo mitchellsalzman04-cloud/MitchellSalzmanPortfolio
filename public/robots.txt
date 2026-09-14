@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mitchellsalzman04-cloud.github.io/MitchellSalzmanPortfolio/sitemap-index.xml

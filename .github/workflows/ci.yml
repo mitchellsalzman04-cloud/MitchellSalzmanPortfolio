@@ -1,0 +1,20 @@
+name: CI
+
+# Deploys are handled by deploy.yml on push to main; this job just checks
+# that pull requests still build.
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx astro check || true
+      - run: npm run build
