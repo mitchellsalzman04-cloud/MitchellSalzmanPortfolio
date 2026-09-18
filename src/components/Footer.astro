@@ -3,8 +3,18 @@ import Icon from "@/components/Icon.astro";
 import { site } from "@/data/site";
 ---
 
-<footer class="border-line mt-8 border-t py-10">
-  <div class="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
+{/*
+  Full-bleed, and deliberately outside <main> in Base.astro so it can reach
+  both screen edges like the bands above it.
+
+  The affiliation line is not boilerplate. The layout grammar on this site is
+  borrowed from medical-device marketing design, and Mitchell interned at
+  Medtronic twice — without a disclaimer, a visitor could reasonably read this
+  as an official or endorsed page. The palette was already shifted off their
+  brand colours for the same reason.
+*/}
+<footer class="band band-ink">
+  <div class="wrap flex flex-col gap-8 py-12 sm:flex-row sm:items-start sm:justify-between">
     <div class="flex gap-5">
       {
         site.socials.map((s) => (
@@ -13,23 +23,28 @@ import { site } from "@/data/site";
             target="_blank"
             rel="noopener noreferrer"
             aria-label={s.label}
-            class="text-muted hover:text-accent transition-colors"
+            class="text-white/55 transition-colors hover:text-white"
           >
             <Icon name={s.icon} />
           </a>
         ))
       }
     </div>
-    <p class="font-mono text-faint text-center text-xs sm:text-right">
-      built by {site.name} · design adapted from{" "}
-      <a
-        href="https://github.com/guilyx/v4"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="hover:text-accent transition-colors"
-      >
-        guilyx/v4
-      </a>
-    </p>
+
+    <div class="max-w-md text-[0.72rem] leading-relaxed text-white/45 sm:text-right">
+      <p>
+        Built by {site.name} · design adapted from{" "}
+        <a
+          href="https://github.com/guilyx/v4"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="transition-colors hover:text-white/80">guilyx/v4</a
+        >
+      </p>
+      <p class="mt-2">
+        A personal portfolio, independently built and maintained. Not affiliated with,
+        endorsed by, or representative of Medtronic plc or any other employer.
+      </p>
+    </div>
   </div>
 </footer>

@@ -1,0 +1,478 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icon from "@/components/Icon.astro";
+import { site } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Base
+  title="Optical Tissue Classification"
+  description="A physics-informed neural network classifying 25 tissue types from three-wavelength diffuse reflectance spectroscopy with confidence-gated inference."
+>
+  <div class="mx-auto max-w-5xl px-6 pt-36 pb-24 sm:px-12 md:px-24">
+    <a
+      href={withBase("/#projects")}
+      class="font-mono text-muted hover:text-accent inline-flex items-center gap-2 text-xs transition-colors"
+    >
+      <Icon name="arrow" size={14} class="rotate-180" /> back to portfolio
+    </a>
+
+    <!-- Header -->
+    <header class="mt-8 mb-12" data-reveal>
+      <p class="eyebrow">BMEN 5421 · University of Minnesota · Spring 2025</p>
+      <h1 class="mt-4 text-3xl font-semibold sm:text-4xl">Optical Tissue Classification</h1>
+      <p class="text-muted mt-2 text-lg">Neural Classification of Tissue Type via Multispectral Diffuse Reflectance Spectroscopy</p>
+      <p class="text-body mt-3 text-sm">
+        Mitchell Salzman
+      </p>
+      <p class="text-muted mt-1 text-xs">
+        Course: Introduction to Biomedical Optics (BMEN 5421)
+      </p>
+    </header>
+
+    <!-- Architecture Diagram -->
+    <section class="mb-14" data-reveal>
+      <div class="overflow-hidden rounded-lg border border-[var(--color-line)] bg-white">
+        <img
+          src={withBase("/media/optical-architecture.svg")}
+          alt="Optical tissue classification architecture: fiber-optic probe measures reflectance at three wavelengths, features feed into MLP classifier, outputs tissue type with confidence gating"
+          class="block w-full p-4"
+        />
+      </div>
+    </section>
+
+    <!-- The Problem -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">The Problem</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        During surgery, distinguishing healthy tissue from tumor is life-or-death. Leave
+        tumor behind and it recurs, cut too far and you damage critical structures. Today
+        that call rests on frozen-section pathology: a 20 to 30 minute wait mid-operation while
+        a pathologist examines a slice under a microscope. An intraoperative probe that could
+        classify tissue in real time from its optical signature would give surgeons immediate
+        feedback without stopping the procedure.
+      </p>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div class="rounded-lg border-2 border-[var(--color-accent)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-lg font-bold">25</p>
+          <p class="text-accent mt-1 text-xs font-medium">Tissue classes</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">3</p>
+          <p class="text-muted mt-1 text-xs">Wavelengths</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">83.6%</p>
+          <p class="text-muted mt-1 text-xs">Confident accuracy</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">&lt;1 ms</p>
+          <p class="text-muted mt-1 text-xs">Inference time</p>
+        </div>
+      </div>
+      <p class="text-muted mt-4 text-center text-xs">
+        A physics-informed forward model generates synthetic training data; a confidence gate ensures the classifier only speaks when it's sure
+      </p>
+    </section>
+
+    <!-- Pipeline Overview -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Pipeline</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The system chains a physics-based forward model with a machine learning classifier.
+        Rather than collecting thousands of real tissue measurements, the forward model
+        simulates what a three-wavelength probe would read for each tissue type, then the
+        neural network learns to invert that mapping.
+      </p>
+
+      <div class="mb-8 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <h3 class="text-heading mb-4 text-base font-semibold">Four-Stage Pipeline</h3>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <p class="text-accent text-sm font-semibold">1. Absorption</p>
+            <p class="text-body mt-1 text-[0.85rem]">
+              Beer-Lambert law computes absorption from five chromophore concentrations
+              (HbO<sub>2</sub>, HbR, water, lipid, melanin) at each wavelength.
+            </p>
+          </div>
+          <div>
+            <p class="text-accent text-sm font-semibold">2. Scattering</p>
+            <p class="text-body mt-1 text-[0.85rem]">
+              Mie scattering power law models reduced scattering using tissue-specific
+              amplitude and exponent parameters.
+            </p>
+          </div>
+          <div>
+            <p class="text-accent text-sm font-semibold">3. Reflectance</p>
+            <p class="text-body mt-1 text-[0.85rem]">
+              The Farrell-Patterson-Wilson diffusion approximation converts optical
+              properties into the diffuse reflectance a probe would measure.
+            </p>
+          </div>
+          <div>
+            <p class="text-accent text-sm font-semibold">4. Classification</p>
+            <p class="text-body mt-1 text-[0.85rem]">
+              An MLP classifier trained on 50,000 synthetic samples maps the 6D feature
+              vector to one of 25 tissue labels, gated by confidence.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Physics Forward Model -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Physics Forward Model</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Each tissue type is defined by its chromophore composition and scattering parameters,
+        drawn from published optical-property literature. The forward model computes what a
+        660 nm / 810 nm / 940 nm probe would read through three physical laws.
+      </p>
+
+      <div class="mb-8 space-y-4">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Beer-Lambert Absorption</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            Absorption coefficient &mu;<sub>a</sub>(&lambda;) is the weighted sum of each
+            chromophore's extinction coefficient times its concentration. Five chromophores
+            (oxyhemoglobin, deoxyhemoglobin, water, lipid, and melanin) cover the
+            dominant absorbers in biological tissue.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Mie Scattering Power Law</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            Reduced scattering &mu;<sub>s</sub>&prime;(&lambda;) = a &middot; (&lambda; / 500 nm)<sup>-b</sup>,
+            where a captures scattering amplitude and b encodes particle size. Higher b
+            means smaller scatterers, typical of cellular structures.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Diffusion Approximation</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            The Farrell-Patterson-Wilson model (1992) combines absorption and scattering
+            into a closed-form estimate of diffuse reflectance R<sub>d</sub> at a given
+            source-detector separation, producing the signal a real probe would measure.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tissue Classes -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Tissue Coverage</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The model classifies across 25 tissue types spanning eight organ sites, plus
+        structural tissues that a probe might encounter during surgery. Compositions are
+        sourced from peer-reviewed optical property measurements.
+      </p>
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">Brain</p>
+          <p class="text-body mt-1 text-[0.85rem]">Gray matter, white matter, low-grade glioma, high-grade glioma</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">Breast</p>
+          <p class="text-body mt-1 text-[0.85rem]">Fibroglandular, adipose, carcinoma</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">Colon</p>
+          <p class="text-body mt-1 text-[0.85rem]">Normal mucosa, carcinoma</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">Skin</p>
+          <p class="text-body mt-1 text-[0.85rem]">Epidermis, dermis, melanoma</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">Liver</p>
+          <p class="text-body mt-1 text-[0.85rem]">Normal parenchyma, hepatic tumor</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">Lung</p>
+          <p class="text-body mt-1 text-[0.85rem]">Normal tissue, carcinoma</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">Oral / Head & Neck</p>
+          <p class="text-body mt-1 text-[0.85rem]">Normal mucosa, squamous cell carcinoma</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">Kidney</p>
+          <p class="text-body mt-1 text-[0.85rem]">Normal cortex, renal cell carcinoma</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">Structural</p>
+          <p class="text-body mt-1 text-[0.85rem]">Adipose, skeletal muscle, whole blood, bone, aorta wall</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Synthetic Data Generation -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Synthetic Data Generation</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Rather than requiring thousands of real tissue samples, the forward model generates
+        realistic training data by running each tissue's composition through the physics
+        pipeline with two layers of noise that mimic real measurement conditions.
+      </p>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-3 text-base font-semibold">Noise Model</h3>
+          <dl class="text-body space-y-3 text-[0.9rem]">
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Biological variation:</dt>
+              <dd class="inline"> &plusmn;15% perturbation of chromophore concentrations to simulate inter-patient differences</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Multiplicative noise:</dt>
+              <dd class="inline"> &sigma; = 0.08, modeling probe contact and illumination variability</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Additive noise:</dt>
+              <dd class="inline"> &sigma; = 0.005, modeling detector read noise</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-3 text-base font-semibold">Feature Engineering</h3>
+          <dl class="text-body space-y-3 text-[0.9rem]">
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Raw reflectances:</dt>
+              <dd class="inline"> R<sub>660</sub>, R<sub>810</sub>, R<sub>940</sub></dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Reflectance ratios:</dt>
+              <dd class="inline"> R<sub>660</sub>/R<sub>810</sub>, R<sub>810</sub>/R<sub>940</sub>, R<sub>660</sub>/R<sub>940</sub></dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Total samples:</dt>
+              <dd class="inline"> 50,000 (2,000 per class), 80/20 train/test split</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- Model Architecture -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Model Architecture</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The classifier is a two-hidden-layer MLP trained with Adam and early stopping.
+        The architecture is deliberately simple. The physics forward model does the heavy
+        lifting, so the neural network only needs to learn the inverse mapping from a
+        well-structured 6D feature space.
+      </p>
+
+      <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <h3 class="text-heading mb-3 text-base font-semibold">Architecture Details</h3>
+        <dl class="text-body space-y-3 text-[0.9rem]">
+          <div>
+            <dt class="font-semibold text-[var(--color-heading)] inline">Type:</dt>
+            <dd class="inline"> Multi-layer perceptron (scikit-learn MLPClassifier)</dd>
+          </div>
+          <div>
+            <dt class="font-semibold text-[var(--color-heading)] inline">Layers:</dt>
+            <dd class="inline"> Input(6) &rarr; Dense(128, ReLU) &rarr; Dense(128, ReLU) &rarr; Softmax(25)</dd>
+          </div>
+          <div>
+            <dt class="font-semibold text-[var(--color-heading)] inline">Optimizer:</dt>
+            <dd class="inline"> Adam, learning rate 0.001, batch size 256</dd>
+          </div>
+          <div>
+            <dt class="font-semibold text-[var(--color-heading)] inline">Regularization:</dt>
+            <dd class="inline"> Early stopping with 10% validation holdout, patience 15 epochs</dd>
+          </div>
+          <div>
+            <dt class="font-semibold text-[var(--color-heading)] inline">Convergence:</dt>
+            <dd class="inline"> 46 epochs</dd>
+          </div>
+          <div>
+            <dt class="font-semibold text-[var(--color-heading)] inline">Preprocessing:</dt>
+            <dd class="inline"> StandardScaler normalization for gradient stability</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Results</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The raw 25-class accuracy is 35.0%, modest for fine-grained tissue discrimination
+        with only three wavelengths. But the confusion matrix reveals that errors cluster
+        among tissues with similar optical properties, not random misclassifications. The
+        confidence gate is what makes the system clinically useful.
+      </p>
+
+      <div class="mb-8 overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/optical-confusion-matrix.png")}
+          alt="Normalized confusion matrix across 25 tissue classes showing 35% overall accuracy with strong diagonal for distinct tissues"
+          class="w-full bg-white p-2"
+          loading="lazy"
+        />
+        <p class="text-muted bg-[var(--color-bg-raised)] py-2 text-center text-xs">
+          Normalized confusion matrix with color-coded bars showing healthy (green), tumor (red), and structural (blue) classes
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-lg font-bold">35.0%</p>
+          <p class="text-muted mt-1 text-xs">Overall accuracy</p>
+        </div>
+        <div class="rounded-lg border-2 border-[var(--color-accent)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-lg font-bold">83.6%</p>
+          <p class="text-accent mt-1 text-xs font-medium">Confident accuracy</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">95%+</p>
+          <p class="text-muted mt-1 text-xs">Blood & bone recall</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">8</p>
+          <p class="text-muted mt-1 text-xs">Organ sites covered</p>
+        </div>
+      </div>
+
+      <div class="mt-6 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <h3 class="text-heading mb-3 text-base font-semibold">Healthy vs. Tumor Discrimination</h3>
+        <p class="text-body mb-4 text-[0.9rem] leading-relaxed">
+          Even when the model confuses subtypes within an organ, it usually gets the
+          healthy-vs-tumor binary call right, the clinically critical distinction.
+        </p>
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {[
+            { organ: "Breast", acc: "76.3%" },
+            { organ: "Lung", acc: "70.2%" },
+            { organ: "Skin", acc: "66.8%" },
+            { organ: "Brain", acc: "66.3%" },
+            { organ: "Oral", acc: "59.1%" },
+            { organ: "Colon", acc: "57.9%" },
+            { organ: "Liver", acc: "55.1%" },
+            { organ: "Kidney", acc: "51.7%" },
+          ].map(({ organ, acc }) => (
+            <div class="rounded border border-[var(--color-line)] px-3 py-2 text-center">
+              <p class="text-heading text-sm font-semibold">{acc}</p>
+              <p class="text-muted text-xs">{organ}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Confidence Gating -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Confidence Gating</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The key design choice: rather than trusting every prediction, the system only reports
+        a diagnosis when the softmax confidence exceeds 0.65. Low-confidence samples are
+        flagged for pathologist review. This operationalizes the asymmetric cost structure
+        of surgery. A wrong answer is far worse than saying "I'm not sure."
+      </p>
+
+      <div class="mb-8 overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/optical-confidence-analysis.png")}
+          alt="Confidence distribution and accuracy vs threshold analysis showing 83.6% accuracy above the 0.65 operating point"
+          class="w-full bg-white p-2"
+          loading="lazy"
+        />
+        <p class="text-muted bg-[var(--color-bg-raised)] py-2 text-center text-xs">
+          Left: confidence distribution on the test set. Right: accuracy climbs sharply as the threshold filters out uncertain predictions.
+        </p>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-3">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-2xl font-bold">0.65</p>
+          <p class="text-muted mt-1 text-xs">Confidence threshold</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-2xl font-bold">12.4%</p>
+          <p class="text-muted mt-1 text-xs">Samples classified with confidence</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-2xl font-bold">83.6%</p>
+          <p class="text-muted mt-1 text-xs">Accuracy on those samples</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Insight -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Key Insight</h2>
+      <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <p class="text-body text-[0.95rem] leading-relaxed">
+          Three wavelengths can't resolve 25 tissues, but they don't need to. The
+          physics-informed approach means the model doesn't learn arbitrary patterns; it
+          learns to invert a physical process. And confidence gating means it doesn't
+          have to be right about everything. It just has to know when it's sure. The
+          tissues it classifies confidently (whole blood, bone, melanoma, high-grade glioma)
+          are the ones with the most distinctive optical signatures, which is exactly
+          what you'd want a real-time surgical probe to catch first.
+        </p>
+      </div>
+    </section>
+
+    <!-- Future Work -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Future Work</h2>
+      <ul class="text-body space-y-3 text-[0.95rem]">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Add more wavelengths (e.g. 5-channel or hyperspectral) to increase separability between optically similar tissues
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Validate against real tissue measurements using a bench-top spectrometer and ex vivo samples
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Replace the MLP with a deeper architecture or ensemble to improve fine-grained discrimination
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Incorporate spatial or time-resolved reflectance to separate absorption from scattering more cleanly
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Design a compact fiber-optic probe prototype for intraoperative testing
+        </li>
+      </ul>
+    </section>
+
+    <!-- Resources -->
+    <section class="mb-8" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Resources</h2>
+      <div class="flex flex-wrap gap-4">
+        <a
+          href={withBase("/media/optical-confusion-matrix.png")}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] px-4 py-3 text-sm font-medium text-[var(--color-heading)] transition-colors hover:border-[var(--color-accent)]"
+        >
+          <Icon name="external" size={14} />
+          Confusion Matrix
+        </a>
+        <a
+          href={withBase("/media/optical-confidence-analysis.png")}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] px-4 py-3 text-sm font-medium text-[var(--color-heading)] transition-colors hover:border-[var(--color-accent)]"
+        >
+          <Icon name="external" size={14} />
+          Confidence Analysis
+        </a>
+      </div>
+    </section>
+
+    <!-- Tech chips -->
+    <div class="border-line flex flex-wrap gap-3 border-t pt-8" data-reveal>
+      {["Python", "Scikit-learn", "MLP", "NumPy", "Matplotlib", "Beer-Lambert", "Diffusion Approximation", "Biomedical Optics"].map(t => (
+        <span class="chip">{t}</span>
+      ))}
+    </div>
+  </div>
+</Base>

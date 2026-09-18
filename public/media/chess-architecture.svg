@@ -1,0 +1,463 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="580" viewBox="0 0 1400 580">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#94a3b8"/>
+    </marker>
+    <marker id="arr-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#3b82f6"/>
+    </marker>
+    <marker id="arr-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#059669"/>
+    </marker>
+    <filter id="sh" x="-3%" y="-3%" width="106%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.08"/>
+    </filter>
+    <linearGradient id="cv-g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+    <linearGradient id="nn-g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e40af"/><stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="out-g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="in-g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#dc2626"/><stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+    <!-- checkerboard pattern for board -->
+    <pattern id="checker" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="20" height="20" fill="#d4a574"/>
+      <rect x="20" width="20" height="20" fill="#8b6914"/>
+      <rect y="20" width="20" height="20" fill="#8b6914"/>
+      <rect x="20" y="20" width="20" height="20" fill="#d4a574"/>
+    </pattern>
+  </defs>
+  <style>text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif}</style>
+
+  <rect width="1400" height="580" fill="#fff"/>
+
+  <!-- ===== INPUT: CHESSBOARD PHOTO (left) ===== -->
+  <g>
+    <rect x="30" y="60" width="200" height="370" rx="18" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2" filter="url(#sh)"/>
+    <!-- Header -->
+    <rect x="30" y="60" width="200" height="50" rx="18" fill="url(#in-g)"/>
+    <rect x="30" y="88" width="200" height="22" fill="url(#in-g)"/>
+    <text x="130" y="93" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" letter-spacing="1">INPUT IMAGE</text>
+
+    <!-- Stylized chessboard -->
+    <g transform="translate(50, 125)">
+      <rect width="160" height="160" rx="8" fill="url(#checker)" stroke="#64748b" stroke-width="1.5"/>
+      <!-- camera icon -->
+      <rect x="55" y="55" width="50" height="36" rx="8" fill="#1e293b" opacity="0.7"/>
+      <circle cx="80" cy="73" r="12" fill="none" stroke="#fff" stroke-width="2"/>
+      <circle cx="80" cy="73" r="5" fill="#fff" opacity="0.7"/>
+      <rect x="65" y="55" width="14" height="8" rx="3" fill="#334155" opacity="0.8"/>
+    </g>
+
+    <!-- Green/blue Hough lines overlay -->
+    <g transform="translate(50, 125)" opacity="0.6">
+      <line x1="0" y1="20" x2="160" y2="25" stroke="#22c55e" stroke-width="1.5"/>
+      <line x1="0" y1="60" x2="160" y2="58" stroke="#22c55e" stroke-width="1.5"/>
+      <line x1="0" y1="100" x2="160" y2="95" stroke="#22c55e" stroke-width="1.5"/>
+      <line x1="0" y1="140" x2="160" y2="138" stroke="#22c55e" stroke-width="1.5"/>
+      <line x1="20" y1="0" x2="22" y2="160" stroke="#3b82f6" stroke-width="1.5"/>
+      <line x1="60" y1="0" x2="58" y2="160" stroke="#3b82f6" stroke-width="1.5"/>
+      <line x1="100" y1="0" x2="102" y2="160" stroke="#3b82f6" stroke-width="1.5"/>
+      <line x1="140" y1="0" x2="138" y2="160" stroke="#3b82f6" stroke-width="1.5"/>
+      <!-- Red intersection dots -->
+      <circle cx="20" cy="20" r="4" fill="#ef4444"/>
+      <circle cx="60" cy="60" r="4" fill="#ef4444"/>
+      <circle cx="100" cy="100" r="4" fill="#ef4444"/>
+      <circle cx="140" cy="140" r="4" fill="#ef4444"/>
+      <circle cx="60" cy="20" r="4" fill="#ef4444"/>
+      <circle cx="100" cy="60" r="4" fill="#ef4444"/>
+      <circle cx="140" cy="100" r="4" fill="#ef4444"/>
+      <circle cx="20" cy="60" r="4" fill="#ef4444"/>
+      <circle cx="20" cy="100" r="4" fill="#ef4444"/>
+    </g>
+
+    <!-- Steps listed -->
+    <text x="130" y="310" text-anchor="middle" font-size="12" font-weight="600" fill="#64748b">Canny Edges</text>
+    <text x="130" y="328" text-anchor="middle" font-size="12" font-weight="600" fill="#64748b">Hough Lines</text>
+    <text x="130" y="346" text-anchor="middle" font-size="12" font-weight="600" fill="#64748b">Line Clustering</text>
+    <text x="130" y="364" text-anchor="middle" font-size="12" font-weight="600" fill="#64748b">81 Intersections</text>
+    <text x="130" y="382" text-anchor="middle" font-size="12" font-weight="600" fill="#64748b">Homography</text>
+
+    <text x="130" y="456" text-anchor="middle" font-size="17" font-weight="700" fill="#1e293b">Photo of Board</text>
+    <text x="130" y="476" text-anchor="middle" font-size="13" fill="#64748b">any perspective</text>
+  </g>
+
+  <!-- ===== ARROW: input to squares ===== -->
+  <line x1="240" y1="250" x2="288" y2="250" stroke="#94a3b8" stroke-width="3" marker-end="url(#arr)"/>
+
+  <!-- ===== SQUARE EXTRACTION (center-left) ===== -->
+  <g>
+    <rect x="298" y="60" width="200" height="370" rx="18" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2" filter="url(#sh)"/>
+    <!-- Header -->
+    <rect x="298" y="60" width="200" height="50" rx="18" fill="url(#cv-g)"/>
+    <rect x="298" y="88" width="200" height="22" fill="url(#cv-g)"/>
+    <text x="398" y="93" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" letter-spacing="1">64 SQUARES</text>
+
+    <!-- 8x8 grid of small squares -->
+    <g transform="translate(320, 125)">
+      <!-- Row 1 -->
+      <rect x="0" y="0" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="20" y="0" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="40" y="0" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="60" y="0" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="80" y="0" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="100" y="0" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="120" y="0" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="140" y="0" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <!-- Row 2 -->
+      <rect x="0" y="20" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="20" y="20" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="40" y="20" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="60" y="20" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="80" y="20" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="100" y="20" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="120" y="20" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="140" y="20" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <!-- Row 3 -->
+      <rect x="0" y="40" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="20" y="40" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="40" y="40" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="60" y="40" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="80" y="40" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="100" y="40" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="120" y="40" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="140" y="40" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <!-- Row 4 -->
+      <rect x="0" y="60" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="20" y="60" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="40" y="60" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="60" y="60" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="80" y="60" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="100" y="60" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="120" y="60" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="140" y="60" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <!-- Rows 5-8 (same pattern) -->
+      <rect x="0" y="80" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="20" y="80" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="40" y="80" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="60" y="80" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="80" y="80" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="100" y="80" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="120" y="80" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="140" y="80" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="0" y="100" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="20" y="100" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="40" y="100" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="60" y="100" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="80" y="100" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="100" y="100" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="120" y="100" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="140" y="100" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="0" y="120" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="20" y="120" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="40" y="120" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="60" y="120" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="80" y="120" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="100" y="120" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="120" y="120" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="140" y="120" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="0" y="140" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="20" y="140" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="40" y="140" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="60" y="140" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="80" y="140" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="100" y="140" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="120" y="140" width="18" height="18" rx="2" fill="#8b6914" stroke="#94a3b8" stroke-width="0.5"/>
+      <rect x="140" y="140" width="18" height="18" rx="2" fill="#d4a574" stroke="#94a3b8" stroke-width="0.5"/>
+
+      <!-- Some piece indicators on squares -->
+      <circle cx="29" cy="29" r="6" fill="#1e293b" opacity="0.7"/>
+      <circle cx="69" cy="29" r="6" fill="#1e293b" opacity="0.7"/>
+      <circle cx="109" cy="49" r="6" fill="#f5f5f4" stroke="#94a3b8" stroke-width="0.5" opacity="0.8"/>
+      <circle cx="49" cy="69" r="6" fill="#f5f5f4" stroke="#94a3b8" stroke-width="0.5" opacity="0.8"/>
+      <circle cx="89" cy="109" r="6" fill="#1e293b" opacity="0.7"/>
+      <circle cx="29" cy="149" r="6" fill="#f5f5f4" stroke="#94a3b8" stroke-width="0.5" opacity="0.8"/>
+      <circle cx="149" cy="89" r="6" fill="#1e293b" opacity="0.7"/>
+    </g>
+
+    <!-- Highlight one square -->
+    <rect x="380" y="185" width="18" height="18" rx="2" fill="none" stroke="#ef4444" stroke-width="2.5"/>
+
+    <!-- Zoom callout -->
+    <line x1="398" y1="194" x2="420" y2="310" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <line x1="380" y1="194" x2="360" y2="310" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+    <!-- Zoomed square -->
+    <rect x="348" y="310" width="84" height="84" rx="6" fill="#d4a574" stroke="#ef4444" stroke-width="2"/>
+    <circle cx="390" cy="352" r="18" fill="#1e293b" opacity="0.7"/>
+    <text x="390" y="415" text-anchor="middle" font-size="12" font-weight="600" fill="#64748b">48 x 48 x 3</text>
+
+    <text x="398" y="456" text-anchor="middle" font-size="17" font-weight="700" fill="#1e293b">Extracted Squares</text>
+    <text x="398" y="476" text-anchor="middle" font-size="13" fill="#64748b">rectified via homography</text>
+  </g>
+
+  <!-- ===== ARROW: squares to NNs ===== -->
+  <line x1="508" y1="250" x2="548" y2="250" stroke="#3b82f6" stroke-width="3" marker-end="url(#arr-b)"/>
+
+  <!-- ===== NEURAL NETWORKS (center) ===== -->
+  <g>
+    <rect x="558" y="30" width="480" height="440" rx="18" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2" filter="url(#sh)"/>
+    <!-- Header -->
+    <rect x="558" y="30" width="480" height="50" rx="18" fill="url(#nn-g)"/>
+    <rect x="558" y="58" width="480" height="22" fill="url(#nn-g)"/>
+    <text x="798" y="63" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" letter-spacing="1">THREE-STAGE NEURAL NETWORK CASCADE</text>
+
+    <!-- NN 1: blankNet -->
+    <g>
+      <rect x="580" y="95" width="210" height="105" rx="12" fill="#fff" stroke="#93c5fd" stroke-width="2"/>
+      <rect x="580" y="95" width="210" height="32" rx="12" fill="#dbeafe"/>
+      <rect x="580" y="115" width="210" height="12" fill="#dbeafe"/>
+      <text x="685" y="117" text-anchor="middle" font-size="14" font-weight="800" fill="#1e40af">blankNet</text>
+      <text x="685" y="150" text-anchor="middle" font-size="13" font-weight="600" fill="#334155">Occupancy Classifier</text>
+
+      <!-- Input nodes -->
+      <circle cx="610" cy="178" r="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+      <circle cx="630" cy="178" r="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+      <circle cx="650" cy="178" r="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+
+      <!-- Hidden nodes -->
+      <circle cx="685" cy="170" r="7" fill="#93c5fd" stroke="#3b82f6" stroke-width="1.5"/>
+      <circle cx="685" cy="188" r="7" fill="#93c5fd" stroke="#3b82f6" stroke-width="1.5"/>
+
+      <!-- Output nodes -->
+      <circle cx="720" cy="170" r="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5"/>
+      <circle cx="720" cy="188" r="8" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+
+      <!-- Connections (simplified) -->
+      <line x1="658" y1="178" x2="678" y2="170" stroke="#94a3b8" stroke-width="0.8"/>
+      <line x1="658" y1="178" x2="678" y2="188" stroke="#94a3b8" stroke-width="0.8"/>
+      <line x1="692" y1="170" x2="712" y2="170" stroke="#94a3b8" stroke-width="0.8"/>
+      <line x1="692" y1="188" x2="712" y2="188" stroke="#94a3b8" stroke-width="0.8"/>
+      <line x1="692" y1="170" x2="712" y2="188" stroke="#94a3b8" stroke-width="0.8"/>
+      <line x1="692" y1="188" x2="712" y2="170" stroke="#94a3b8" stroke-width="0.8"/>
+
+      <!-- Labels -->
+      <text x="735" y="174" font-size="11" font-weight="600" fill="#166534">Occupied</text>
+      <text x="735" y="192" font-size="11" font-weight="600" fill="#dc2626">Empty</text>
+    </g>
+
+    <!-- Training data for blankNet -->
+    <rect x="800" y="95" width="220" height="105" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+    <text x="910" y="117" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b" letter-spacing="1">TRAINING DATA</text>
+    <rect x="820" y="130" width="180" height="26" rx="6" fill="#e2e8f0"/>
+    <rect x="820" y="130" width="90" height="26" rx="6" fill="#94a3b8"/>
+    <text x="865" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">1,664</text>
+    <text x="955" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#475569">1,664</text>
+    <text x="865" y="170" text-anchor="middle" font-size="11" fill="#64748b">Occupied</text>
+    <text x="955" y="170" text-anchor="middle" font-size="11" fill="#64748b">Blank</text>
+    <text x="910" y="192" text-anchor="middle" font-size="13" font-weight="600" fill="#1e293b">3,328 images</text>
+
+    <!-- Arrow: blankNet to colorNet/pieceNet -->
+    <text x="685" y="218" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">if occupied</text>
+    <line x1="685" y1="225" x2="685" y2="245" stroke="#22c55e" stroke-width="2.5" marker-end="url(#arr-g)"/>
+
+    <!-- Branch lines -->
+    <line x1="685" y1="240" x2="685" y2="260" stroke="#3b82f6" stroke-width="2"/>
+    <line x1="685" y1="260" x2="620" y2="260" stroke="#3b82f6" stroke-width="2"/>
+    <line x1="685" y1="260" x2="910" y2="260" stroke="#3b82f6" stroke-width="2"/>
+    <line x1="620" y1="260" x2="620" y2="275" stroke="#3b82f6" stroke-width="2" marker-end="url(#arr-b)"/>
+    <line x1="910" y1="260" x2="910" y2="275" stroke="#3b82f6" stroke-width="2" marker-end="url(#arr-b)"/>
+
+    <!-- NN 2: colorNet -->
+    <g>
+      <rect x="580" y="283" width="210" height="170" rx="12" fill="#fff" stroke="#93c5fd" stroke-width="2"/>
+      <rect x="580" y="283" width="210" height="32" rx="12" fill="#dbeafe"/>
+      <rect x="580" y="303" width="210" height="12" fill="#dbeafe"/>
+      <text x="685" y="305" text-anchor="middle" font-size="14" font-weight="800" fill="#1e40af">colorNet</text>
+      <text x="685" y="335" text-anchor="middle" font-size="13" font-weight="600" fill="#334155">Color Classifier</text>
+
+      <!-- Input nodes -->
+      <circle cx="610" cy="365" r="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+      <circle cx="630" cy="365" r="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+      <circle cx="650" cy="365" r="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+
+      <!-- Hidden nodes -->
+      <circle cx="685" cy="357" r="7" fill="#93c5fd" stroke="#3b82f6" stroke-width="1.5"/>
+      <circle cx="685" cy="375" r="7" fill="#93c5fd" stroke="#3b82f6" stroke-width="1.5"/>
+
+      <!-- Output nodes -->
+      <circle cx="720" cy="357" r="8" fill="#1e293b" stroke="#1e293b" stroke-width="1.5"/>
+      <circle cx="720" cy="375" r="8" fill="#fefce8" stroke="#eab308" stroke-width="1.5"/>
+
+      <!-- Connections -->
+      <line x1="658" y1="365" x2="678" y2="357" stroke="#94a3b8" stroke-width="0.8"/>
+      <line x1="658" y1="365" x2="678" y2="375" stroke="#94a3b8" stroke-width="0.8"/>
+      <line x1="692" y1="357" x2="712" y2="357" stroke="#94a3b8" stroke-width="0.8"/>
+      <line x1="692" y1="375" x2="712" y2="375" stroke="#94a3b8" stroke-width="0.8"/>
+      <line x1="692" y1="357" x2="712" y2="375" stroke="#94a3b8" stroke-width="0.8"/>
+      <line x1="692" y1="375" x2="712" y2="357" stroke="#94a3b8" stroke-width="0.8"/>
+
+      <!-- Labels -->
+      <text x="735" y="361" font-size="11" font-weight="600" fill="#1e293b">Black</text>
+      <text x="735" y="379" font-size="11" font-weight="600" fill="#a16207">White</text>
+
+      <!-- Training data -->
+      <rect x="604" y="395" width="76" height="40" rx="8" fill="#1e293b"/>
+      <text x="642" y="412" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">832</text>
+      <text x="642" y="428" text-anchor="middle" font-size="10" fill="#94a3b8">black</text>
+
+      <rect x="690" y="395" width="76" height="40" rx="8" fill="#fefce8" stroke="#eab308" stroke-width="1"/>
+      <text x="728" y="412" text-anchor="middle" font-size="12" font-weight="700" fill="#a16207">832</text>
+      <text x="728" y="428" text-anchor="middle" font-size="10" fill="#a16207">white</text>
+    </g>
+
+    <!-- NN 3: pieceNet -->
+    <g>
+      <rect x="810" y="283" width="210" height="170" rx="12" fill="#fff" stroke="#93c5fd" stroke-width="2"/>
+      <rect x="810" y="283" width="210" height="32" rx="12" fill="#dbeafe"/>
+      <rect x="810" y="303" width="210" height="12" fill="#dbeafe"/>
+      <text x="915" y="305" text-anchor="middle" font-size="14" font-weight="800" fill="#1e40af">pieceNet</text>
+      <text x="915" y="335" text-anchor="middle" font-size="13" font-weight="600" fill="#334155">Piece Type Classifier</text>
+
+      <!-- Input nodes -->
+      <circle cx="840" cy="365" r="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+      <circle cx="860" cy="365" r="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+      <circle cx="880" cy="365" r="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+
+      <!-- Hidden nodes -->
+      <circle cx="915" cy="353" r="7" fill="#93c5fd" stroke="#3b82f6" stroke-width="1.5"/>
+      <circle cx="915" cy="371" r="7" fill="#93c5fd" stroke="#3b82f6" stroke-width="1.5"/>
+
+      <!-- Output nodes (6 piece types) -->
+      <circle cx="955" cy="345" r="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1"/>
+      <circle cx="955" cy="357" r="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1"/>
+      <circle cx="955" cy="369" r="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1"/>
+      <circle cx="955" cy="381" r="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1"/>
+      <circle cx="955" cy="393" r="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1"/>
+      <circle cx="955" cy="405" r="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1"/>
+
+      <!-- Connections -->
+      <line x1="888" y1="365" x2="908" y2="353" stroke="#94a3b8" stroke-width="0.7"/>
+      <line x1="888" y1="365" x2="908" y2="371" stroke="#94a3b8" stroke-width="0.7"/>
+      <line x1="922" y1="353" x2="949" y2="345" stroke="#94a3b8" stroke-width="0.7"/>
+      <line x1="922" y1="353" x2="949" y2="357" stroke="#94a3b8" stroke-width="0.7"/>
+      <line x1="922" y1="353" x2="949" y2="369" stroke="#94a3b8" stroke-width="0.7"/>
+      <line x1="922" y1="371" x2="949" y2="381" stroke="#94a3b8" stroke-width="0.7"/>
+      <line x1="922" y1="371" x2="949" y2="393" stroke="#94a3b8" stroke-width="0.7"/>
+      <line x1="922" y1="371" x2="949" y2="405" stroke="#94a3b8" stroke-width="0.7"/>
+
+      <!-- Labels -->
+      <text x="968" y="349" font-size="10" font-weight="600" fill="#dc2626">Pawn</text>
+      <text x="968" y="361" font-size="10" font-weight="600" fill="#dc2626">Bishop</text>
+      <text x="968" y="373" font-size="10" font-weight="600" fill="#dc2626">Knight</text>
+      <text x="968" y="385" font-size="10" font-weight="600" fill="#dc2626">Rook</text>
+      <text x="968" y="397" font-size="10" font-weight="600" fill="#dc2626">Queen</text>
+      <text x="968" y="409" font-size="10" font-weight="600" fill="#dc2626">King</text>
+
+      <!-- Training data badge -->
+      <rect x="835" y="420" width="160" height="22" rx="6" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="915" y="436" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">6 classes &#x00B7; 1,664 images</text>
+    </g>
+
+    <!-- All NNs note -->
+    <text x="798" y="475" text-anchor="middle" font-size="12" fill="#94a3b8">All networks: PyTorch &#x2192; MATLAB &#x00B7; 48&#x00D7;48&#x00D7;3 RGB input</text>
+  </g>
+
+  <!-- ===== ARROW: NNs to output ===== -->
+  <line x1="1048" y1="250" x2="1088" y2="250" stroke="#059669" stroke-width="3" marker-end="url(#arr-g)"/>
+
+  <!-- ===== OUTPUT (right) ===== -->
+  <g>
+    <rect x="1098" y="60" width="278" height="370" rx="18" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2" filter="url(#sh)"/>
+    <!-- Header -->
+    <rect x="1098" y="60" width="278" height="50" rx="18" fill="url(#out-g)"/>
+    <rect x="1098" y="88" width="278" height="22" fill="url(#out-g)"/>
+    <text x="1237" y="93" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" letter-spacing="1">OUTPUT</text>
+
+    <!-- FEN string -->
+    <text x="1237" y="135" text-anchor="middle" font-size="14" font-weight="600" fill="#64748b" letter-spacing="1.5">FEN STRING</text>
+    <rect x="1115" y="145" width="244" height="34" rx="8" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1.5"/>
+    <text x="1237" y="168" text-anchor="middle" font-size="11" font-weight="600" fill="#334155" font-family="monospace">2p2P2/1b3N1.../...</text>
+
+    <!-- Mini chess board output -->
+    <g transform="translate(1140, 195)">
+      <!-- 8x8 board -->
+      <rect width="192" height="192" rx="4" fill="#d4a574" stroke="#64748b" stroke-width="1.5"/>
+      <!-- dark squares -->
+      <rect x="24" y="0" width="24" height="24" fill="#8b6914"/>
+      <rect x="72" y="0" width="24" height="24" fill="#8b6914"/>
+      <rect x="120" y="0" width="24" height="24" fill="#8b6914"/>
+      <rect x="168" y="0" width="24" height="24" fill="#8b6914"/>
+      <rect x="0" y="24" width="24" height="24" fill="#8b6914"/>
+      <rect x="48" y="24" width="24" height="24" fill="#8b6914"/>
+      <rect x="96" y="24" width="24" height="24" fill="#8b6914"/>
+      <rect x="144" y="24" width="24" height="24" fill="#8b6914"/>
+      <rect x="24" y="48" width="24" height="24" fill="#8b6914"/>
+      <rect x="72" y="48" width="24" height="24" fill="#8b6914"/>
+      <rect x="120" y="48" width="24" height="24" fill="#8b6914"/>
+      <rect x="168" y="48" width="24" height="24" fill="#8b6914"/>
+      <rect x="0" y="72" width="24" height="24" fill="#8b6914"/>
+      <rect x="48" y="72" width="24" height="24" fill="#8b6914"/>
+      <rect x="96" y="72" width="24" height="24" fill="#8b6914"/>
+      <rect x="144" y="72" width="24" height="24" fill="#8b6914"/>
+      <rect x="24" y="96" width="24" height="24" fill="#8b6914"/>
+      <rect x="72" y="96" width="24" height="24" fill="#8b6914"/>
+      <rect x="120" y="96" width="24" height="24" fill="#8b6914"/>
+      <rect x="168" y="96" width="24" height="24" fill="#8b6914"/>
+      <rect x="0" y="120" width="24" height="24" fill="#8b6914"/>
+      <rect x="48" y="120" width="24" height="24" fill="#8b6914"/>
+      <rect x="96" y="120" width="24" height="24" fill="#8b6914"/>
+      <rect x="144" y="120" width="24" height="24" fill="#8b6914"/>
+      <rect x="24" y="144" width="24" height="24" fill="#8b6914"/>
+      <rect x="72" y="144" width="24" height="24" fill="#8b6914"/>
+      <rect x="120" y="144" width="24" height="24" fill="#8b6914"/>
+      <rect x="168" y="144" width="24" height="24" fill="#8b6914"/>
+      <rect x="0" y="168" width="24" height="24" fill="#8b6914"/>
+      <rect x="48" y="168" width="24" height="24" fill="#8b6914"/>
+      <rect x="96" y="168" width="24" height="24" fill="#8b6914"/>
+      <rect x="144" y="168" width="24" height="24" fill="#8b6914"/>
+
+      <!-- Chess piece symbols (unicode) -->
+      <!-- Black pieces -->
+      <text x="60" y="19" text-anchor="middle" font-size="18" fill="#1e293b">&#9823;</text>
+      <text x="36" y="67" text-anchor="middle" font-size="18" fill="#1e293b">&#9821;</text>
+      <text x="108" y="67" text-anchor="middle" font-size="18" fill="#1e293b">&#9821;</text>
+      <text x="60" y="91" text-anchor="middle" font-size="18" fill="#1e293b">&#9822;</text>
+      <text x="36" y="115" text-anchor="middle" font-size="18" fill="#1e293b">&#9820;</text>
+      <text x="60" y="139" text-anchor="middle" font-size="18" fill="#1e293b">&#9819;</text>
+      <text x="36" y="187" text-anchor="middle" font-size="18" fill="#1e293b">&#9818;</text>
+      <!-- White pieces -->
+      <text x="132" y="19" text-anchor="middle" font-size="18" fill="#f5f5f4" stroke="#333" stroke-width="0.5">&#9823;</text>
+      <text x="132" y="91" text-anchor="middle" font-size="18" fill="#f5f5f4" stroke="#333" stroke-width="0.5">&#9822;</text>
+      <text x="108" y="115" text-anchor="middle" font-size="18" fill="#f5f5f4" stroke="#333" stroke-width="0.5">&#9820;</text>
+      <text x="132" y="139" text-anchor="middle" font-size="18" fill="#f5f5f4" stroke="#333" stroke-width="0.5">&#9819;</text>
+      <text x="108" y="187" text-anchor="middle" font-size="18" fill="#f5f5f4" stroke="#333" stroke-width="0.5">&#9818;</text>
+    </g>
+
+    <!-- ChessMaster label -->
+    <rect x="1130" y="400" width="214" height="26" rx="8" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
+    <text x="1237" y="418" text-anchor="middle" font-size="13" font-weight="700" fill="#059669">ChessMaster Visualization</text>
+
+    <text x="1237" y="456" text-anchor="middle" font-size="17" font-weight="700" fill="#1e293b">Board Position</text>
+    <text x="1237" y="476" text-anchor="middle" font-size="13" fill="#64748b">FEN &#x2192; playable board</text>
+  </g>
+
+  <!-- ===== BOTTOM PIPELINE BAR ===== -->
+  <g transform="translate(0, 500)">
+    <rect x="30" y="0" width="200" height="26" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.2"/>
+    <text x="130" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#dc2626">Computer Vision</text>
+
+    <line x1="238" y1="13" x2="288" y2="13" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+
+    <rect x="298" y="0" width="200" height="26" rx="8" fill="#f3e8ff" stroke="#c4b5fd" stroke-width="1.2"/>
+    <text x="398" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#7c3aed">Homography</text>
+
+    <line x1="506" y1="13" x2="548" y2="13" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+
+    <rect x="558" y="0" width="480" height="26" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+    <text x="798" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">Neural Classification (3 Networks)</text>
+
+    <line x1="1046" y1="13" x2="1088" y2="13" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+
+    <rect x="1098" y="0" width="278" height="26" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.2"/>
+    <text x="1237" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#059669">FEN Output</text>
+  </g>
+
+  <!-- Title -->
+  <text x="700" y="558" text-anchor="middle" font-size="14" fill="#94a3b8">Chess Vision — MATLAB + PyTorch &#x00B7; EE 5271 Robot Vision</text>
+</svg>

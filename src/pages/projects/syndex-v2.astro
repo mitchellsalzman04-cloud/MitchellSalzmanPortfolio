@@ -1,0 +1,440 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icon from "@/components/Icon.astro";
+import { site } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Base
+  title="SynDex V2"
+  description="A next-generation linear-driven haptic device with pistol-grip end effector for surgical simulation training."
+>
+  <div class="mx-auto max-w-5xl px-6 pt-36 pb-24 sm:px-12 md:px-24">
+    <a
+      href={withBase("/#projects")}
+      class="font-mono text-muted hover:text-accent inline-flex items-center gap-2 text-xs transition-colors"
+    >
+      <Icon name="arrow" size={14} class="rotate-180" /> back to portfolio
+    </a>
+
+    <!-- Header -->
+    <header class="mt-8 mb-12" data-reveal>
+      <p class="eyebrow">STRIVE Medical · In Progress</p>
+      <h1 class="mt-4 text-3xl font-semibold sm:text-4xl">SynDex V2</h1>
+      <p class="text-muted mt-2 text-lg">Next-Generation Linear-Driven Haptic Platform</p>
+      <p class="text-accent mt-3 text-sm font-medium">
+        Founder & Lead · Electrical & Mechanical Design
+      </p>
+      <div class="mt-4 inline-flex items-center gap-2 rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)]/10 px-3 py-1">
+        <span class="h-2 w-2 rounded-full bg-[var(--color-accent)] animate-pulse"></span>
+        <span class="text-accent text-xs font-medium">Active Development</span>
+      </div>
+    </header>
+
+    <!-- Interactive 3D Concept -->
+    <section class="mb-14" data-reveal>
+      <div class="relative w-full overflow-hidden rounded-lg border border-[var(--color-line)]" style="height: 480px;">
+        <canvas id="syndex-3d" class="block h-full w-full"></canvas>
+        <div class="pointer-events-none absolute bottom-3 left-3 text-xs text-[var(--color-muted)]">Drag to orbit · Scroll to zoom</div>
+        <div class="absolute top-3 right-3 flex gap-2">
+          <button id="btn-reset" class="rounded border border-[var(--color-line)] bg-[var(--color-bg-raised)] px-3 py-1 text-xs text-[var(--color-body)] transition-colors hover:bg-[var(--color-line)]">Reset</button>
+          <button id="btn-explode" class="rounded border border-[var(--color-line)] bg-[var(--color-bg-raised)] px-3 py-1 text-xs text-[var(--color-body)] transition-colors hover:bg-[var(--color-line)]">Explode</button>
+        </div>
+      </div>
+      <p class="text-muted mt-2 text-center text-xs">Interactive concept render: open-cage Cartesian gantry with pistol-grip end effector</p>
+    </section>
+
+    <!-- Motivation -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Why V2</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        SynDex V1 proved the concept: a low cost, admittance controlled haptic arm for surgical
+        training. But the 7 DOF revolute-joint design introduced coupled kinematics that
+        complicated control, and the pulley-driven linkages limited the force bandwidth the
+        device could deliver. V2 starts from a fundamentally different mechanical architecture
+        to address those limitations head on.
+      </p>
+    </section>
+
+    <!-- Architecture -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Architecture</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        V2 replaces the revolute-joint arm with a stacked Cartesian gantry: three linear-driven
+        rails spanning the X, Y, and Z axes, each mounted on the previous rail's carriage so
+        the whole assembly chains together like a 3D printer. Each axis is driven by a NEMA
+        stepper that serves dual purpose: tracking the user's hand position and applying force
+        or haptic feedback along that axis. At the end of the third rail, a ball-and-socket
+        joint connects to the pistol-grip end effector.
+      </p>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-3 text-base font-semibold">Gantry System</h3>
+          <ul class="text-body space-y-2 text-[0.85rem]">
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              Stacked rails: each axis mounts on the previous carriage
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              Motor on each axis for position sensing and force output
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              Ball-and-socket joint at the end of the third axis
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              Decoupled axes simplify kinematics vs V1's coupled pulleys
+            </li>
+          </ul>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-3 text-base font-semibold">End Effector</h3>
+          <ul class="text-body space-y-2 text-[0.85rem]">
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              Pistol-grip handle for ergonomic surgical-console interaction
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              Integrated trigger for instrument actuation
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              Custom PCB housed inside the grip
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              Ball-and-socket joint allows wrist-like rotation
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- V1 vs V2 -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">V1 vs V2</h2>
+      <div class="overflow-x-auto rounded-lg border border-[var(--color-line)]">
+        <table class="w-full text-[0.85rem]">
+          <thead>
+            <tr class="border-b border-[var(--color-line)] bg-[var(--color-bg-raised)]">
+              <th class="text-heading px-4 py-3 text-left font-semibold"></th>
+              <th class="text-muted px-4 py-3 text-left font-semibold">SynDex V1</th>
+              <th class="text-accent px-4 py-3 text-left font-semibold">SynDex V2</th>
+            </tr>
+          </thead>
+          <tbody class="text-body">
+            <tr class="border-b border-[var(--color-line)]">
+              <td class="px-4 py-3 font-medium text-[var(--color-heading)]">Topology</td>
+              <td class="px-4 py-3">7 DOF revolute-joint arm</td>
+              <td class="px-4 py-3">Stacked Cartesian gantry</td>
+            </tr>
+            <tr class="border-b border-[var(--color-line)]">
+              <td class="px-4 py-3 font-medium text-[var(--color-heading)]">Kinematics</td>
+              <td class="px-4 py-3">Coupled pulley linkages</td>
+              <td class="px-4 py-3">Decoupled linear axes</td>
+            </tr>
+            <tr class="border-b border-[var(--color-line)]">
+              <td class="px-4 py-3 font-medium text-[var(--color-heading)]">End Effector</td>
+              <td class="px-4 py-3">Interchangeable grip</td>
+              <td class="px-4 py-3">Pistol grip with trigger + PCB</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium text-[var(--color-heading)]">Joint</td>
+              <td class="px-4 py-3">Revolute joints</td>
+              <td class="px-4 py-3">Ball-and-socket at intersection</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Status -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Current Status</h2>
+      <p class="text-body text-[0.95rem] leading-relaxed">
+        SynDex V2 is in active development at STRIVE Medical. Mechanical design of the gantry
+        frame and rail system is underway, alongside PCB design for the end effector electronics.
+        The project builds directly on the control architecture, firmware, and simulation
+        infrastructure validated in V1.
+      </p>
+    </section>
+
+    <!-- Tech chips -->
+    <div class="border-line flex flex-wrap gap-3 border-t pt-8" data-reveal>
+      {["Linear Rails", "NEMA Steppers", "Ball-and-Socket Joint", "Altium", "Embedded C", "CAN", "Unity", "SolidWorks"].map(t => (
+        <span class="chip">{t}</span>
+      ))}
+    </div>
+  </div>
+
+  <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script is:inline>
+  (function(){
+    const canvas = document.getElementById('syndex-3d');
+    if (!canvas) return;
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const W = rect.width, H = rect.height;
+    const scene = new THREE.Scene();
+    const dk = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    scene.background = new THREE.Color(dk ? 0x1a1a1a : 0xf0efe8);
+
+    const camera = new THREE.PerspectiveCamera(34, W/H, 0.1, 100);
+    const renderer = new THREE.WebGLRenderer({canvas, antialias: true});
+    renderer.setSize(W, H);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+    var d1 = new THREE.DirectionalLight(0xffffff, 0.8);
+    d1.position.set(5,8,6); d1.castShadow = true; scene.add(d1);
+    scene.add(new THREE.DirectionalLight(0x99aacc, 0.3).translateX(-4).translateY(3).translateZ(-5));
+
+    var mAlum = new THREE.MeshStandardMaterial({color: 0xd5d5cd, roughness: 0.3, metalness: 0.65});
+    var mSlot = new THREE.MeshStandardMaterial({color: 0xbbbbb3, roughness: 0.4, metalness: 0.5});
+    var mFrame = new THREE.MeshStandardMaterial({color: 0xc8c8c0, roughness: 0.3, metalness: 0.6});
+    var mFrameSlot = new THREE.MeshStandardMaterial({color: 0xb0b0a8, roughness: 0.4, metalness: 0.5});
+    var mMotor = new THREE.MeshStandardMaterial({color: 0x1a1a1a, roughness: 0.4, metalness: 0.5});
+    var mCap = new THREE.MeshStandardMaterial({color: 0x3a3a38, roughness: 0.35, metalness: 0.6});
+    var mShaft = new THREE.MeshStandardMaterial({color: 0xcccccc, roughness: 0.15, metalness: 0.9});
+    var mBolt = new THREE.MeshStandardMaterial({color: 0x555555, roughness: 0.3, metalness: 0.7});
+    var mCarr = new THREE.MeshStandardMaterial({color: 0x444440, roughness: 0.45, metalness: 0.55});
+    var mPlate = new THREE.MeshStandardMaterial({color: 0x555550, roughness: 0.4, metalness: 0.5});
+    var mJoint = new THREE.MeshStandardMaterial({color: 0xbbbbbb, roughness: 0.15, metalness: 0.85});
+    var mGrip = new THREE.MeshStandardMaterial({color: 0x1a1a1a, roughness: 0.8, metalness: 0.1});
+    var mTrig = new THREE.MeshStandardMaterial({color: 0x555550, roughness: 0.5, metalness: 0.3});
+    var mLink = new THREE.MeshStandardMaterial({color: 0x999990, roughness: 0.3, metalness: 0.6});
+
+    var parts = [], homes = [];
+    function add(m, ex) { scene.add(m); parts.push({mesh:m, ex:ex||[0,0,0]}); homes.push(m.position.clone()); }
+
+    function frameBeam(from, to) {
+      var g = new THREE.Group();
+      var d = new THREE.Vector3(to[0]-from[0], to[1]-from[1], to[2]-from[2]);
+      var len = d.length(); var bw = 0.10;
+      var m = new THREE.Mesh(new THREE.BoxGeometry(bw, bw, len), mFrame);
+      m.position.set((from[0]+to[0])/2,(from[1]+to[1])/2,(from[2]+to[2])/2);
+      m.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1), d.clone().normalize());
+      g.add(m);
+      var s1 = new THREE.Mesh(new THREE.BoxGeometry(0.04,0.015,len), mFrameSlot);
+      s1.position.copy(m.position); s1.quaternion.copy(m.quaternion); s1.translateY(bw/2); g.add(s1);
+      var s2 = new THREE.Mesh(new THREE.BoxGeometry(0.015,0.04,len), mFrameSlot);
+      s2.position.copy(m.position); s2.quaternion.copy(m.quaternion); s2.translateX(bw/2); g.add(s2);
+      return g;
+    }
+
+    function extrusion(len, axis) {
+      var g = new THREE.Group();
+      var pw=0.18, ph=0.18;
+      var geo = axis==='y' ? new THREE.BoxGeometry(pw,len,ph) : axis==='z' ? new THREE.BoxGeometry(pw,ph,len) : new THREE.BoxGeometry(len,ph,pw);
+      g.add(new THREE.Mesh(geo, mAlum));
+      if(axis==='x'){
+        g.add(new THREE.Mesh(new THREE.BoxGeometry(len,0.025,0.06),mSlot).translateY(ph/2));
+        g.add(new THREE.Mesh(new THREE.BoxGeometry(len,0.025,0.06),mSlot).translateY(-ph/2));
+        g.add(new THREE.Mesh(new THREE.BoxGeometry(len,0.06,0.025),mSlot).translateZ(pw/2));
+        g.add(new THREE.Mesh(new THREE.BoxGeometry(len,0.06,0.025),mSlot).translateZ(-pw/2));
+      } else if(axis==='y'){
+        g.add(new THREE.Mesh(new THREE.BoxGeometry(0.025,len,0.06),mSlot).translateX(pw/2));
+        g.add(new THREE.Mesh(new THREE.BoxGeometry(0.025,len,0.06),mSlot).translateX(-pw/2));
+        g.add(new THREE.Mesh(new THREE.BoxGeometry(0.06,len,0.025),mSlot).translateZ(ph/2));
+        g.add(new THREE.Mesh(new THREE.BoxGeometry(0.06,len,0.025),mSlot).translateZ(-ph/2));
+      } else {
+        g.add(new THREE.Mesh(new THREE.BoxGeometry(0.025,0.06,len),mSlot).translateX(pw/2));
+        g.add(new THREE.Mesh(new THREE.BoxGeometry(0.025,0.06,len),mSlot).translateX(-pw/2));
+        g.add(new THREE.Mesh(new THREE.BoxGeometry(0.06,0.025,len),mSlot).translateY(ph/2));
+        g.add(new THREE.Mesh(new THREE.BoxGeometry(0.06,0.025,len),mSlot).translateY(-ph/2));
+      }
+      return g;
+    }
+
+    function nema(sz) {
+      var g = new THREE.Group();
+      var dp=sz*0.9;
+      g.add(new THREE.Mesh(new THREE.BoxGeometry(sz,sz,dp), mMotor));
+      var cap = new THREE.Mesh(new THREE.CylinderGeometry(sz*0.38,sz*0.38,0.012,16), mCap);
+      cap.rotation.x=Math.PI/2; cap.position.z=dp/2; g.add(cap);
+      var sh = new THREE.Mesh(new THREE.CylinderGeometry(0.022,0.022,0.14,8), mShaft);
+      sh.rotation.x=Math.PI/2; sh.position.z=dp/2+0.07; g.add(sh);
+      var br=sz*0.34;
+      [[1,1],[-1,1],[1,-1],[-1,-1]].forEach(function(p){
+        var b=new THREE.Mesh(new THREE.CylinderGeometry(0.013,0.013,0.02,6),mBolt);
+        b.rotation.x=Math.PI/2; b.position.set(p[0]*br,p[1]*br,dp/2+0.005); g.add(b);
+      });
+      return g;
+    }
+
+    function carriage(axis) {
+      var g = new THREE.Group();
+      var main = axis==='x' ? new THREE.BoxGeometry(0.16,0.26,0.26) : axis==='y' ? new THREE.BoxGeometry(0.26,0.16,0.26) : new THREE.BoxGeometry(0.26,0.26,0.16);
+      g.add(new THREE.Mesh(main, mCarr));
+      return g;
+    }
+
+    var cW=1.6, cD=1.6, cH=2.0;
+    var hw=cW/2, hd=cD/2;
+    var cageGroup = new THREE.Group();
+    cageGroup.add(frameBeam([-hw,0,-hd],[hw,0,-hd]));
+    cageGroup.add(frameBeam([-hw,0,hd],[hw,0,hd]));
+    cageGroup.add(frameBeam([-hw,0,-hd],[-hw,0,hd]));
+    cageGroup.add(frameBeam([hw,0,-hd],[hw,0,hd]));
+    cageGroup.add(frameBeam([-hw,cH,-hd],[hw,cH,-hd]));
+    cageGroup.add(frameBeam([-hw,cH,-hd],[-hw,cH,hd]));
+    cageGroup.add(frameBeam([-hw,0,-hd],[-hw,cH,-hd]));
+    cageGroup.add(frameBeam([hw,0,-hd],[hw,cH,-hd]));
+    cageGroup.add(frameBeam([-hw,0,hd],[-hw,cH,hd]));
+    add(cageGroup, [0,0.3,0]);
+
+    var RL=1.8, railY=0.22;
+
+    var rail1 = extrusion(RL,'x');
+    rail1.position.set(0, railY, 0);
+    add(rail1, [0,-0.3,0]);
+
+    var motor1 = nema(0.24);
+    motor1.rotation.y = Math.PI/2;
+    motor1.position.set(-RL/2-0.20, railY, 0);
+    add(motor1, [-0.7,-0.3,0]);
+
+    var carr1 = carriage('x');
+    carr1.position.set(0.15, railY, 0);
+    add(carr1, [0,-0.15,0]);
+
+    var plate1 = new THREE.Mesh(new THREE.BoxGeometry(0.20,0.03,0.20), mPlate);
+    plate1.position.set(0.15, railY+0.145, 0);
+    add(plate1, [0,0,0]);
+
+    var rail2 = extrusion(RL,'z');
+    rail2.position.set(0.15, railY+0.265, 0);
+    add(rail2, [0,0.15,0]);
+
+    var motor2 = nema(0.24);
+    motor2.rotation.y = Math.PI;
+    motor2.position.set(0.15, railY+0.265, -RL/2-0.20);
+    add(motor2, [0,0.15,-0.7]);
+
+    var carr2 = carriage('z');
+    carr2.position.set(0.15, railY+0.265, 0.25);
+    add(carr2, [0,0.3,0]);
+
+    var plate2 = new THREE.Mesh(new THREE.BoxGeometry(0.03,0.20,0.20), mPlate);
+    plate2.position.set(0.15+0.145, railY+0.265, 0.25);
+    add(plate2, [0.15,0.3,0]);
+
+    var RLy=1.5;
+    var rail3 = extrusion(RLy,'y');
+    rail3.position.set(0.415, railY+0.265, 0.25);
+    add(rail3, [0.3,0.3,0]);
+
+    var motor3 = nema(0.24);
+    motor3.rotation.x = -Math.PI/2;
+    motor3.position.set(0.415, railY+0.265+RLy/2+0.20, 0.25);
+    add(motor3, [0.3,1.0,0]);
+
+    var carr3 = carriage('y');
+    carr3.position.set(0.415, railY-0.05, 0.25);
+    add(carr3, [0.5,-0.15,0]);
+
+    var armStartX = 0.415 + 0.13;
+    var armY = railY - 0.05;
+    var armZ = 0.25;
+
+    var arm = new THREE.Mesh(new THREE.CylinderGeometry(0.02,0.02,0.20,6), mLink);
+    arm.rotation.x = Math.PI/2;
+    arm.position.set(armStartX, armY, armZ + 0.10);
+    add(arm, [0.6,-0.15,0.3]);
+
+    var bjZ = armZ + 0.22;
+    var ball = new THREE.Mesh(new THREE.SphereGeometry(0.09,16,16), mJoint);
+    ball.position.set(armStartX, armY, bjZ);
+    add(ball, [0.6,-0.15,0.5]);
+
+    var bRing = new THREE.Mesh(new THREE.TorusGeometry(0.09,0.016,8,16), mCap);
+    bRing.position.set(armStartX, armY, bjZ);
+    bRing.rotation.y = Math.PI/2;
+    add(bRing, [0.6,-0.15,0.5]);
+
+    var grip = new THREE.Group();
+
+    var barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.055,0.06,0.30,12), mGrip);
+    barrel.rotation.x = Math.PI/2;
+    barrel.position.set(0, 0, 0.15);
+    grip.add(barrel);
+
+    var nose = new THREE.Mesh(new THREE.SphereGeometry(0.055,12,8,0,Math.PI*2,0,Math.PI/2), mCap);
+    nose.rotation.x = -Math.PI/2;
+    nose.position.set(0, 0, 0.30);
+    grip.add(nose);
+
+    var backR = new THREE.Mesh(new THREE.CylinderGeometry(0.068,0.058,0.025,12), mCap);
+    backR.rotation.x = Math.PI/2;
+    backR.position.set(0, 0, 0.0);
+    grip.add(backR);
+
+    var hnd = new THREE.Mesh(new THREE.BoxGeometry(0.08,0.30,0.09), mGrip);
+    hnd.position.set(0, -0.20, 0.06);
+    hnd.rotation.x = -0.22;
+    grip.add(hnd);
+
+    var hndBot = new THREE.Mesh(new THREE.BoxGeometry(0.085,0.04,0.10), mGrip);
+    hndBot.position.set(0, -0.35, 0.13);
+    hndBot.rotation.x = -0.22;
+    grip.add(hndBot);
+
+    var guard = new THREE.Mesh(new THREE.TorusGeometry(0.06,0.009,6,12,Math.PI), mTrig);
+    guard.position.set(0, -0.08, 0.11);
+    guard.rotation.set(Math.PI/2, 0, 0);
+    grip.add(guard);
+
+    var trig = new THREE.Mesh(new THREE.BoxGeometry(0.015,0.07,0.025), mTrig);
+    trig.position.set(0, -0.06, 0.10);
+    trig.rotation.x = 0.15;
+    grip.add(trig);
+
+    var gStem = new THREE.Mesh(new THREE.CylinderGeometry(0.02,0.02,0.10,6), mLink);
+    gStem.rotation.x = Math.PI/2;
+    gStem.position.set(0, 0, -0.05);
+    grip.add(gStem);
+
+    grip.position.set(armStartX, armY, bjZ);
+    add(grip, [0.6,-0.5,0.8]);
+
+    var grid = new THREE.GridHelper(6,12,dk?0x333333:0xdddddd,dk?0x2a2a2a:0xeeeeee);
+    grid.position.y = -0.08; scene.add(grid);
+
+    var isD=false, pxM=0, pyM=0;
+    var th=0.9, ph=0.50, rad=5.5;
+    function cam(){
+      camera.position.set(rad*Math.sin(ph)*Math.cos(th), rad*Math.cos(ph)+0.6, rad*Math.sin(ph)*Math.sin(th));
+      camera.lookAt(0,0.7,0.1);
+    }
+    cam();
+
+    canvas.addEventListener('pointerdown',function(e){isD=true;pxM=e.clientX;pyM=e.clientY;canvas.setPointerCapture(e.pointerId);});
+    canvas.addEventListener('pointermove',function(e){if(!isD)return;th-=(e.clientX-pxM)*0.007;ph=Math.max(0.15,Math.min(1.45,ph+(e.clientY-pyM)*0.007));pxM=e.clientX;pyM=e.clientY;cam();});
+    canvas.addEventListener('pointerup',function(){isD=false;});
+    canvas.addEventListener('wheel',function(e){e.preventDefault();rad=Math.max(2.5,Math.min(14,rad+e.deltaY*0.008));cam();},{passive:false});
+
+    var expl=false, eT=0;
+    document.getElementById('btn-explode').addEventListener('click',function(){expl=!expl;this.textContent=expl?'Assemble':'Explode';});
+    document.getElementById('btn-reset').addEventListener('click',function(){th=0.9;ph=0.50;rad=5.5;expl=false;eT=0;document.getElementById('btn-explode').textContent='Explode';parts.forEach(function(p,i){p.mesh.position.copy(homes[i]);});cam();});
+
+    (function anim(){
+      requestAnimationFrame(anim);
+      eT+=((expl?1:0)-eT)*0.06;
+      parts.forEach(function(p,i){var h=homes[i];p.mesh.position.set(h.x+p.ex[0]*eT,h.y+p.ex[1]*eT,h.z+p.ex[2]*eT);});
+      if(!isD){th+=0.0012;cam();}
+      renderer.render(scene,camera);
+    })();
+
+    window.addEventListener('resize',function(){
+      var r = canvas.parentElement.getBoundingClientRect();
+      camera.aspect=r.width/r.height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(r.width, r.height);
+    });
+  })();
+  </script>
+</Base>

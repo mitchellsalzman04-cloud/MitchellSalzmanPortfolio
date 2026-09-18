@@ -1,0 +1,346 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icon from "@/components/Icon.astro";
+import { site, about } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Base
+  title="About Me"
+  description="Learn more about Mitchell Salzman, ECE student at the University of Minnesota, medical device builder, and founder of STRIVE Medical."
+>
+  <div class="about-page">
+    <!-- Hero banner -->
+    <section class="about-hero">
+      <div class="about-hero-inner">
+        <div class="about-hero-text">
+          <p class="eyebrow mb-4">About Me</p>
+          <h1 class="text-4xl font-bold sm:text-5xl lg:text-6xl">
+            Hi, I'm Mitchell.
+          </h1>
+          <p class="mt-4 max-w-lg text-lg leading-relaxed text-body">
+            I build things that are useful to people, mostly in medical devices
+            and health tech, where the stakes are real and the person on the
+            other end of the design matters.
+          </p>
+        </div>
+        <div class="about-hero-image">
+          <!-- Replace src with your portrait photo -->
+          <div class="portrait-placeholder"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main content -->
+    <section class="about-body">
+      <div class="about-grid">
+        <!-- Left: images column -->
+        <div class="about-images">
+          <!-- Image 1: replace src with your photo -->
+          <div class="about-img-slot about-img-slot--tall">
+            <div class="img-placeholder">Photo 1</div>
+          </div>
+          <!-- Image 2: replace src with your photo -->
+          <div class="about-img-slot">
+            <div class="img-placeholder">Photo 2</div>
+          </div>
+        </div>
+
+        <!-- Right: text column -->
+        <div class="about-text">
+          <h2 class="text-2xl font-bold mb-6">My Story</h2>
+
+          <p class="text-body leading-relaxed mb-5">
+            I study electrical and computer engineering at the University of
+            Minnesota, on a combined bachelor's and master's track. That's the
+            background, not really how I think about myself.
+          </p>
+
+          <p class="text-body leading-relaxed mb-5">
+            What I care about most is building things that are useful to people.
+            I like getting in early, when a problem is still messy, figuring out
+            what's worth building, then helping make it real. That's the product
+            side, and it's the part I love. Not just how something works, but why
+            it exists, who it's for, and what makes them come back.
+          </p>
+
+          <p class="text-body leading-relaxed mb-5">
+            The way I actually get there is systems thinking. I'm good at it,
+            and I like it. Holding all the moving parts of a problem in view at
+            once and seeing where they push and pull against each other. Project
+            management is where that turns into something real for me, and I
+            genuinely enjoy it: taking a messy pile of dependencies and shaping
+            it into work a team can actually ship.
+          </p>
+
+          <!-- Image 3: inline break image -->
+          <div class="about-img-slot about-img-inline mb-5">
+            <div class="img-placeholder">Photo 3</div>
+          </div>
+
+          <h3 class="text-xl font-bold mb-4">Why Medical Devices</h3>
+
+          <p class="text-body leading-relaxed mb-5">
+            Mostly I'm into medical devices and health tech. I like understanding
+            how something is built, how it reaches the people who need it, and
+            who it's really for, all at once, because in medical devices those
+            three answers have to line up or the product never reaches anyone.
+            Something technically impressive and clinically confused is still
+            broken; it just takes longer for anyone to say so. What pulls me
+            toward medical devices in particular is that the stakes are real.
+            There's a person on the other end of the design, so the interesting
+            question is rarely whether a thing <em>can</em> be done and almost
+            always whether it <em>should</em> be, and for whom.
+          </p>
+
+          <p class="text-body leading-relaxed mb-5">
+            Long term, I want to build products and eventually start my own
+            company. Product management sits right where the technical, business,
+            and people sides meet.
+          </p>
+
+          <h3 class="text-xl font-bold mb-4">STRIVE Medical</h3>
+
+          <p class="text-body leading-relaxed mb-5">
+            I started STRIVE Medical because I wanted to share the passion I have
+            for the medical device industry, and because I wanted more people to
+            feel confident in what they're actually capable of. At the end of the
+            day, I want people to be able to walk into an interview and talk
+            smart about the things they personally own and have contributed to,
+            with the quiet confidence that only comes from having actually built
+            the thing.
+          </p>
+
+          <p class="text-body leading-relaxed mb-5">
+            What that looks like day to day is empowering my members: making them
+            better public speakers, sharper researchers, prouder of what they
+            build, and able to talk about it with real skill. When someone can
+            speak with conviction about the thing they made, they stop feeling
+            like they're along for the ride and start feeling like they're adding
+            to what the whole group knows. A lot of it comes down to delegation,
+            handing people real ownership and then pushing them a little further
+            than they'd push themselves. But when you have people who actually
+            care and want to get better, that push is usually all they need, and
+            watching that development happen is the part I love most.
+          </p>
+
+          <h3 class="text-xl font-bold mb-4">Outside of Work</h3>
+
+          <p class="text-body leading-relaxed mb-5">
+            Weightlifting, motorcycling, snowmobiling and skiing, because a
+            Minnesota winter may as well be good for something. Traveling around
+            the world with my friends, trying to work on not overplanning. And
+            camping, getting far enough out that the signal drops, and that's the
+            point.
+          </p>
+
+          <!-- Quick facts -->
+          <div class="facts-grid mt-8">
+            <div class="fact-card">
+              <span class="fact-label">Based in</span>
+              <span class="fact-value">Minneapolis, MN</span>
+            </div>
+            <div class="fact-card">
+              <span class="fact-label">Education</span>
+              <span class="fact-value">BS + MS ECE, UMN</span>
+            </div>
+            <div class="fact-card">
+              <span class="fact-label">Focus</span>
+              <span class="fact-value">Medical devices & product</span>
+            </div>
+            <div class="fact-card">
+              <span class="fact-label">Long term</span>
+              <span class="fact-value">Build products, start a company</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom image row -->
+    <section class="about-bottom-images">
+      <div class="bottom-images-grid">
+        <!-- Image 4 -->
+        <div class="about-img-slot">
+          <div class="img-placeholder">Photo 4</div>
+        </div>
+        <!-- Image 5 -->
+        <div class="about-img-slot">
+          <div class="img-placeholder">Photo 5</div>
+        </div>
+        <!-- Image 6 -->
+        <div class="about-img-slot">
+          <div class="img-placeholder">Photo 6</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Back link -->
+    <div class="mx-auto max-w-5xl px-6 pb-24 sm:px-12 md:px-24 text-center">
+      <a
+        href={withBase("/")}
+        class="link text-sm inline-flex items-center gap-2"
+      >
+        <Icon name="arrow" size={14} class="rotate-180" /> back to portfolio
+      </a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .about-page {
+    --about-max: 1120px;
+  }
+
+  .about-hero {
+    padding: 9rem 1.5rem 4rem;
+    background: var(--color-surface-alt, #f8fafc);
+  }
+
+  .about-hero-inner {
+    max-width: var(--about-max);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .about-hero-inner {
+      grid-template-columns: 1fr auto;
+    }
+  }
+
+  .about-hero-image .portrait-placeholder {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #dce3ea 0%, #c4d0dc 100%);
+    margin: 0 auto;
+  }
+
+  @media (min-width: 768px) {
+    .about-hero-image .portrait-placeholder {
+      width: 280px;
+      height: 280px;
+    }
+  }
+
+  .about-body {
+    max-width: var(--about-max);
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .about-body {
+      padding: 4rem 3rem;
+    }
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  @media (min-width: 768px) {
+    .about-grid {
+      grid-template-columns: 2fr 3fr;
+      gap: 3.5rem;
+    }
+  }
+
+  .about-images {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .about-img-slot {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--color-line, #e2e8f0);
+  }
+
+  .about-img-slot--tall .img-placeholder {
+    height: 300px;
+  }
+
+  .about-img-inline {
+    border-radius: 12px;
+  }
+
+  .img-placeholder {
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .about-img-slot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .facts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .fact-card {
+    padding: 1rem;
+    border-radius: 8px;
+    background: var(--color-surface-alt, #f8fafc);
+    border: 1px solid var(--color-line, #e2e8f0);
+  }
+
+  .fact-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted, #94a3b8);
+    margin-bottom: 0.25rem;
+  }
+
+  .fact-value {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--color-heading, #1e293b);
+  }
+
+  .about-bottom-images {
+    max-width: var(--about-max);
+    margin: 0 auto;
+    padding: 0 1.5rem 3rem;
+  }
+
+  @media (min-width: 640px) {
+    .about-bottom-images {
+      padding: 0 3rem 3rem;
+    }
+  }
+
+  .bottom-images-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .bottom-images-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

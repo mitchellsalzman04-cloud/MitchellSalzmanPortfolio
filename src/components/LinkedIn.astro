@@ -1,0 +1,271 @@
+---
+import Band from "@/components/Band.astro";
+
+const posts = [
+  { urn: "urn:li:ugcPost:7487716874319863808", h: 628 },
+  { urn: "urn:li:ugcPost:7464033369966813184", h: 628 },
+  { urn: "urn:li:ugcPost:7463639201553604608", h: 628 },
+  { urn: "urn:li:share:7462966677866135552",   h: 628 },
+  { urn: "urn:li:ugcPost:7455786060598640641", h: 628 },
+  { urn: "urn:li:ugcPost:7455781518121046029", h: 628 },
+  { urn: "urn:li:ugcPost:7452770798920159232", h: 628 },
+  { urn: "urn:li:ugcPost:7429323372322500609", h: 628 },
+  { urn: "urn:li:share:7424321683961933824",   h: 628 },
+  { urn: "urn:li:share:7402424610652168192",   h: 628 },
+];
+---
+
+<Band id="linkedin" tone="grey" class="py-16 md:py-20">
+  <div data-reveal>
+    <p class="eyebrow">What I'm Sharing</p>
+    <h2 class="mt-4 text-2xl font-bold sm:text-3xl">
+      <a
+        href="https://www.linkedin.com/in/mitchell-salzman"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="linkedin-link"
+      >
+        LinkedIn
+      </a>
+    </h2>
+  </div>
+
+  <div class="li-wrapper mt-10" data-reveal>
+    <button class="li-arrow li-arrow--left" aria-label="Previous post">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    </button>
+
+    <div class="li-track">
+      <div class="li-scroll">
+        {
+          posts.map((p) => (
+            <div class="li-card">
+              <iframe
+                src={`https://www.linkedin.com/embed/feed/update/${p.urn}?collapsed=1`}
+                height={p.h}
+                width="504"
+                frameborder="0"
+                allowfullscreen
+                title="LinkedIn post"
+                loading="eager"
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <button class="li-arrow li-arrow--right" aria-label="Next post">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    </button>
+  </div>
+</Band>
+
+<style>
+  .linkedin-link {
+    color: var(--color-heading);
+    text-decoration: underline;
+    text-decoration-color: #0a66c2;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 3px;
+    transition: color 0.2s var(--ease-swift);
+  }
+  .linkedin-link:hover {
+    color: #0a66c2;
+  }
+
+  .li-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .li-arrow {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--color-line);
+    background: var(--color-bg-raised, rgba(255,255,255,0.9));
+    color: var(--color-heading);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .li-arrow:hover {
+    background: var(--color-heading);
+    color: var(--color-bg);
+    transform: scale(1.08);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+  .li-arrow:active {
+    transform: scale(0.96);
+  }
+
+  @media (max-width: 700px) {
+    .li-arrow {
+      display: none;
+    }
+  }
+
+  .li-track {
+    overflow: hidden;
+    flex: 1;
+    min-width: 0;
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 2%,
+      black 98%,
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 2%,
+      black 98%,
+      transparent
+    );
+  }
+
+  .li-scroll {
+    display: flex;
+    gap: 1.25rem;
+    width: max-content;
+    animation: li-pan 120s linear infinite;
+  }
+
+  .li-scroll:hover,
+  .li-scroll.paused {
+    animation-play-state: paused;
+  }
+
+  .li-card {
+    flex-shrink: 0;
+    width: 504px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .li-card iframe {
+    display: block;
+    border: none;
+    width: 100%;
+  }
+
+  @keyframes li-pan {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .li-card {
+      width: 340px;
+    }
+    .li-card iframe {
+      width: 340px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .li-scroll {
+      animation: none;
+      overflow-x: auto;
+    }
+    .li-track {
+      -webkit-mask-image: none;
+      mask-image: none;
+      overflow-x: auto;
+    }
+  }
+</style>
+
+<script>
+  const scroll = document.querySelector<HTMLElement>(".li-scroll");
+  const leftBtn = document.querySelector<HTMLButtonElement>(".li-arrow--left");
+  const rightBtn = document.querySelector<HTMLButtonElement>(".li-arrow--right");
+
+  if (scroll) {
+    // Duplicate posts for seamless infinite scroll
+    const cards = Array.from(scroll.children);
+    cards.forEach((card) => {
+      scroll.appendChild(card.cloneNode(true));
+    });
+
+    // Get card width + gap for step size
+    function getStep() {
+      const card = scroll!.querySelector<HTMLElement>(".li-card");
+      if (!card) return 524;
+      const gap = parseFloat(getComputedStyle(scroll!).gap) || 20;
+      return card.offsetWidth + gap;
+    }
+
+    let resumeTimer: ReturnType<typeof setTimeout>;
+
+    function pauseAuto() {
+      scroll!.classList.add("paused");
+      clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(() => {
+        scroll!.classList.remove("paused");
+      }, 4000);
+    }
+
+    function nudge(direction: number) {
+      pauseAuto();
+      const track = scroll!.parentElement!;
+      const step = getStep();
+      // Get current scroll-like position from the transform
+      const style = getComputedStyle(scroll!);
+      const matrix = new DOMMatrix(style.transform);
+      const currentX = matrix.m41;
+      const totalWidth = scroll!.scrollWidth / 2; // half because we duplicated
+
+      // Calculate target
+      let targetX = currentX + direction * step;
+
+      // Wrap around
+      if (targetX > 0) targetX -= totalWidth;
+      if (Math.abs(targetX) >= totalWidth) targetX += totalWidth;
+
+      // Pause the CSS animation and apply a smooth transition
+      scroll!.style.animation = "none";
+      scroll!.style.transform = `translateX(${currentX}px)`;
+
+      // Force reflow
+      scroll!.offsetHeight;
+
+      scroll!.style.transition = "transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)";
+      scroll!.style.transform = `translateX(${targetX}px)`;
+
+      const onEnd = () => {
+        scroll!.removeEventListener("transitionend", onEnd);
+        scroll!.style.transition = "";
+        scroll!.style.transform = "";
+        // Resume the CSS animation from the equivalent offset
+        const fraction = Math.abs(targetX) / totalWidth;
+        const duration = 120;
+        const offset = fraction * duration;
+        scroll!.style.animation = `li-pan ${duration}s linear infinite`;
+        scroll!.style.animationDelay = `-${offset}s`;
+      };
+      scroll!.addEventListener("transitionend", onEnd);
+    }
+
+    leftBtn?.addEventListener("click", () => nudge(1));
+    rightBtn?.addEventListener("click", () => nudge(-1));
+  }
+</script>

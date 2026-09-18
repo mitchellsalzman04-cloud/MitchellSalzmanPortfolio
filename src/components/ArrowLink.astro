@@ -1,0 +1,32 @@
+---
+/**
+ * Circle-arrow call to action. Borrowed wholesale from medical-device
+ * marketing sites, where it appears on essentially every section — it does
+ * more brand work than any single colour does.
+ *
+ * The circle takes its fill from `currentColor`, so it inherits the band's
+ * flip automatically: accent blue on light grounds, white on dark ones. The
+ * arrow itself reads `--arrow-ink`, set alongside that flip in global.css.
+ */
+interface Props {
+  href: string;
+  class?: string;
+  external?: boolean;
+}
+
+const { href, class: className = "", external = false } = Astro.props;
+---
+
+<a
+  href={href}
+  class={`arrow-link ${className}`}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+>
+  <span><slot /></span>
+  <span class="arrow-circle" aria-hidden="true">
+    <svg viewBox="0 0 16 16" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2.5 8h10M8.5 4l4 4-4 4"></path>
+    </svg>
+  </span>
+</a>

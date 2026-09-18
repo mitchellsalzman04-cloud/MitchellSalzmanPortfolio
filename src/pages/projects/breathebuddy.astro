@@ -1,0 +1,344 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icon from "@/components/Icon.astro";
+import { site } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Base
+  title="BreatheBuddy"
+  description="An IoT-enabled smart inhaler attachment that tracks pediatric asthma medication adherence and alerts parents in real time."
+>
+  <div class="mx-auto max-w-5xl px-6 pt-36 pb-24 sm:px-12 md:px-24">
+    <a
+      href={withBase("/#projects")}
+      class="font-mono text-muted hover:text-accent inline-flex items-center gap-2 text-xs transition-colors"
+    >
+      <Icon name="arrow" size={14} class="rotate-180" /> back to portfolio
+    </a>
+
+    <!-- Header -->
+    <header class="mt-8 mb-12" data-reveal>
+      <p class="eyebrow">EE 4951W · University of Minnesota · Fall 2023</p>
+      <h1 class="mt-4 text-3xl font-semibold sm:text-4xl">BreatheBuddy</h1>
+      <p class="text-muted mt-2 text-lg">An IoT-Enabled Smart Inhaler for Pediatric Asthma</p>
+      <p class="text-body mt-3 text-sm">
+        Mitchell Salzman · Andrew Berg · Ricky Seo
+      </p>
+    </header>
+
+    <!-- Hero Image -->
+    <section class="mb-14" data-reveal>
+      <div class="mx-auto max-w-md overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/breathebuddy-device.jpeg")}
+          alt="BreatheBuddy prototype: a standard inhaler with the IoT attachment housing a Particle Photon, NeoPixel, piezo buzzer, and button"
+          class="w-full max-h-[28rem] object-cover"
+        />
+      </div>
+      <p class="text-muted mt-3 text-center text-xs">
+        The BreatheBuddy prototype attached to a standard albuterol inhaler
+      </p>
+    </section>
+
+    <!-- The Problem -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">The Problem</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Asthma is the most common chronic disease of childhood, affecting 8.4% of children in
+        the United States. Parents have limited visibility into whether their child is actually
+        using their inhaler at school or daycare, and the consequences of missed doses are
+        serious. According to the WHO, two out of three asthma-related deaths can be prevented
+        through timely medication and better management.
+      </p>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div class="rounded-lg border-2 border-[var(--color-accent)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-lg font-bold">8.4%</p>
+          <p class="text-accent mt-1 text-xs font-medium">of US children</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">2 in 3</p>
+          <p class="text-muted mt-1 text-xs">Deaths preventable</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">Zero</p>
+          <p class="text-muted mt-1 text-xs">Parent visibility</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">68 to 92%</p>
+          <p class="text-muted mt-1 text-xs">Heritability rate</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Solution -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Our Solution</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        BreatheBuddy is an IoT attachment that clips onto a standard inhaler and gives parents
+        real-time visibility into their child's medication adherence, no app required on the
+        child's end. When the child presses the inhaler, a button logs the dose timestamp to
+        the cloud. A color-coded LED reminds the child when it's time to use the inhaler, and
+        a piezo buzzer provides audio feedback confirming each dose.
+      </p>
+
+      <div class="mb-8 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <h3 class="text-heading mb-4 text-base font-semibold">Three-State LED System</h3>
+        <div class="grid gap-6 sm:grid-cols-3">
+          <div>
+            <div class="mb-2 flex items-center gap-2">
+              <span class="inline-block h-3 w-3 rounded-full bg-green-500"></span>
+              <p class="text-accent text-sm font-semibold">Green: All Clear</p>
+            </div>
+            <p class="text-body text-[0.85rem]">
+              The child doesn't need to use the inhaler yet. Pressing the button
+              resets the timer and logs the dose.
+            </p>
+          </div>
+          <div>
+            <div class="mb-2 flex items-center gap-2">
+              <span class="inline-block h-3 w-3 rounded-full bg-orange-400"></span>
+              <p class="text-accent text-sm font-semibold">Orange: Grace Period</p>
+            </div>
+            <p class="text-body text-[0.85rem]">
+              The recommended dosing interval has passed. The child has a 10-minute
+              window to take a dose before the alert escalates.
+            </p>
+          </div>
+          <div>
+            <div class="mb-2 flex items-center gap-2">
+              <span class="inline-block h-3 w-3 rounded-full bg-red-500"></span>
+              <p class="text-accent text-sm font-semibold">Red: Missed Dose</p>
+            </div>
+            <p class="text-body text-[0.85rem]">
+              The grace period expired without a dose. An alert is sent to the
+              parent's dashboard so they can follow up.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Circuit Diagram -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Circuit Design</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The device is built around a Particle Photon microcontroller on a breadboard, with a
+        push button (D5) detecting inhaler actuation, a WS2812 NeoPixel (D6) for the
+        three-state LED indicator, and a piezo buzzer (A4) that plays an ascending tone
+        sequence to confirm each dose to the child.
+      </p>
+      <div class="grid items-start gap-6 md:grid-cols-2">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-3 text-base font-semibold">Hardware Bill of Materials</h3>
+          <dl class="text-body space-y-3 text-[0.9rem]">
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">MCU:</dt>
+              <dd class="inline"> Particle Photon (Wi-Fi enabled)</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Button:</dt>
+              <dd class="inline"> Tactile push button on D5 (INPUT_PULLDOWN)</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">LED:</dt>
+              <dd class="inline"> WS2812 NeoPixel on D6</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Audio:</dt>
+              <dd class="inline"> Piezo buzzer on A4 (3-tone ascending)</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Cloud:</dt>
+              <dd class="inline"> Particle.publish() &rarr; Google Sheets webhook</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Language:</dt>
+              <dd class="inline"> Embedded C++ (Particle DeviceOS)</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/breathebuddy-internals.jpeg")}
+            alt="BreatheBuddy internals: Particle Photon on breadboard with piezo buzzer, NeoPixel, and wiring inside the cardboard housing"
+            class="w-full"
+            loading="lazy"
+          />
+          <p class="text-muted bg-[var(--color-bg-raised)] py-2 text-center text-xs">
+            Photon, buzzer, and NeoPixel mounted inside the prototype enclosure
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works (Dive Deep) -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">How It Works</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The firmware runs a continuous state machine driven by two inputs: elapsed time and
+        button presses. The system starts in Green mode with a running timer. When the timer
+        exceeds the dosing interval (configurable, default 4 to 6 hours per clinical guidelines),
+        the LED transitions to Orange. If another grace window passes with no button press,
+        the device enters Red mode and publishes an alert event to the Particle Cloud.
+      </p>
+
+      <div class="mb-8 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <h3 class="text-heading mb-4 text-base font-semibold">State Machine Logic</h3>
+        <div class="space-y-4 text-[0.9rem]">
+          <div class="flex items-start gap-3">
+            <span class="mt-1 inline-block h-3 w-3 shrink-0 rounded-full bg-green-500"></span>
+            <div>
+              <p class="text-heading font-semibold">GREEN &rarr; ORANGE</p>
+              <p class="text-body">
+                When <code class="rounded bg-[var(--color-bg)] px-1.5 py-0.5 text-xs">millis() - lastDose > OTIMER</code>,
+                the NeoPixel switches to orange. The child sees a visual cue that it's time to
+                use the inhaler soon.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="mt-1 inline-block h-3 w-3 shrink-0 rounded-full bg-orange-400"></span>
+            <div>
+              <p class="text-heading font-semibold">ORANGE &rarr; RED</p>
+              <p class="text-body">
+                If the grace period (<code class="rounded bg-[var(--color-bg)] px-1.5 py-0.5 text-xs">RTIMER</code>)
+                also elapses without a press, the LED turns red and
+                <code class="rounded bg-[var(--color-bg)] px-1.5 py-0.5 text-xs">Particle.publish("ModeRed", ...)</code>
+                sends a cloud event that triggers a row in the parent's Google Sheet.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="mt-1 inline-block h-3 w-3 shrink-0 rounded-full bg-blue-500"></span>
+            <div>
+              <p class="text-heading font-semibold">ANY STATE &rarr; GREEN (button press)</p>
+              <p class="text-body">
+                A press at any point resets the timer, increments the dose counter, publishes
+                <code class="rounded bg-[var(--color-bg)] px-1.5 py-0.5 text-xs">Particle.publish("loggedInhale", count)</code>,
+                and plays a three-frequency ascending tone on the buzzer as audible confirmation
+                to the child.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <h3 class="text-heading mb-3 text-base font-semibold">Cloud Pipeline</h3>
+        <p class="text-body text-[0.9rem] leading-relaxed">
+          Every button press fires a <code class="rounded bg-[var(--color-bg)] px-1.5 py-0.5 text-xs">Particle.publish()</code>
+          event carrying the cumulative dose count. A Particle webhook forwards these events
+          to a Google Apps Script endpoint, which appends each dose timestamp, count, and
+          device state to a shared Google Sheet. Parents see a live log of when their child
+          used the inhaler, with a highlighted alert row whenever a dose was missed, without
+          needing any app installed.
+        </p>
+      </div>
+    </section>
+
+    <!-- Demo Photo -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Demo Day</h2>
+      <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/breathebuddy-demo.jpeg")}
+          alt="Mitchell Salzman demonstrating BreatheBuddy at the IoT project showcase, showing the device and live Google Sheet logging"
+          class="w-full"
+          loading="lazy"
+        />
+      </div>
+      <p class="text-muted mt-3 text-center text-xs">
+        Demonstrating BreatheBuddy at the University of Minnesota IoT project showcase
+      </p>
+    </section>
+
+    <!-- My Contributions -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">My Contributions</h2>
+      <ul class="text-body space-y-4 text-[0.95rem] leading-relaxed">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Defined the product concept and scoped the feature set around real pediatric
+            asthma guidelines, including dosing intervals, missed-dose escalation, and parent
+            notification, to ensure the device addressed a genuine clinical gap.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Wrote the embedded C++ firmware on the Particle Photon: the three-state LED
+            state machine, debounced button handling, piezo buzzer tone generation, and
+            cloud event publishing via <code class="rounded bg-[var(--color-bg)] px-1.5 py-0.5 text-xs">Particle.publish()</code>.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Designed the circuit layout on the breadboard, wiring the NeoPixel, button
+            with pull-down resistor, and piezo buzzer to the Photon, and integrating
+            everything into a compact enclosure that clips onto a standard inhaler.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Built the cloud data pipeline: configured the Particle webhook to forward events
+            to a Google Apps Script endpoint that logs every dose and missed-dose alert to a
+            shared Google Sheet for parent monitoring.
+          </span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Key Insight -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Key Insight</h2>
+      <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <p class="text-body text-[0.95rem] leading-relaxed">
+          The core design decision was keeping the child-facing interaction as simple as
+          possible, a single color and a sound, while pushing all complexity to the cloud
+          side where parents can engage with it. A child doesn't need an app or a screen;
+          they need a green light that turns orange when it's time. The device meets kids
+          where they already are (pressing the inhaler) and turns that existing action into
+          a data point without adding any steps to their routine.
+        </p>
+      </div>
+    </section>
+
+    <!-- Future Work -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Future Work</h2>
+      <ul class="text-body space-y-3 text-[0.95rem]">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Replace the breadboard prototype with a custom PCB small enough to fit inside a 3D-printed snap-on enclosure
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Add BLE connectivity to a companion parent app with push notifications for missed doses
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Integrate allergen and pollen forecasts so the device can proactively recommend preventive doses
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Add technique detection (accelerometer on the inhaler) to flag incorrect usage patterns
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Pilot with a local pediatric clinic to validate adherence improvement against a control group
+        </li>
+      </ul>
+    </section>
+
+    <!-- Tech chips -->
+    <div class="border-line flex flex-wrap gap-3 border-t pt-8" data-reveal>
+      {["Particle Photon", "Embedded C++", "IoT", "NeoPixel", "Piezo Buzzer", "Google Sheets", "Particle Cloud", "Webhook"].map(t => (
+        <span class="chip">{t}</span>
+      ))}
+    </div>
+  </div>
+</Base>

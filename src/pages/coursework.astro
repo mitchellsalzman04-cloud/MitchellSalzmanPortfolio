@@ -1,0 +1,75 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icon from "@/components/Icon.astro";
+import { education, coursework, site } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Base
+  title="Coursework"
+  description={`Selected electrical and biomedical coursework from ${site.name}'s integrated B.E.E./M.S. ECE program.`}
+>
+  <div class="mx-auto max-w-4xl px-6 pt-36 pb-24 sm:px-12 md:px-24">
+    <a
+      href={withBase("/#education")}
+      class="font-mono text-muted hover:text-accent inline-flex items-center gap-2 text-xs transition-colors"
+    >
+      <Icon name="arrow" size={14} class="rotate-180" /> back to portfolio
+    </a>
+
+    <header class="mt-8 mb-10" data-reveal>
+      <p class="eyebrow">Education · Electrical Engineering</p>
+      <h1 class="mt-4 text-3xl font-semibold sm:text-4xl">Selected Coursework</h1>
+      <p class="text-muted mt-4 max-w-xl text-sm">
+        Electrical and biomedical coursework from my integrated B.E.E. / M.S. ECE
+        program at the University of Minnesota.
+      </p>
+    </header>
+
+    <div class="border-line mb-12 flex flex-col gap-3 border-t pt-6 sm:flex-row sm:gap-10">
+      {
+        education.map((deg) => (
+          <div class="flex items-start gap-3">
+            <img
+              src={withBase(deg.logo)}
+              alt={deg.school}
+              width="32"
+              height="32"
+              class="mt-0.5 h-8 w-8 rounded"
+            />
+            <div>
+              <p class="text-heading text-sm font-medium">{deg.title}</p>
+              <p class="font-mono text-muted text-xs">
+                {deg.status}
+                {deg.gpa && <span> · GPA {deg.gpa}</span>}
+                {deg.honors && <span> · {deg.honors}</span>}
+              </p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="grid gap-8 sm:grid-cols-2">
+      {
+        coursework.map((group, i) => (
+          <div
+            class="course-group rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-5"
+            data-reveal
+            style={`--reveal-delay: ${i * 80}ms`}
+          >
+            <h2 class="text-heading mb-3 text-sm font-semibold">{group.label}</h2>
+            <ul class="space-y-1.5">
+              {group.courses.map((c) => (
+                <li class="text-muted flex items-start gap-2 text-[0.85rem]">
+                  <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current" />
+                  {c}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</Base>

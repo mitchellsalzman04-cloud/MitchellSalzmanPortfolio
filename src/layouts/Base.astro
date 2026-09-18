@@ -1,6 +1,6 @@
 ---
 import "@fontsource-variable/inter";
-import "@fontsource-variable/space-grotesk";
+import "@fontsource-variable/figtree";
 import "@fontsource/jetbrains-mono/400.css";
 import "@fontsource/jetbrains-mono/500.css";
 import "@/styles/global.css";
@@ -18,7 +18,7 @@ interface Props {
 }
 
 const { title, description = site.description, loader = false } = Astro.props;
-const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.role}`;
+const pageTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.role}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(withBase("/og.png"), Astro.site);
 ---
@@ -34,7 +34,7 @@ const ogImage = new URL(withBase("/og.png"), Astro.site);
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
     <link rel="sitemap" href={withBase("/sitemap-index.xml")} />
-    <meta name="theme-color" content="#12141b" />
+    <meta name="theme-color" content="#ffffff" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
@@ -43,7 +43,7 @@ const ogImage = new URL(withBase("/og.png"), Astro.site);
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="2400" />
     <meta property="og:image:height" content="1260" />
-    <meta property="og:image:alt" content={`${site.name} — ${site.tagline}`} />
+    <meta property="og:image:alt" content={`${site.name} | ${site.tagline}`} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogImage} />
     <script is:inline>
@@ -56,17 +56,25 @@ const ogImage = new URL(withBase("/og.png"), Astro.site);
 
     <a
       href="#main"
-      class="font-mono text-sm bg-accent fixed top-4 left-4 z-[100] -translate-y-24 rounded px-4 py-2 text-black transition-transform focus:translate-y-0"
+      class="bg-accent fixed top-4 left-4 z-[100] -translate-y-24 rounded-full px-5 py-2 text-sm font-semibold text-white transition-transform focus:translate-y-0"
     >
       Skip to content
     </a>
 
     <Nav />
 
-    <div id="main" class="relative z-[1] mx-auto max-w-screen-xl px-6 sm:px-12 md:px-24">
+    {/*
+      No max-width container here — that is deliberate. Sections carry their
+      own full-bleed band and re-centre their contents with `.wrap`, which is
+      what lets backgrounds run to both screen edges. A wrapper at this level
+      would clip every band at max-w-screen-xl and the striped layout would
+      collapse back into one column.
+    */}
+    <main id="main" class="relative z-[1]">
       <slot />
-      <Footer />
-    </div>
+    </main>
+
+    <Footer />
 
     <script>
       // Scroll-reveal: observe [data-reveal] elements once, then unobserve.

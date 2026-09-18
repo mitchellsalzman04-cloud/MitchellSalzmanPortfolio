@@ -1,0 +1,59 @@
+---
+/**
+ * The little square beside a company or org name.
+ *
+ * Three tiers, best first: a real logo committed under public/logos/, then
+ * Google's scraped favicon, then the monogram sitting behind both. A logo
+ * fills the box edge to edge because these marks ship with their own grounds
+ * (Velosity's gradient, IEEE's maroon) and insetting them on a white chip
+ * puts a frame around a frame. A favicon keeps the chip.
+ */
+import { withBase } from "@/lib/url";
+
+interface Props {
+  company: string;
+  url: string;
+  logo?: string;
+  /** Rendered box edge, in px. */
+  size: number;
+}
+
+const { company, url, logo, size } = Astro.props;
+
+/**
+ * Favicons via Google's faviconV2 on gstatic, given the *full* page URL
+ * rather than a bare domain. Domain-only lookups downgrade to http:// and
+ * miss some modern sites, and the older www.google.com/s2/favicons host sits
+ * on common tracker blocklists, so it silently fails behind a blocker.
+ *
+ * Ask for 2x the rendered box. If it fails anyway, `onerror` drops the image
+ * and the monogram behind shows.
+ */
+const faviconFor = (u: string, px: number) =>
+  `https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent(
+    u,
+  )}&size=${px}`;
+
+const inner = logo ? size : Math.round(size * 0.75);
+const radius = Math.max(2, Math.round(size * 0.16));
+---
+
+<span
+  class="border-line bg-bg font-mono relative inline-flex shrink-0 items-center justify-center overflow-hidden border leading-none"
+  style={`width:${size}px;height:${size}px;border-radius:${radius}px;font-size:${Math.round(size * 0.4)}px`}
+  aria-hidden="true"
+>
+  {company.charAt(0)}
+  <img
+    src={logo ? withBase(logo) : faviconFor(url, size * 2)}
+    alt=""
+    aria-hidden="true"
+    width={inner}
+    height={inner}
+    loading="lazy"
+    decoding="async"
+    class="absolute inset-0 m-auto"
+    style={`width:${inner}px;height:${inner}px;object-fit:${logo ? "cover" : "contain"}`}
+    onerror="this.remove()"
+  />
+</span>

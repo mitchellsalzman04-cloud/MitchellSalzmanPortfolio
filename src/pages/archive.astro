@@ -11,7 +11,7 @@ const rows = [...archive].sort((a, b) => b.year - a.year);
   title="Archive"
   description={`A full list of things ${site.name} has built.`}
 >
-  <div class="mx-auto max-w-4xl pt-36 pb-24">
+  <div class="mx-auto max-w-4xl px-6 pt-36 pb-24 sm:px-12 md:px-24">
     <a
       href={withBase("/#projects")}
       class="font-mono text-muted hover:text-accent inline-flex items-center gap-2 text-xs transition-colors"
@@ -22,7 +22,7 @@ const rows = [...archive].sort((a, b) => b.year - a.year);
     <header class="mt-8 mb-12" data-reveal>
       <h1 class="text-3xl font-semibold sm:text-4xl">Archive</h1>
       <p class="text-muted mt-4 max-w-xl text-sm">
-        A big list of things I've built — tools, robots, agents, and a few papers.
+        A big list of things I've built: tools, robots, agents, and a few papers.
       </p>
     </header>
 
@@ -50,7 +50,7 @@ const rows = [...archive].sort((a, b) => b.year - a.year);
                 </td>
                 <td class="text-heading py-4 pr-4 align-top text-sm font-medium">{row.title}</td>
                 <td class="text-muted hidden py-4 pr-4 align-top text-sm sm:table-cell">
-                  {row.madeAt ?? <span class="text-faint">—</span>}
+                  {row.madeAt ?? ""}
                 </td>
                 <td class="hidden py-4 pr-4 align-top md:table-cell">
                   <span class="font-mono text-muted text-xs">

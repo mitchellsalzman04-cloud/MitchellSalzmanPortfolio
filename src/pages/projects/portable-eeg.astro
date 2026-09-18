@@ -1,0 +1,150 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icon from "@/components/Icon.astro";
+import { site } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Base
+  title="Portable Neural Recording"
+  description="A wearable device for continuous neural recording from implanted DBS electrodes during the two-week gap between surgeries."
+>
+  <div class="mx-auto max-w-5xl px-6 pt-36 pb-24 sm:px-12 md:px-24">
+    <a
+      href={withBase("/#projects")}
+      class="font-mono text-muted hover:text-accent inline-flex items-center gap-2 text-xs transition-colors"
+    >
+      <Icon name="arrow" size={14} class="rotate-180" /> back to portfolio
+    </a>
+
+    <!-- Header -->
+    <header class="mt-8 mb-12" data-reveal>
+      <p class="eyebrow">STRIVE Medical · UMN Neurology · In Progress</p>
+      <h1 class="mt-4 text-3xl font-semibold sm:text-4xl">Portable Neural Recording</h1>
+      <p class="text-muted mt-2 text-lg">Closing the Two-Week Gap in Brain Stimulation</p>
+      <p class="text-accent mt-3 text-sm font-medium">
+        Team of 7 · Clinical Collaboration · Hardware Design
+      </p>
+      <div class="mt-4 inline-flex items-center gap-2 rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)]/10 px-3 py-1">
+        <span class="h-2 w-2 rounded-full bg-[var(--color-accent)] animate-pulse"></span>
+        <span class="text-accent text-xs font-medium">Active Development</span>
+      </div>
+    </header>
+
+    <!-- Hero Image -->
+    <section class="mb-14" data-reveal>
+      <div class="mx-auto max-w-lg overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/portable-eeg-cover.jpg")}
+          alt="Deep brain stimulation electrode placement"
+          class="w-full"
+        />
+      </div>
+    </section>
+
+    <!-- The Problem -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">The Problem</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Deep brain stimulation (DBS) can treat epilepsy, depression, OCD, and other neurological
+        conditions, but the way it's implanted in the US leaves a critical gap. The procedure
+        happens in two separate surgeries: first the electrodes are placed in the brain, then
+        about two weeks later a second surgery connects them to a pulse generator in the chest.
+        For those two weeks, the implanted electrodes sit idle and record nothing, while patients
+        stay tethered to bulky hospital equipment.
+      </p>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        That window is a missed opportunity. It's exactly when doctors could be learning how a
+        patient's brain behaves in real life, rather than in a hospital bed. And there's a deeper
+        limitation: today a surgeon commits to a single stimulation target with no way to test it
+        first, and roughly half of DBS cases don't deliver the results patients hope for.
+        Conditions like depression and OCD make this even harder, because their symptoms rarely
+        appear in a clinical setting.
+      </p>
+      <p class="text-body text-[0.95rem] leading-relaxed">
+        For patients who can't be treated with medication alone, current reimbursement programs
+        don't allow stereo EEG, the gold standard for understanding where neural issues
+        originate. This device closes that gap.
+      </p>
+    </section>
+
+    <!-- What We're Building -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">What We're Building</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        We're developing a portable, wearable recording device that captures continuous neural
+        data from implanted electrodes during that two-week window, at home, in the patient's
+        normal environment. Instead of staying wired to a hospital machine, patients go home with
+        a compact box that records around the clock.
+      </p>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-2 text-base font-semibold">The Anchor</h3>
+          <p class="text-body text-[0.85rem]">
+            A secure interface that stabilizes the electrodes where they exit the skull, so
+            signals stay clean during everyday movement.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-2 text-base font-semibold">The Recorder</h3>
+          <p class="text-body text-[0.85rem]">
+            A miniaturized, low-power device that reliably captures 24-hour neural data while
+            managing battery life, onboard storage, and signal noise.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Where It Leads -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Where It Leads</h2>
+      <p class="text-body text-[0.95rem] leading-relaxed">
+        Longer term, this becomes a platform. If electrodes can be placed at several candidate
+        targets and trialed at home, clinicians could find the target that actually works best
+        for each patient before committing to a permanent implant, then remove the rest. That
+        has the potential to meaningfully raise DBS success rates and extend the approach well
+        beyond epilepsy to depression, OCD, and any condition that depends on capturing
+        real-world neural signals.
+      </p>
+    </section>
+
+    <!-- Clinical Partners -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Clinical Partners</h2>
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-2 text-base font-semibold">UMN Visible Heart Lab</h3>
+          <p class="text-body text-[0.85rem]">
+            A world-recognized research lab providing expertise in medical device development,
+            testing infrastructure, and translational research methodology.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-2 text-base font-semibold">UMN Neurology Department</h3>
+          <p class="text-body text-[0.85rem]">
+            Clinical neurology faculty defining the recording requirements, access to DBS
+            patients and workflows, and validation of captured neural data quality.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Current Status -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Current Status</h2>
+      <p class="text-body text-[0.95rem] leading-relaxed">
+        A team of seven is actively developing the device. The anchor interface and recorder
+        architecture are in early design, with clinical requirements defined alongside the UMN
+        Neurology department. More details will be published as the project progresses.
+      </p>
+    </section>
+
+    <!-- Tech chips -->
+    <div class="border-line flex flex-wrap gap-3 border-t pt-8" data-reveal>
+      {["Neural Recording", "DBS", "Analog Front End", "PCB Design", "Signal Processing", "Altium", "Low Power", "Biomedical"].map(t => (
+        <span class="chip">{t}</span>
+      ))}
+    </div>
+  </div>
+</Base>

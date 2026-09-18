@@ -1,0 +1,25 @@
+---
+/**
+ * Full-bleed band. The section spans the viewport so its background reaches
+ * both screen edges; `.wrap` re-centres the content inside it at the same
+ * width the old single-column layout used.
+ *
+ * This is the whole trick behind the striped look — text never moves, only
+ * the ground underneath it changes.
+ */
+interface Props {
+  tone?: "white" | "grey" | "dark" | "ink" | "hero" | "accent";
+  id?: string;
+  class?: string;
+  /** Extra classes on the inner centred container. */
+  wrapClass?: string;
+}
+
+const { tone = "white", id, class: className = "", wrapClass = "" } = Astro.props;
+---
+
+<section id={id} class={`band band-${tone} ${id ? "scroll-mt-20" : ""} ${className}`}>
+  <div class={`wrap ${wrapClass}`}>
+    <slot />
+  </div>
+</section>

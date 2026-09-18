@@ -1,0 +1,483 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icon from "@/components/Icon.astro";
+import { site } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Base
+  title="SynDex"
+  description="A 7-DOF desktop robotic surgery training device built at STRIVE Medical."
+>
+  <div class="mx-auto max-w-5xl px-6 pt-36 pb-24 sm:px-12 md:px-24">
+    <a
+      href={withBase("/#projects")}
+      class="font-mono text-muted hover:text-accent inline-flex items-center gap-2 text-xs transition-colors"
+    >
+      <Icon name="arrow" size={14} class="rotate-180" /> back to portfolio
+    </a>
+
+    <!-- Header -->
+    <header class="mt-8 mb-12" data-reveal>
+      <p class="eyebrow">STRIVE Medical · Surgical Simulation</p>
+      <h1 class="mt-4 text-3xl font-semibold sm:text-4xl">SynDex</h1>
+      <p class="text-muted mt-2 text-lg">A 7 DOF Desktop Robotic Surgery Training Device</p>
+      <p class="text-accent mt-3 text-sm font-medium">
+        Founder & President · Operations Lead · Co Electrical Lead
+      </p>
+    </header>
+
+    <!-- The Problem -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">The Problem</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Robotic assisted surgery (RAS) training simulators cost upward of $5,000 for sessions
+        that last only 1 to 3 days, and are institution owned, making sustained independent
+        practice inaccessible to early stage students. SynDex is a personal, desktop scale
+        haptic device that gives students hands on exposure to RAS console interaction without
+        the cost barrier.
+      </p>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        <div class="rounded-lg border-2 border-[var(--color-accent)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-lg font-bold">$1,400</p>
+          <p class="text-accent mt-1 text-xs font-medium">SynDex</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">$300</p>
+          <p class="text-muted mt-1 text-xs">Ghost Med VR</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">$40K</p>
+          <p class="text-muted mt-1 text-xs">BBZ LEO</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">$89K</p>
+          <p class="text-muted mt-1 text-xs">SimNow</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">$137K</p>
+          <p class="text-muted mt-1 text-xs">RobotiX</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">$100K</p>
+          <p class="text-muted mt-1 text-xs">Versius Trainer</p>
+        </div>
+      </div>
+      <p class="text-muted mt-4 text-center text-xs">SynDex is the only option under $40K that provides realistic haptic control, personal ownership, and easy entry</p>
+    </section>
+
+    <!-- Demo Video + Poster side by side -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Demo</h2>
+      <div class="grid items-start gap-6 md:grid-cols-2">
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)] bg-black/5">
+          <video
+            controls
+            playsinline
+            preload="metadata"
+            aria-label="SynDex demo"
+            class="block w-full"
+          >
+            <source src={withBase("/media/syndex-demo.mov")} type="video/mp4" />
+          </video>
+        </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/syndex-poster-low.png")}
+            alt="SynDex project poster"
+            class="block w-full"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- System Overview -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">System Overview</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        SynDex is a 7 DOF admittance controlled robotic manipulator that interfaces with a
+        Unity simulation environment to deliver real time haptic feedback. The user physically
+        moves the arm; the embedded system estimates interaction forces from motor current,
+        computes the admittance response, and renders corresponding forces in simulation.
+        Collisions detected in Unity are returned as torque commands to the physical arm,
+        closing the haptic loop.
+      </p>
+
+      <div class="mb-8 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <h3 class="text-heading mb-4 text-base font-semibold">Processing Nodes</h3>
+        <div class="grid gap-6 sm:grid-cols-3">
+          <div>
+            <p class="text-accent text-sm font-semibold">Teensy 4.1</p>
+            <p class="text-body mt-1 text-[0.85rem]">Central supervisory controller running the state machine and admittance control loop</p>
+          </div>
+          <div>
+            <p class="text-accent text-sm font-semibold">ODrive Micro (x3, expandable to 7)</p>
+            <p class="text-body mt-1 text-[0.85rem]">Dedicated motor controllers running inner current loops at 10 to 20 kHz</p>
+          </div>
+          <div>
+            <p class="text-accent text-sm font-semibold">Host PC</p>
+            <p class="text-body mt-1 text-[0.85rem]">Simulation environment providing virtual feedback and user interface</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-6 overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/syndex-fig-p3-1.png")}
+          alt="System architecture block diagram"
+          class="w-full bg-white p-4"
+          loading="lazy"
+        />
+      </div>
+      <p class="text-muted mb-8 text-center text-xs">System architecture: Teensy, ODrives, sensors, and PC communication paths</p>
+
+      <div class="grid gap-8 sm:grid-cols-2">
+        <div>
+          <h3 class="text-heading mb-3 text-sm font-semibold">Key System Requirements</h3>
+          <ul class="text-body space-y-2 text-[0.85rem]">
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              Bidirectional haptic feedback via admittance control
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              Low latency communication between firmware and simulation
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              Deterministic CAN communication with ODrives
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              Hardware fault detection and safe state handling
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              Modular mechanical design for grip interchangeability
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-heading mb-3 text-sm font-semibold">Key Technologies</h3>
+          <ul class="text-body space-y-2 text-[0.85rem]">
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              <strong>MCU:</strong>&nbsp;Teensy 4.1 (600 MHz Cortex M7)
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              <strong>Motor Control:</strong>&nbsp;ODrive Micro, BLDC motors, magnetic rotary encoders
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              <strong>PCB:</strong>&nbsp;Custom Altium design with power distribution, CAN transceivers, multiplexers, error LEDs, test points
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              <strong>Software:</strong>&nbsp;C/C++, Python, Unity simulation
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              <strong>Protocols:</strong>&nbsp;CAN, I²C, USB CDC
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hardware: CAD & PCB -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Hardware</h2>
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div>
+          <img
+            src={withBase("/media/syndex-fig-p2-0.png")}
+            alt="SynDex CAD model"
+            class="w-full rounded-lg border border-[var(--color-line)]"
+            loading="lazy"
+          />
+          <p class="text-muted mt-2 text-center text-xs">CAD model of the 7 DOF robotic arm</p>
+        </div>
+        <div>
+          <img
+            src={withBase("/media/syndex-fig-p2-1.png")}
+            alt="SynDex custom PCB layout in Altium"
+            class="w-full rounded-lg border border-[var(--color-line)]"
+            loading="lazy"
+          />
+          <p class="text-muted mt-2 text-center text-xs">Custom PCB designed in Altium</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- System State Machine -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">System State Machine</h2>
+      <div class="grid items-start gap-8 md:grid-cols-[1fr_auto]">
+        <div>
+          <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+            The system behavior is orchestrated by a centralized state machine running on
+            the Teensy. This ensures deterministic transitions between operational modes
+            and consistent fault handling, a critical requirement for real time embedded
+            systems. The architecture cleanly separates operational modes while maintaining
+            continuous control. A global error state manages fault detection and recovery,
+            ensuring safe and robust operation.
+          </p>
+          <h3 class="text-heading mb-3 text-base font-semibold">Key States</h3>
+          <dl class="text-body space-y-3 text-[0.9rem]">
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Boot Up:</dt>
+              <dd class="inline"> Hardware init: CAN, I²C, GPIO; ODrive discovery.</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Idle:</dt>
+              <dd class="inline"> Waiting for host connection. Responds to ping commands from Unity.</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Connected:</dt>
+              <dd class="inline"> Host connection established, system ready for user initiation.</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Homing:</dt>
+              <dd class="inline"> Calibration sequence: move joints to hard stops, set zero positions.</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Ready:</dt>
+              <dd class="inline"> Fully calibrated and connected, awaiting user command.</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Error Mode:</dt>
+              <dd class="inline"> Fault detected. Safe state with motors disabled.</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="mx-auto w-full max-w-[280px] overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/syndex-fig-p3-0.png")}
+            alt="System state machine diagram"
+            class="w-full bg-white p-3"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Control Architecture -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-6 text-xl font-semibold">Control Loop Architecture</h2>
+
+      <p class="text-body mb-8 text-[0.95rem] leading-relaxed">
+        The control system is partitioned into three distinct layers with different rate requirements:
+      </p>
+
+      <!-- Control Layers -->
+      <div class="mb-8 space-y-4">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Inner Current Loop (ODrive, 10 to 20 kHz)</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            Field oriented control (FOC) of BLDC motors. Each ODrive independently regulates
+            phase currents based on torque/velocity commands from the Teensy.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Outer Admittance Loop (Teensy)</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            Computes desired motion based on estimated interaction forces. Implements the virtual
+            mass spring damper dynamics, coordinates multiple joints, and manages bidirectional
+            device to PC communication through custom USB packets.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Simulation Loop (Unity, ~60 Hz)</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            Renders the virtual environment, detects collisions, and computes haptic return forces.
+            Runs asynchronously on the host PC.
+          </p>
+        </div>
+      </div>
+
+      <!-- Closed Loop Control Architecture Diagram — FULL WIDTH -->
+      <div class="mb-2 overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/syndex-fig-p4-0.png")}
+          alt="Closed loop control architecture with sensor readings and admittance control"
+          class="w-full bg-white p-6"
+          loading="lazy"
+        />
+      </div>
+      <p class="text-muted mb-8 text-center text-xs">Closed loop control architecture with sensor readings and admittance control</p>
+
+      <!-- Data Flow + Admittance Equation as PDF screenshot -->
+      <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/syndex-dataflow-algo.png")}
+          alt="Data flow and communication paths, and core admittance control algorithm"
+          class="w-full bg-white p-4"
+          loading="lazy"
+        />
+      </div>
+    </section>
+
+    <!-- My Contributions -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">My Contributions</h2>
+      <ul class="text-body space-y-4 text-[0.95rem] leading-relaxed">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Founded STRIVE Medical and scaled the organization from 8 to 40 members across
+            five technical subteams in nine months, securing $5,000 in grants and sponsorship
+            and building an eleven person leadership team.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Led the operations team: conducted user research with surgical students, drove
+            industry collaboration and outreach, and defined human factors requirements that
+            shaped the device's ergonomic and interaction design.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Served as co electrical lead: designed and routed the multi layer PCB in Altium
+            handling power distribution, CAN transceivers, signal routing, and component
+            placement. Built and tested the board, and taught wire harnessing across the team.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Managed the full project across mechanical, electrical, firmware, and software
+            subteams. Conducted a formal
+            <a
+              href="https://docs.google.com/presentation/d/1HzOBPyfM0l5T4zp0KgTGSxyQJabb578KTwcQz5bGWG4/edit?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-accent hover:underline"
+            >design review</a>
+            to align cross functional work and catch integration issues early.
+          </span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Results -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Results</h2>
+      <ul class="text-body space-y-3 text-[0.95rem]">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          CAN communication verified with three ODrives and three motors at 1 Mbit/s; architecture confirmed expandable to seven axes with no bus timing violations
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Closed loop pulley joint mechanism integrated and validated through full range of motion testing
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Unity simulation prototype demonstrates virtual end effector tracking of physical arm motion with sub frame latency at 60 Hz render rate
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Won overall top prize at MIN Corps Founders Day against 25 competing ventures
+        </li>
+      </ul>
+    </section>
+
+    <!-- Technical Challenges -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Technical Challenges</h2>
+      <div class="space-y-4">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Subteam Integration</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            Coordinating mechanical, electrical, firmware, and software teams required clear
+            interface definitions. Weekly subteam meetings helped catch inconsistencies early;
+            interface contracts for CAN message formats and USB packet schemas were documented
+            and version controlled to prevent integration regressions.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Coupled Joint Mechanism</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            The closed loop pulley system couples two degrees of freedom, requiring kinematic
+            decoupling to achieve independent admittance control per joint. URDF's lack of
+            support for closed loop linkages also complicated simulation; a custom kinematic
+            mapping was implemented to work around this constraint.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Managing Scope Against Complexity</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            As technical demands grew, the proposed project plan required continuous revision.
+            Reducing the motor count from seven to three was a deliberate scope decision that
+            preserved schedule while keeping the architecture expandable. This required ongoing
+            compromise between what was desirable and what was achievable within the timeline.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Future Improvements -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Future Improvements</h2>
+      <ul class="text-body space-y-3 text-[0.95rem]">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Expand to a dual arm system to further mimic RAS console interaction
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Improve "weightlessness" by tuning admittance model parameters and adding a full gravity compensation term
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Add real world surgical task modules (suturing, tissue manipulation) into the Unity simulation
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Integrate a touchscreen user interface directly into the device enclosure
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Implement BLE connectivity for wireless operation between device and host software
+        </li>
+      </ul>
+    </section>
+
+    <!-- Resources -->
+    <section class="mb-8" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Resources</h2>
+      <div class="flex flex-wrap gap-4">
+        <a
+          href="https://docs.google.com/presentation/d/1HzOBPyfM0l5T4zp0KgTGSxyQJabb578KTwcQz5bGWG4/edit?usp=sharing"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] px-4 py-3 text-sm font-medium text-[var(--color-heading)] transition-colors hover:border-[var(--color-accent)]"
+        >
+          <Icon name="external" size={14} />
+          Design Review Slides
+        </a>
+        <a
+          href="https://docs.google.com/presentation/d/1IMAy5ANh1K_zuJgHZLM3AnioPRiDQjFQm4VOqZyZkyw/edit?usp=sharing"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] px-4 py-3 text-sm font-medium text-[var(--color-heading)] transition-colors hover:border-[var(--color-accent)]"
+        >
+          <Icon name="external" size={14} />
+          Project Slide Deck
+        </a>
+      </div>
+    </section>
+
+    <!-- Tech chips -->
+    <div class="border-line flex flex-wrap gap-3 border-t pt-8" data-reveal>
+      {["Teensy 4.1", "ODrive Micro", "CAN", "I²C", "USB CDC", "Altium", "Unity", "C/C++", "Python", "BLDC Motors"].map(t => (
+        <span class="chip">{t}</span>
+      ))}
+    </div>
+  </div>
+</Base>

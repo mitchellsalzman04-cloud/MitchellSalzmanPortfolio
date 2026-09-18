@@ -1,0 +1,383 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icon from "@/components/Icon.astro";
+import { site } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Base
+  title="VO₂Go"
+  description="A deep learning model that detects ventilatory threshold from heart rate and demographics alone. No lab, no gas mask, no expert."
+>
+  <div class="mx-auto max-w-5xl px-6 pt-36 pb-24 sm:px-12 md:px-24">
+    <a
+      href={withBase("/#projects")}
+      class="font-mono text-muted hover:text-accent inline-flex items-center gap-2 text-xs transition-colors"
+    >
+      <Icon name="arrow" size={14} class="rotate-180" /> back to portfolio
+    </a>
+
+    <!-- Header -->
+    <header class="mt-8 mb-12" data-reveal>
+      <p class="eyebrow">EE 4940 · University of Minnesota · Spring 2025</p>
+      <h1 class="mt-4 text-3xl font-semibold sm:text-4xl">VO₂Go</h1>
+      <p class="text-muted mt-2 text-lg">Advancing Ventilatory Threshold Detection with Multimodal Features</p>
+      <p class="text-body mt-3 text-sm">
+        Mitchell Salzman · Talha Hamza · Alexander Buermann
+      </p>
+      <p class="text-muted mt-1 text-xs">
+        Advisors: Otto Sanchez, MD, PhD (Minnesota Heart Institute) · Dr. Anton Hesse (University of Minnesota)
+      </p>
+    </header>
+
+    <!-- The Problem -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">The Problem</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Ventilatory threshold (VT1) is the intensity at which your body shifts from burning
+        fat to burning carbohydrates, the single most useful number for endurance training.
+        Finding it today requires a $200 to $300 lab test with a gas exchange mask, a treadmill
+        protocol, and expert interpretation of respiratory data. Most athletes never get tested.
+      </p>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div class="rounded-lg border-2 border-[var(--color-accent)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-lg font-bold">$0</p>
+          <p class="text-accent mt-1 text-xs font-medium">VO₂Go</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">$200 to $300</p>
+          <p class="text-muted mt-1 text-xs">Lab VO₂ test</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">Gas mask</p>
+          <p class="text-muted mt-1 text-xs">Required equipment</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">Expert</p>
+          <p class="text-muted mt-1 text-xs">Manual interpretation</p>
+        </div>
+      </div>
+      <p class="text-muted mt-4 text-center text-xs">
+        VO₂Go replaces the lab test entirely, predicting VT1 from heart rate and basic demographics alone
+      </p>
+    </section>
+
+    <!-- Architecture Diagram -->
+    <section class="mb-14" data-reveal>
+      <div class="overflow-hidden rounded-lg border border-[var(--color-line)] bg-white">
+        <img
+          src={withBase("/media/vo2go-architecture.svg")}
+          alt="VO₂Go architecture: Apple Watch captures heart rate, demographics feed into LSTM model, outputs VT1 and training zones"
+          class="block w-full p-4"
+        />
+      </div>
+    </section>
+
+    <!-- Our Solution -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Our Solution</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        VO₂Go is an LSTM-based deep learning model that predicts ventilatory threshold from
+        data any smartwatch can record: heart rate over time, plus age, weight, height, and
+        sex. No gas exchange equipment, no lab visit, no expert analysis.
+      </p>
+
+      <div class="mb-8 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <h3 class="text-heading mb-4 text-base font-semibold">Three-Stage Pipeline</h3>
+        <div class="grid gap-6 sm:grid-cols-3">
+          <div>
+            <p class="text-accent text-sm font-semibold">1. Ground Truth Labels</p>
+            <p class="text-body mt-1 text-[0.85rem]">
+              Leveraged the PhysioNet TMET cardiorespiratory dataset and applied three
+              validated VT1 detection methods (V-slope, VE/VO₂, Excess CO₂) to establish
+              consensus labels.
+            </p>
+          </div>
+          <div>
+            <p class="text-accent text-sm font-semibold">2. Feature Engineering</p>
+            <p class="text-body mt-1 text-[0.85rem]">
+              Paired heart rate time series with static demographics (age, weight, height,
+              sex), limiting inputs to what a consumer wearable provides.
+            </p>
+          </div>
+          <div>
+            <p class="text-accent text-sm font-semibold">3. LSTM Regression</p>
+            <p class="text-body mt-1 text-[0.85rem]">
+              Trained an LSTM network that processes the heart rate sequence alongside
+              static features to predict VT1 as a continuous VO₂ value.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/vo2go-slide-solution.png")}
+          alt="VO₂Go solution pipeline: dataset, threshold detection, model training"
+          class="w-full"
+          loading="lazy"
+        />
+      </div>
+    </section>
+
+    <!-- Demo Video -->
+    <section class="mb-14" data-reveal>
+    </section>
+
+    <!-- VT1 Detection Methods -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Threshold Detection</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Before training the model, we needed ground truth labels. We implemented three
+        established physiological methods for detecting VT1 from gas exchange data and
+        used their agreement to produce reliable labels for 868 exercise tests.
+      </p>
+
+      <div class="mb-8 space-y-4">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">V-Slope Method</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            Plots VCO₂ against VO₂ and identifies the breakpoint where the slope increases,
+            the point at which CO₂ production begins to outpace oxygen consumption.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Ventilatory Equivalents (VE/VO₂)</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            Identifies when VE/VO₂ rises while VE/VCO₂ remains stable, the hallmark
+            of increased ventilatory drive at the aerobic threshold.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Excess CO₂</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            Detects VT1 as the point where CO₂ production exceeds steady-state levels,
+            using the formula: ExCO₂ = (VCO₂²/VO₂) − VCO₂.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/vo2go-slide-detection.png")}
+            alt="Three VT1 detection methods: Excess CO₂, V-Slope, and Ventilatory Equivalents"
+            class="w-full"
+            loading="lazy"
+          />
+        </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/vo2go-slide-example.png")}
+            alt="Example VT1 detection for subject 2_1 showing all three methods converging"
+            class="w-full"
+            loading="lazy"
+          />
+        </div>
+      </div>
+      <p class="text-muted mt-4 text-center text-xs">
+        Left: the three detection methods applied to gas exchange data. Right: an example subject showing convergence.
+      </p>
+    </section>
+
+    <!-- Model Architecture -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Model Architecture</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The model is an LSTM regression network that combines a time-series heart rate
+        sequence with static demographic features. The LSTM processes the variable-length
+        heart rate recording; its final hidden state is concatenated with the demographic
+        vector and passed through fully connected layers to predict VT1 as a continuous
+        VO₂ value in mL/min.
+      </p>
+
+      <div class="grid items-start gap-8 md:grid-cols-2">
+        <div>
+          <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+            <h3 class="text-heading mb-3 text-base font-semibold">Architecture Details</h3>
+            <dl class="text-body space-y-3 text-[0.9rem]">
+              <div>
+                <dt class="font-semibold text-[var(--color-heading)] inline">Type:</dt>
+                <dd class="inline"> LSTM + fully connected regression head</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-[var(--color-heading)] inline">LSTM:</dt>
+                <dd class="inline"> 64 hidden units, 1 layer, batch-first</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-[var(--color-heading)] inline">Inputs:</dt>
+                <dd class="inline"> Heart rate time series + [age, weight, height, sex]</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-[var(--color-heading)] inline">Output:</dt>
+                <dd class="inline"> VT1 threshold (mL/min VO₂)</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-[var(--color-heading)] inline">Loss:</dt>
+                <dd class="inline"> Mean squared error</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-[var(--color-heading)] inline">Split:</dt>
+                <dd class="inline"> 70% train / 15% validation / 15% test</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-[var(--color-heading)] inline">Dataset:</dt>
+                <dd class="inline"> 868 treadmill exercise tests from PhysioNet</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/vo2go-slide-model.png")}
+            alt="LSTM model architecture and training parameters"
+            class="w-full"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Training Results -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Training Results</h2>
+      <div class="grid items-start gap-8 md:grid-cols-[1fr_auto]">
+        <div>
+          <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+            The model converges over 20 epochs, with training and validation loss closely
+            tracking, indicating the model generalizes rather than overfitting to the
+            training set. On the held-out test set, the model achieves an MSE of ~506K,
+            corresponding to a root mean squared error of roughly 711 mL/min VO₂.
+          </p>
+          <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+            <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+              <p class="text-accent text-lg font-bold">868</p>
+              <p class="text-muted mt-1 text-xs">Exercise tests</p>
+            </div>
+            <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+              <p class="text-accent text-lg font-bold">20</p>
+              <p class="text-muted mt-1 text-xs">Training epochs</p>
+            </div>
+            <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+              <p class="text-accent text-lg font-bold">5</p>
+              <p class="text-muted mt-1 text-xs">Input features</p>
+            </div>
+          </div>
+        </div>
+        <div class="mx-auto w-full max-w-sm overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/vo2go-nb-cell9-0.png")}
+            alt="Training and validation loss over 20 epochs"
+            class="w-full bg-white p-2"
+            loading="lazy"
+          />
+          <p class="text-muted bg-[var(--color-bg-raised)] py-2 text-center text-xs">Training & validation loss converging over 20 epochs</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- My Contributions -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">My Contributions</h2>
+      <ul class="text-body space-y-4 text-[0.95rem] leading-relaxed">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Led the data pipeline: sourced the PhysioNet TMET dataset, cleaned and paired
+            868 exercise tests with subject demographics, and built the ground truth labels
+            by implementing and cross-validating three physiological VT1 detection methods.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Designed the feature engineering approach constraining model inputs to
+            watch-accessible signals only, ensuring the model could run from a consumer
+            wearable without gas exchange equipment.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Co-developed the LSTM model architecture in PyTorch, implemented the training
+            loop with train/validation/test splitting, and ran the evaluation experiments.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Presented the project to faculty and industry advisors, including a clinician
+            from the Minnesota Heart Institute and an exercise physiologist from the
+            University of Minnesota.
+          </span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Key Insight -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Key Insight</h2>
+      <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <p class="text-body text-[0.95rem] leading-relaxed">
+          The core bet is that the <em>shape</em> of a heart rate curve during graded exercise
+          encodes enough information about your ventilatory response to locate the aerobic
+          threshold, even without directly measuring gas exchange. Heart rate inflection
+          patterns during progressive exercise are physiologically coupled to ventilatory
+          drive, which is what the LSTM learns to detect. By pairing this with basic
+          demographics, the model captures both the temporal signal and inter-subject
+          variability.
+        </p>
+      </div>
+    </section>
+
+    <!-- Future Work -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Future Work</h2>
+      <ul class="text-body space-y-3 text-[0.95rem]">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Deploy the model as a mobile app connected to Apple Watch or Garmin heart rate streams
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Expand training data with additional datasets and outdoor running protocols
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Explore attention mechanisms and transformer architectures for improved sequence modeling
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Add VT2 (anaerobic threshold) detection for complete training zone mapping
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Validate against fresh lab tests with local athletes at the University of Minnesota
+        </li>
+      </ul>
+    </section>
+
+    <!-- Resources -->
+    <section class="mb-8" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Resources</h2>
+      <div class="flex flex-wrap gap-4">
+        <a
+          href="https://physionet.org/content/treadmill-exercise-cardioresp/1.0.1/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] px-4 py-3 text-sm font-medium text-[var(--color-heading)] transition-colors hover:border-[var(--color-accent)]"
+        >
+          <Icon name="external" size={14} />
+          PhysioNet Dataset
+        </a>
+      </div>
+    </section>
+
+    <!-- Tech chips -->
+    <div class="border-line flex flex-wrap gap-3 border-t pt-8" data-reveal>
+      {["Python", "PyTorch", "LSTM", "Scikit-learn", "Pandas", "NumPy", "PhysioNet", "Wearable Sensors"].map(t => (
+        <span class="chip">{t}</span>
+      ))}
+    </div>
+  </div>
+</Base>

@@ -1,20 +1,29 @@
 ---
+/**
+ * Closing band — the azure-to-teal gradient that ends the page, mirroring the
+ * full-width statement panel these layouts close on.
+ */
 import { contact, site } from "@/data/site";
+import Band from "@/components/Band.astro";
+import ArrowLink from "@/components/ArrowLink.astro";
 ---
 
-<section id="contact" class="mx-auto max-w-4xl scroll-mt-24 py-24 md:py-32">
-  <div class="border-line bg-bg-raised rounded border p-8 sm:p-12" data-reveal>
-    <p class="font-mono text-accent flex items-center gap-2.5 text-xs tracking-wide">
-      <span class="bg-accent inline-block h-1 w-1 rotate-45" aria-hidden="true"></span>
-      contact
-    </p>
-    <h2 class="mt-2 text-xl font-semibold sm:text-2xl">{contact.title}</h2>
-    <p class="text-body mt-4 max-w-lg text-[0.95rem]">
+<Band id="contact" tone="accent" class="py-24 md:py-32">
+  <div class="max-w-2xl" data-reveal>
+    <p class="eyebrow">Contact</p>
+    <h2 class="mt-4 text-3xl font-bold sm:text-4xl md:text-5xl">{contact.title}</h2>
+
+    <p class="mt-6 leading-relaxed text-white/85">
       {contact.body.replace(/\s+/g, " ")}
     </p>
-    <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-      <a href={`mailto:${site.email}`} class="btn">Say hello</a>
-      <span class="font-mono text-faint text-xs">{site.location}</span>
+
+    <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+      <a href={`mailto:${site.email}`} class="btn-ghost">Email me</a>
+      <ArrowLink href={`mailto:${site.email}`}>{site.email}</ArrowLink>
     </div>
+
+    <p class="mt-10 text-[0.8rem] tracking-[0.14em] text-white/55 uppercase">
+      {site.location}
+    </p>
   </div>
-</section>
+</Band>

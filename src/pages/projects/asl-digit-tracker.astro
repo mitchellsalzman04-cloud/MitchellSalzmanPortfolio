@@ -1,0 +1,374 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icon from "@/components/Icon.astro";
+import { site } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Base
+  title="ASL Digit Tracker"
+  description="An embedded glove that translates ASL hand gestures into digits on an LCD display, built around a PIC24 microcontroller and five flex sensors."
+>
+  <div class="mx-auto max-w-5xl px-6 pt-36 pb-24 sm:px-12 md:px-24">
+    <a
+      href={withBase("/#projects")}
+      class="font-mono text-muted hover:text-accent inline-flex items-center gap-2 text-xs transition-colors"
+    >
+      <Icon name="arrow" size={14} class="rotate-180" /> back to portfolio
+    </a>
+
+    <!-- Header -->
+    <header class="mt-8 mb-12" data-reveal>
+      <p class="eyebrow">EE 2361 · University of Minnesota · 2024</p>
+      <h1 class="mt-4 text-3xl font-semibold sm:text-4xl">ASL Digit Tracker</h1>
+      <p class="text-muted mt-2 text-lg">An Embedded Glove for Real Time ASL to Digit Translation</p>
+      <p class="text-body mt-3 text-sm">
+        Mitchell Salzman · Sabrina Simkhovich · Hunter Johnson
+      </p>
+    </header>
+
+    <!-- Demo Video -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Demo</h2>
+      <div class="overflow-hidden rounded-lg border border-[var(--color-line)] bg-black/5">
+        <video
+          controls
+          playsinline
+          preload="metadata"
+          aria-label="ASL Digit Tracker demo"
+          class="block w-full"
+        >
+          <source src={withBase("/media/asl-demo.mov")} type="video/mp4" />
+        </video>
+      </div>
+    </section>
+
+    <!-- The Problem -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">The Problem</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        American Sign Language is one of the most widely used sign languages in the world, yet
+        real time translation tools remain expensive or inaccessible. Most camera based ASL
+        recognition systems require significant compute power and controlled lighting. We set out
+        to build a wearable device that translates ASL digit gestures (0 through 9) into a
+        digital readout using only embedded hardware, no camera or computer required.
+      </p>
+    </section>
+
+    <!-- Our Solution -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Our Solution</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The ASL Digit Tracker is a glove with five short flex sensors sewn onto each finger.
+        Each sensor forms a voltage divider whose output changes as the finger bends. A
+        PIC24FJ64GA002 microcontroller samples all five channels through its ADC, averages the
+        readings through per finger circular buffers to suppress noise, classifies each finger
+        as bent or unbent, and maps the five finger binary pattern to an ASL digit (0 through 9).
+        The recognized digit is displayed in real time on an I2C connected LCD. Unrecognized
+        gestures display "U" for undefined.
+      </p>
+
+      <div class="mb-8 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <h3 class="text-heading mb-4 text-base font-semibold">Signal Pipeline</h3>
+        <div class="grid gap-6 sm:grid-cols-5">
+          <div class="text-center">
+            <p class="text-accent text-sm font-semibold">Flex Sensor</p>
+            <p class="text-body mt-1 text-[0.8rem]">Resistance changes with bend angle</p>
+          </div>
+          <div class="text-center">
+            <p class="text-accent text-sm font-semibold">Voltage Divider</p>
+            <p class="text-body mt-1 text-[0.8rem]">Converts resistance to a measurable voltage</p>
+          </div>
+          <div class="text-center">
+            <p class="text-accent text-sm font-semibold">ADC</p>
+            <p class="text-body mt-1 text-[0.8rem]">PIC24 samples all 5 channels via interrupt</p>
+          </div>
+          <div class="text-center">
+            <p class="text-accent text-sm font-semibold">Buffer + Avg</p>
+            <p class="text-body mt-1 text-[0.8rem]">128 sample circular buffer per finger</p>
+          </div>
+          <div class="text-center">
+            <p class="text-accent text-sm font-semibold">LCD Output</p>
+            <p class="text-body mt-1 text-[0.8rem]">Digit displayed via I2C at 100 ms refresh</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hardware -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Hardware</h2>
+      <div class="grid items-start gap-6 md:grid-cols-2">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-3 text-base font-semibold">Bill of Materials</h3>
+          <dl class="text-body space-y-3 text-[0.9rem]">
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">MCU:</dt>
+              <dd class="inline"> PIC24FJ64GA002 (16 MHz, 5-ch ADC, I2C master)</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Sensors:</dt>
+              <dd class="inline"> 5 short flex sensors (one per finger)</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Display:</dt>
+              <dd class="inline"> AQM0802A LCD with ST7032 driver over I2C</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Power:</dt>
+              <dd class="inline"> LM2937 LDO regulator (5 V USB &rarr; 3.3 V)</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Input:</dt>
+              <dd class="inline"> USB Micro-B breakout for 5 V supply</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Passives:</dt>
+              <dd class="inline"> 47 k&Omega; reference resistors, 10 k&Omega; pull-downs, 0.1 &micro;F and 10 &micro;F coupling caps</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Enclosure:</dt>
+              <dd class="inline"> 3D printed housing with Velcro wrist mount</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/asl-pcb.jpg")}
+            alt="ASL Digit Tracker protoboard: PIC24, LCD, LDO regulator, USB breakout, and voltage divider resistors"
+            class="w-full"
+            loading="lazy"
+          />
+          <p class="text-muted bg-[var(--color-bg-raised)] py-2 text-center text-xs">
+            Protoboard with PIC24, LCD module, LDO regulator, and flex sensor voltage dividers
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Circuit Design -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Circuit Design</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Each flex sensor forms a voltage divider with a 47 k&Omega; reference resistor. As the
+        finger bends, the sensor resistance increases and the ADC input voltage rises. Each
+        finger's divider has a unique upper resistor value (22.2 k&Omega; to 100 &Omega;) tuned to
+        the individual sensor's response curve so the bent/unbent threshold lands cleanly in the
+        ADC range. The PIC24 scans all five analog channels via an interrupt driven ADC routine
+        and deposits each sample into its finger's circular buffer.
+      </p>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Power comes from a USB Micro-B breakout providing 5 V, stepped down to 3.3 V by an
+        LM2937 low dropout regulator with 0.1 &micro;F and 10 &micro;F decoupling capacitors. The
+        LCD communicates with the PIC24 over I2C (SDA/SCL) using the ST7032 driver protocol.
+      </p>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-5">
+          <h3 class="text-heading mb-2 text-sm font-semibold">Flex Sensor Voltage Dividers</h3>
+          <div class="text-body space-y-1 text-[0.85rem]">
+            <div class="flex justify-between"><span>Thumb</span><span class="text-accent font-mono">22.2 k&Omega;</span></div>
+            <div class="flex justify-between"><span>Pointer</span><span class="text-accent font-mono">25 k&Omega;</span></div>
+            <div class="flex justify-between"><span>Middle</span><span class="text-accent font-mono">75 k&Omega;</span></div>
+            <div class="flex justify-between"><span>Ring</span><span class="text-accent font-mono">83 k&Omega;</span></div>
+            <div class="flex justify-between"><span>Pinkie</span><span class="text-accent font-mono">100 &Omega;</span></div>
+          </div>
+          <p class="text-muted mt-3 text-[0.8rem]">Each paired with a 47 k&Omega; reference resistor to ground</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-5">
+          <h3 class="text-heading mb-2 text-sm font-semibold">Key Interfaces</h3>
+          <ul class="text-body space-y-2 text-[0.85rem]">
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              <strong>ADC:</strong>&nbsp;5 analog channels (AN8, AN9, AN10, AN11, AN12) scanned via interrupt
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              <strong>I2C:</strong>&nbsp;SDA2/SCL2 to the ST7032 LCD driver
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1.5 block h-1.5 w-1.5 shrink-0 rounded-full bg-current"></span>
+              <strong>Power:</strong>&nbsp;USB 5 V &rarr; LM2937 &rarr; 3.3 V rail for PIC24 and LCD
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Software Architecture -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Software Architecture</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The firmware is structured across seven C source files: five per finger sensor modules,
+        an LCD driver, and the main control loop. Each finger module manages its own 128 sample
+        circular buffer and exposes three functions: initialize the buffer, push a new ADC
+        sample, and compute the running average.
+      </p>
+
+      <div class="mb-8 space-y-4">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Sensor Modules (x5)</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            Each finger (thumb, pointer, middle, ring, pinkie) has its own source file with a
+            128 element circular buffer. <code class="rounded bg-[var(--color-bg)] px-1.5 py-0.5 text-xs">putxValue()</code>
+            inserts the latest ADC reading; <code class="rounded bg-[var(--color-bg)] px-1.5 py-0.5 text-xs">getxAvg()</code>
+            computes the running mean. This averaging suppresses the noise inherent in flex
+            sensor readings and provides a stable signal for threshold comparison.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">ADC Interrupt Service Routine</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            The PIC24's ADC is configured to auto scan all five analog channels. On each
+            conversion complete interrupt, the ISR immediately deposits the sample into the
+            corresponding finger's buffer. This decouples sampling from the main loop and
+            ensures consistent sample timing.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Main Loop &amp; Gesture Classification</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            The main loop runs continuously at 100 ms intervals. Each cycle, it reads the
+            averaged value from every finger buffer, compares against calibrated thresholds to
+            classify each finger as bent or unbent, and maps the resulting five bit pattern to an
+            ASL digit character (0 through 9). The character is sent to the LCD via the I2C
+            driver. Patterns that don't match a known ASL digit display "U" for undefined.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">LCD Driver (I2C)</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            The LCD module communicates over I2C using the ST7032 protocol. The driver handles
+            initialization, cursor positioning, and character output. A custom
+            <code class="rounded bg-[var(--color-bg)] px-1.5 py-0.5 text-xs">delay_ms()</code>
+            function provides calibrated timing for the display's command sequence.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- My Contributions -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">My Contributions</h2>
+      <ul class="text-body space-y-4 text-[0.95rem] leading-relaxed">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Designed and hand-soldered the protoboard PCB integrating the PIC24 microcontroller,
+            USB power input, LM2937 voltage regulation, flex sensor voltage dividers, and the
+            I2C LCD module into a compact wrist mounted package.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Wrote the ADC configuration and interrupt service routine that auto scans all five
+            analog channels and deposits samples into per finger circular buffers for noise
+            filtered averaging.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Implemented the gesture classification logic: calibrated individual bent/unbent
+            thresholds for each sensor's unique response curve, then mapped the five finger
+            binary patterns to ASL digits 0 through 9.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Physically integrated the electronics onto the glove: sewed flex sensors to each
+            finger with elastic, routed wiring to the wrist mounted enclosure, and 3D printed
+            the housing that holds the protoboard.
+          </span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Technical Challenges -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Technical Challenges</h2>
+      <div class="space-y-4">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Sensor Calibration</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            Each flex sensor had a different baseline resistance and bend response. A single
+            global threshold would misclassify at least one finger. We tuned individual voltage
+            divider resistor values and software thresholds per finger to get clean bent/unbent
+            separation across all five channels.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">ADC Noise</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            Raw ADC readings fluctuated enough to cause false transitions near the threshold.
+            The 128 sample circular buffer averaging smooths these readings and provides a
+            stable classification signal without adding perceptible latency.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Mechanical Integration</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            Routing five sensor wires along each finger to a wrist mounted board without
+            restricting hand movement required careful placement. Elastic channels sewn into the
+            glove keep the sensors aligned while allowing natural flex.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Results</h2>
+      <ul class="text-body space-y-3 text-[0.95rem]">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Reliably recognizes all 10 ASL digit gestures (0 through 9) in real time
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          100 ms update rate provides smooth, responsive display transitions between gestures
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Per finger circular buffer averaging eliminates false triggers from ADC noise
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Entire system runs from a single USB power supply with no external computer required
+        </li>
+      </ul>
+    </section>
+
+    <!-- Future Work -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Future Work</h2>
+      <ul class="text-body space-y-3 text-[0.95rem]">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Expand gesture vocabulary beyond digits to include ASL letters and common words
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Add an IMU for wrist orientation to distinguish gestures that share the same finger pattern but differ in hand position
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Replace the protoboard with a custom PCB to reduce size and improve reliability
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Add BLE to stream recognized gestures to a phone app for text to speech output
+        </li>
+      </ul>
+    </section>
+
+    <!-- Tech chips -->
+    <div class="border-line flex flex-wrap gap-3 border-t pt-8" data-reveal>
+      {["PIC24FJ64GA002", "Embedded C", "ADC", "I2C", "Flex Sensors", "LCD ST7032", "LM2937 LDO", "3D Printing"].map(t => (
+        <span class="chip">{t}</span>
+      ))}
+    </div>
+  </div>
+</Base>

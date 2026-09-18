@@ -1,0 +1,48 @@
+---
+import Band from "@/components/Band.astro";
+import { education } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Band id="education" tone="dark" class="py-14 md:py-18">
+  <div data-reveal>
+    <p class="eyebrow">Education</p>
+    <h2 class="mt-4 text-2xl font-bold sm:text-3xl">Where I Studied</h2>
+  </div>
+
+  <div class="mt-10 grid gap-6 sm:grid-cols-2">
+    {
+      education.map((deg, i) => (
+        <div
+          class="edu-card rounded-lg border border-white/10 bg-white/[0.04] p-6"
+          data-reveal
+          style={`--reveal-delay: ${i * 120}ms`}
+        >
+          <img
+            src={withBase(deg.logo)}
+            alt={deg.school}
+            width="48"
+            height="48"
+            class="mb-4 h-12 w-12 rounded"
+          />
+          <h3 class="text-base font-semibold leading-snug text-white sm:text-lg">
+            {deg.title}
+          </h3>
+          <p class="font-mono mt-2 text-xs text-white/50">{deg.school}</p>
+          <p class="font-mono mt-1 text-xs text-white/40">
+            {deg.status}
+            {deg.gpa && <span> · GPA {deg.gpa}</span>}
+            {deg.honors && <span> · {deg.honors}</span>}
+          </p>
+          <a
+            href={withBase("/coursework")}
+            class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-[#86b6ff] transition-colors hover:text-white"
+          >
+            View selected coursework
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      ))
+    }
+  </div>
+</Band>

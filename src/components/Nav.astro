@@ -8,7 +8,7 @@ import { withBase } from "@/lib/url";
     class="border-line/60 bg-bg/85 flex h-[72px] items-center justify-between border-b px-6 backdrop-blur-md sm:px-10"
     aria-label="Primary"
   >
-    <a href={withBase("/")} class="font-mono text-accent group flex items-center gap-2 text-sm" aria-label="Home">
+    <a href={withBase("/")} class="text-heading group flex items-center gap-2.5" aria-label="Home">
       {/* A route through three waypoints — the brand mark. */}
       <svg
         width="28"
@@ -26,12 +26,12 @@ import { withBase } from "@/lib/url";
           <circle cx="23.5" cy="21" r="2.1"></circle>
         </g>
       </svg>
-      <span class="text-faint hidden lg:inline">{site.handle}</span>
+      <span class="font-display text-heading text-[0.95rem] font-bold tracking-tight">{site.handle}</span>
     </a>
 
     <button
       id="nav-toggle"
-      class="text-accent z-50 -mr-2 p-2 md:hidden"
+      class="text-heading z-50 -mr-2 p-2 md:hidden"
       aria-label="Toggle menu"
       aria-expanded="false"
       aria-controls="nav-menu"
@@ -48,7 +48,7 @@ import { withBase } from "@/lib/url";
       {
         nav.map((item) => (
           <li>
-            <a href={withBase(item.href)} class="font-mono text-body hover:text-accent text-sm transition-colors">
+            <a href={withBase(item.href)} class="text-body hover:text-accent text-[0.88rem] font-medium transition-colors">
               {item.label}
             </a>
           </li>
@@ -72,12 +72,12 @@ import { withBase } from "@/lib/url";
 */}
 <ol
   id="nav-menu"
-  class="nav-drawer border-line bg-bg-raised fixed inset-y-0 right-0 z-40 flex w-[min(78vw,320px)] translate-x-full flex-col items-start justify-center gap-8 border-l px-10 shadow-2xl transition-transform duration-300 ease-out md:hidden"
+  class="nav-drawer border-line bg-bg fixed inset-y-0 right-0 z-40 flex w-[min(78vw,320px)] translate-x-full flex-col items-start justify-center gap-8 border-l px-10 shadow-2xl transition-transform duration-300 ease-out md:hidden"
 >
   {
     nav.map((item) => (
       <li>
-        <a href={withBase(item.href)} class="font-mono text-body hover:text-accent text-base transition-colors">
+        <a href={withBase(item.href)} class="text-body hover:text-accent text-base font-medium transition-colors">
           {item.label}
         </a>
       </li>

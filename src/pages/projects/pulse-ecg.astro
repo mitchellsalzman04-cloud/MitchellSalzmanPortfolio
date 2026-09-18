@@ -1,0 +1,332 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icon from "@/components/Icon.astro";
+import { site } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Base
+  title="Pulse ECG"
+  description="A battery-powered, palm-sized EKG built around a custom Altium PCB with an INA826 analog front end, PIC24 microcontroller, and real-time browser-based waveform display."
+>
+  <div class="mx-auto max-w-5xl px-6 pt-36 pb-24 sm:px-12 md:px-24">
+    <a
+      href={withBase("/#projects")}
+      class="font-mono text-muted hover:text-accent inline-flex items-center gap-2 text-xs transition-colors"
+    >
+      <Icon name="arrow" size={14} class="rotate-180" /> back to portfolio
+    </a>
+
+    <!-- Header -->
+    <header class="mt-8 mb-12" data-reveal>
+      <p class="eyebrow">EE 3951W &middot; University of Minnesota &middot; Fall 2025</p>
+      <h1 class="mt-4 text-3xl font-semibold sm:text-4xl">Pulse ECG</h1>
+      <p class="text-muted mt-2 text-lg">A battery-powered, palm-sized electrocardiogram with real-time browser display</p>
+      <p class="text-body mt-3 text-sm">
+        Mitchell Salzman, Levi Krogh, Charlie Peterson, Raymond Zhao, Bradley Gale
+      </p>
+      <p class="text-muted mt-1 text-xs">
+        Course: Junior Design Project (EE 3951W)
+      </p>
+    </header>
+
+    <!-- Hero Image — Real PCB -->
+    <section class="mb-14" data-reveal>
+      <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/pulse-ecg-pcb.jpeg")}
+          alt="Pulse ECG custom PCB with LiPo battery, palm-sized form factor with INA826 instrumentation amplifier, PIC24 microcontroller, and Mini-USB connector"
+          class="block w-full max-h-[28rem] object-cover object-center"
+        />
+      </div>
+      <p class="text-muted mt-2 text-center text-xs">
+        Final PCB with 350 mAh LiPo battery. The entire EKG fits in the palm of a hand
+      </p>
+    </section>
+
+    <!-- The Problem -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">The Problem</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Clinical EKG machines are bulky, mains-powered, and require trained technicians
+        to operate. For basic cardiac monitoring, such as checking rhythm, detecting arrhythmia,
+        or simply observing a patient's heart signal in a teaching or research setting,
+        there's no reason the hardware can't be compact, battery-powered, and stream
+        data to any device with a web browser.
+      </p>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div class="rounded-lg border-2 border-[var(--color-accent)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-lg font-bold">~1,000&times;</p>
+          <p class="text-accent mt-1 text-xs font-medium">Total analog gain</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">3.3 V</p>
+          <p class="text-muted mt-1 text-xs">Single supply</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">3</p>
+          <p class="text-muted mt-1 text-xs">Lead inputs</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">Real-time</p>
+          <p class="text-muted mt-1 text-xs">Browser display</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- System Overview -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">System Overview</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The system chains five subsections on a single custom PCB designed in Altium:
+        a 3-lead analog front end, a PIC24 microcontroller with external ADC,
+        a UART-to-USB data link, LiPo power management, and a browser-based live
+        waveform plotter. Three electrode leads attach to the patient, the analog chain
+        amplifies the millivolt-level cardiac signal to ADC range, and the digitized
+        waveform streams over USB to a web server that renders a real-time roll chart
+        on any modern browser.
+      </p>
+      <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/pulse-ecg-system.png")}
+          alt="Pulse ECG system diagram showing patient leads, INA amplifier, PIC24 microcontroller, power management, TTL converter, and Mini-USB connector on the PCB layout"
+          class="block w-full bg-white p-2"
+        />
+      </div>
+      <p class="text-muted mt-2 text-center text-xs">
+        Annotated system diagram: patient leads on the left, data out via Mini-USB on the right
+      </p>
+    </section>
+
+    <!-- Analog Front End -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Analog Front End</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The analog chain was designed in LTspice and validated in simulation before layout.
+        It takes a millivolt-level differential ECG signal from the body, rejects common-mode
+        noise, and outputs a clean 0.3 to 3.0 V waveform centered at 1.65 V for the ADC.
+        The INA826 and OPA2310 were chosen for their high CMRR and low power consumption
+        on a 3.3 V rail.
+      </p>
+
+      <!-- LTspice Circuit Diagram -->
+      <div class="mb-8 overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/pulse-ecg-ltspice.png")}
+          alt="LTspice analog front end schematic showing six numbered stages: differential input, driven right leg, INA826 instrumentation amplifier, mid-supply reference, second-stage gain amplifier, and power rails"
+          class="block w-full bg-[#e8e8e8] p-2"
+        />
+        <p class="text-muted bg-[var(--color-bg-raised)] py-2 text-center text-xs">
+          LTspice circuit diagram: six stages color-coded by function
+        </p>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">1. Differential Input</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            Two sine sources simulate the RA/LA differential ECG; a 0.3 V slow common-mode
+            emulates respiration drift to verify CMRR.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">2. Driven Right Leg</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            OPA2310-based inverting stage senses V<sub>cm</sub> and drives its inverse
+            to the RL electrode, shrinking 50/60 Hz common-mode at the INA inputs.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">3. INA826 (G &approx; 9.2&times;)</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            Instrumentation amplifier with R<sub>G</sub> = 6.1 k&Omega; extracts
+            the tiny LA to RA differential while rejecting common-mode.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">4. Mid-Supply Reference</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            Buffered 1.65 V mid-rail reference with a 0.03 Hz high-pass filter
+            (R = 500 k&Omega;, C = 10 &mu;F) to reject baseline wander.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">5. Second-Stage Gain (101&times;)</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            Non-inverting OPA2310 stage (R<sub>f</sub> = 200 k&Omega;, R<sub>in</sub> = 2 k&Omega;)
+            boosts the INA output to a 0.3 to 3.0 V ADC-friendly swing.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">6. Power Rails</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            Resistor divider with OPA2310 buffer supplies a stable V<sub>ref</sub> = 1.65 V
+            to keep the signal centered on a single 3.3 V supply.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Digital & Firmware -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Digital Chain & Firmware</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        An external high-resolution ADC samples the analog output and feeds the PIC24
+        microcontroller. The PIC24 transmits the digitized samples over UART to a
+        USB-to-UART TTL converter, which pipes data to a host computer. A lightweight
+        web server reads the serial stream and renders a live roll-chart display in
+        the browser, updating in real time.
+      </p>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-3 text-base font-semibold">Data Acquisition</h3>
+          <dl class="text-body space-y-3 text-[0.9rem]">
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">ADC:</dt>
+              <dd class="inline"> External 12+ bit converter, 3.3 V reference for max SNR</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Microcontroller:</dt>
+              <dd class="inline"> PIC24 handling ADC reads and UART transmission</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Interface:</dt>
+              <dd class="inline"> UART &rarr; USB via TTL converter to host computer</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-3 text-base font-semibold">Live Display</h3>
+          <dl class="text-body space-y-3 text-[0.9rem]">
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Server:</dt>
+              <dd class="inline"> Lightweight web server reading the serial port</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Frontend:</dt>
+              <dd class="inline"> Auto-scaling roll chart in any modern browser</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Output:</dt>
+              <dd class="inline"> Real-time Lead I waveform resembling clinical strip chart</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- PCB & Power -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">PCB Design & Power</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The board was designed in Altium Designer and went through multiple iterations.
+        A rechargeable 3.7 V / 350 mAh LiPo battery powers the entire system through
+        an LDO regulator, and an onboard charger IC manages charging via the Mini-USB
+        connector. The form factor is palm-sized with 3-lead snap connectors, an on/off
+        switch, and status LEDs.
+      </p>
+
+      <div class="grid gap-6 sm:grid-cols-3">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-2xl font-bold">3</p>
+          <p class="text-muted mt-1 text-xs">PCB iterations</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-2xl font-bold">350 mAh</p>
+          <p class="text-muted mt-1 text-xs">LiPo battery</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-2xl font-bold">Palm-sized</p>
+          <p class="text-muted mt-1 text-xs">Form factor</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Challenges & Lessons -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Challenges</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The project went through several hardware debug cycles. The first PCB had an
+        incorrect node connection in the INA output common-mode circuit that was caught
+        during Altium-to-LTspice transfer. A second board revision fixed the analog path
+        but introduced power supply and programming issues. Debugging with a CLI serial
+        console and logic analyzer across reference and custom PCBs ultimately led to
+        a working final design.
+      </p>
+
+      <div class="space-y-4">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Analog Front End Fix</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            A capacitor was connected to the wrong node for the reference buffer (U6),
+            resulting in 0 V at the reference pin and halting the entire amplifier chain.
+            The fix was to short the capacitor footprint with solder and remove the resistor,
+            converting U6 into a simple buffer, which simulation confirmed performed
+            identically.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Power Section</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            The LDO overheated on first power-up, frying one IC. Impedance measurement
+            (3 k&Omega; vs. expected 6 k&Omega; between 3V3 and GND) confirmed the short.
+            After replacing the LDO and the battery charger IC, the second board delivered
+            stable power.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">UART Debug</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            The USB-to-UART converter was originally connected to the wrong voltage rail
+            on the regulator, producing incorrect logic levels. Comparative debugging between
+            a reference PCB and the custom board using a serial console revealed the mismatch,
+            which was corrected in the second PCB revision.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Specifications Met -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Design Specifications</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">Signal Capture</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            0.3 to 3.0 mV ECG inputs mapped to 0.3 to 3.0 V ADC range with headroom;
+            baseline wander rejected by the 0.03 Hz high-pass.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">Bandwidth</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            Passband covers 0.05 to 150 Hz diagnostic ECG content; ADC sample rate
+            &ge; 500 S/s.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">Common-Mode Rejection</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            INA826 + active driven right leg boost CMRR at 50/60 Hz, keeping millivolt
+            signals above the noise floor.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">Portable Operation</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            Single-cell LiPo with onboard charger; no mains dependency. 3D-printed
+            enclosure with cable strain relief.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech chips -->
+    <div class="border-line flex flex-wrap gap-3 border-t pt-8" data-reveal>
+      {["Altium", "LTspice", "PIC24", "INA826", "OPA2310", "Embedded C", "ADC", "UART", "PCB Design"].map(t => (
+        <span class="chip">{t}</span>
+      ))}
+    </div>
+  </div>
+</Base>

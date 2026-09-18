@@ -1,0 +1,338 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icon from "@/components/Icon.astro";
+import { site } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Base
+  title="Chess Vision"
+  description="A computer vision pipeline that photographs a physical chessboard and reconstructs the full board position using three cascaded neural networks."
+>
+  <div class="mx-auto max-w-5xl px-6 pt-36 pb-24 sm:px-12 md:px-24">
+    <a
+      href={withBase("/#projects")}
+      class="font-mono text-muted hover:text-accent inline-flex items-center gap-2 text-xs transition-colors"
+    >
+      <Icon name="arrow" size={14} class="rotate-180" /> back to portfolio
+    </a>
+
+    <!-- Header -->
+    <header class="mt-8 mb-12" data-reveal>
+      <p class="eyebrow">EE 5271 · University of Minnesota · Spring 2025</p>
+      <h1 class="mt-4 text-3xl font-semibold sm:text-4xl">Chess Vision</h1>
+      <p class="text-muted mt-2 text-lg">Automated Chessboard Position Reconstruction via Computer Vision and Neural Networks</p>
+      <p class="text-body mt-3 text-sm">
+        Mitchell Salzman
+      </p>
+      <p class="text-muted mt-1 text-xs">
+        Course: Robot Vision (EE 5271)
+      </p>
+    </header>
+
+    <!-- Architecture Diagram -->
+    <section class="mb-14" data-reveal>
+      <div class="overflow-hidden rounded-lg border border-[var(--color-line)] bg-white">
+        <img
+          src={withBase("/media/chess-architecture.svg")}
+          alt="Chess Vision architecture: photo of board through computer vision preprocessing and three cascaded neural networks to FEN output"
+          class="block w-full p-4"
+        />
+      </div>
+    </section>
+
+    <!-- The Problem -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">The Problem</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Digitizing a physical chess position for analysis, online play, or record-keeping
+        means manually entering every piece on a digital board. For casual players recording a
+        game or coaches reviewing a student's position, this is tedious and error-prone. A
+        system that can photograph any board from any angle and reconstruct the position
+        automatically would make that translation instant.
+      </p>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div class="rounded-lg border-2 border-[var(--color-accent)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-lg font-bold">3</p>
+          <p class="text-accent mt-1 text-xs font-medium">Neural networks</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">3,328</p>
+          <p class="text-muted mt-1 text-xs">Training images</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">64</p>
+          <p class="text-muted mt-1 text-xs">Squares extracted</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">FEN</p>
+          <p class="text-muted mt-1 text-xs">Standard output</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pipeline Overview -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Pipeline</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The system chains classical computer vision with deep learning. The CV stage handles
+        geometry: finding the board, correcting perspective, and extracting individual squares.
+        The neural network stage handles semantics, deciding what's on each square.
+      </p>
+
+      <div class="mb-8 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <h3 class="text-heading mb-4 text-base font-semibold">Four-Stage Pipeline</h3>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <p class="text-accent text-sm font-semibold">1. Edge Detection</p>
+            <p class="text-body mt-1 text-[0.85rem]">
+              Canny edge detection followed by a Hough transform extracts up to 45 dominant
+              lines from the board image.
+            </p>
+          </div>
+          <div>
+            <p class="text-accent text-sm font-semibold">2. Line Clustering</p>
+            <p class="text-body mt-1 text-[0.85rem]">
+              Lines are separated into two directional clusters by theta, pruned by deviation
+              from the cluster mean, then mean-clustered into 9 lines per direction.
+            </p>
+          </div>
+          <div>
+            <p class="text-accent text-sm font-semibold">3. Homography</p>
+            <p class="text-body mt-1 text-[0.85rem]">
+              The 81 line intersections define the grid. A projective homography maps the
+              perspective-distorted board to a rectified square, producing 64 cropped images.
+            </p>
+          </div>
+          <div>
+            <p class="text-accent text-sm font-semibold">4. Classification</p>
+            <p class="text-body mt-1 text-[0.85rem]">
+              Three cascaded neural networks classify each 48x48 square: occupied or empty,
+              black or white, and which piece type.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Computer Vision -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Computer Vision</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The first half of the pipeline is pure geometry. The goal is to take a photograph of a
+        chessboard from an arbitrary camera angle and produce 64 rectified, uniformly-sized
+        square images ready for classification.
+      </p>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/chess-1-lines.png")}
+            alt="Chessboard with detected Hough lines (green and blue) and intersection points (red dots)"
+            class="w-full"
+            loading="lazy"
+          />
+          <p class="text-muted bg-[var(--color-bg-raised)] py-2 text-center text-xs">
+            Hough lines (green/blue) and 81 intersection points (red) detected on the board
+          </p>
+        </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/chess-2-squares.png")}
+            alt="8x8 grid of extracted and rectified individual square images"
+            class="w-full"
+            loading="lazy"
+          />
+          <p class="text-muted bg-[var(--color-bg-raised)] py-2 text-center text-xs">
+            64 individual squares extracted after homography correction
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Hough Transform & Line Clustering</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            After Canny edge detection, the Hough transform produces candidate lines in
+            (&theta;, &rho;) space. Lines are split into two directional clusters by their
+            average theta, outliers beyond &plusmn;0.2 rad of the cluster mean are pruned, and
+            points are projected onto a best-fit line. Mean clustering with an adaptive radius
+            consolidates nearby lines into exactly 9 per direction, the board's gridlines.
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading text-base font-semibold">Projective Homography</h3>
+          <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+            The 9&times;9 = 81 intersections define the board grid. Four corner points anchor a
+            homography that warps the perspective-distorted image to a rectified square. The
+            warped intersection coordinates then define exact crop boundaries for each of the
+            64 squares, which are resized to 48&times;48&times;3 for the neural networks.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Neural Networks -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Neural Network Cascade</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Rather than a single network solving all three questions at once, the system uses three
+        specialized classifiers in cascade. Each network is a PyTorch model imported into MATLAB,
+        taking 48&times;48&times;3 RGB images as input.
+      </p>
+
+      <div class="mb-8 space-y-4">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <div class="flex items-start gap-4">
+            <div class="rounded-lg bg-[var(--color-accent)] px-3 py-1 text-sm font-bold text-white shrink-0">1</div>
+            <div>
+              <h3 class="text-heading text-base font-semibold">blankNet: Occupancy</h3>
+              <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+                Binary classifier: is this square occupied or empty? Trained on 3,328 images
+                (1,664 occupied + 1,664 blank). This gates the downstream networks; empty squares
+                skip color and piece classification entirely.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <div class="flex items-start gap-4">
+            <div class="rounded-lg bg-[var(--color-accent)] px-3 py-1 text-sm font-bold text-white shrink-0">2</div>
+            <div>
+              <h3 class="text-heading text-base font-semibold">colorNet: Piece Color</h3>
+              <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+                Binary classifier: is the piece black or white? Trained on 1,664 images
+                (832 per color). Only runs on squares that blankNet classified as occupied.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <div class="flex items-start gap-4">
+            <div class="rounded-lg bg-[var(--color-accent)] px-3 py-1 text-sm font-bold text-white shrink-0">3</div>
+            <div>
+              <h3 class="text-heading text-base font-semibold">pieceNet: Piece Type</h3>
+              <p class="text-body mt-2 text-[0.9rem] leading-relaxed">
+                Six-class classifier: pawn, bishop, knight, rook, queen, or king. Trained on
+                1,664 occupied images across all piece types. Runs in parallel with colorNet
+                on occupied squares.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Training Data -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Training Data</h2>
+      <div class="grid items-start gap-8 md:grid-cols-2">
+        <div>
+          <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+            The training set was built by photographing chess positions from multiple angles and
+            extracting individual square images through the same CV pipeline used at inference.
+            This ensures the networks see the same perspective-corrected, cropped inputs during
+            training and deployment.
+          </p>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+              <p class="text-accent text-lg font-bold">1,664</p>
+              <p class="text-muted mt-1 text-xs">Blank squares</p>
+            </div>
+            <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+              <p class="text-accent text-lg font-bold">1,664</p>
+              <p class="text-muted mt-1 text-xs">Occupied squares</p>
+            </div>
+            <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+              <p class="text-heading text-lg font-bold">832</p>
+              <p class="text-muted mt-1 text-xs">Black pieces</p>
+            </div>
+            <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+              <p class="text-heading text-lg font-bold">832</p>
+              <p class="text-muted mt-1 text-xs">White pieces</p>
+            </div>
+          </div>
+        </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/chess-3-training.png")}
+            alt="Training data breakdown: 1,664 blank squares, 832 black pieces, 832 white pieces across 6 piece types"
+            class="w-full"
+            loading="lazy"
+          />
+          <p class="text-muted bg-[var(--color-bg-raised)] py-2 text-center text-xs">
+            Training data distribution: 3,328 total images across blank, black, and white classes with 6 piece types
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Output -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Output</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The three networks' predictions are assembled into an 8&times;8 board array. Uppercase
+        letters represent white pieces and lowercase represent black (standard chess notation).
+        The array is converted to a FEN string, the universal format for encoding chess
+        positions, and loaded into a ChessMaster GUI for visualization and play.
+      </p>
+
+      <div class="grid items-start gap-8 md:grid-cols-2">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-3 text-base font-semibold">FEN Encoding</h3>
+          <dl class="text-body space-y-3 text-[0.9rem]">
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Piece map:</dt>
+              <dd class="inline"> p=pawn, b=bishop, n=knight, r=rook, q=queen, k=king</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Color:</dt>
+              <dd class="inline"> uppercase = white, lowercase = black</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Empty squares:</dt>
+              <dd class="inline"> consecutive blanks encoded as a digit (e.g. "3" = three empty)</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Metadata:</dt>
+              <dd class="inline"> active color, castling rights, en passant, move clocks</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/chess-4-output.png")}
+            alt="Reconstructed chess position rendered in ChessMaster GUI"
+            class="w-full"
+            loading="lazy"
+          />
+          <p class="text-muted bg-[var(--color-bg-raised)] py-2 text-center text-xs">
+            Final reconstructed position rendered in ChessMaster from the generated FEN string
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Insight -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Key Insight</h2>
+      <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <p class="text-body text-[0.95rem] leading-relaxed">
+          Splitting the classification into three specialized networks instead of one monolithic
+          classifier keeps each problem simple: binary for occupancy, binary for color, and a
+          modest six-class problem for piece type. The cascade also saves compute: empty squares
+          (typically 32+ of the 64) skip two of three networks entirely. And by sharing the same
+          CV front end for both training and inference, the networks never see a domain gap
+          between training crops and live inputs.
+        </p>
+      </div>
+    </section>
+
+    <!-- Tech chips -->
+    <div class="border-line flex flex-wrap gap-3 border-t pt-8" data-reveal>
+      {["MATLAB", "PyTorch", "Computer Vision", "Hough Transform", "Homography", "CNN", "Image Classification"].map(t => (
+        <span class="chip">{t}</span>
+      ))}
+    </div>
+  </div>
+</Base>

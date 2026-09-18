@@ -1,0 +1,124 @@
+---
+import { projects } from "@/data/site";
+import { withBase } from "@/lib/url";
+
+const scrollProjects = projects
+  .filter((p) => p.detailPage)
+  .map((p) => {
+    let thumb: string | null = null;
+    if (p.coverImage) thumb = p.coverImage.src;
+    else if (p.sideImages?.[0]) thumb = p.sideImages[0].src;
+    else if (p.video && p.videoAutoplay) thumb = null;
+    return { title: p.title, thumb, detailPage: p.detailPage! };
+  })
+  .filter((p) => p.thumb);
+---
+
+<section class="project-scroll-band py-10 overflow-hidden">
+  <div class="wrap px-6 sm:px-12 md:px-24 max-w-7xl mx-auto mb-5">
+    <p class="eyebrow mb-1">Featured Work</p>
+    <h2 class="text-xl font-bold sm:text-2xl">Projects</h2>
+  </div>
+
+  <div class="scroll-track">
+    <div class="scroll-inner">
+      {[...scrollProjects, ...scrollProjects].map((p) => (
+        <a
+          href={withBase(p.detailPage)}
+          class="scroll-card"
+          aria-label={p.title}
+        >
+          <img
+            src={withBase(p.thumb!)}
+            alt={p.title}
+            class="scroll-img"
+            loading="lazy"
+          />
+          <span class="scroll-label">{p.title}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .project-scroll-band {
+    background: var(--color-surface-alt, #f8fafc);
+  }
+
+  .scroll-track {
+    width: 100%;
+    overflow: hidden;
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 8%,
+      black 92%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 8%,
+      black 92%,
+      transparent 100%
+    );
+  }
+
+  .scroll-inner {
+    display: flex;
+    gap: 1.25rem;
+    width: max-content;
+    animation: marquee 30s linear infinite;
+    padding: 0.5rem 0;
+  }
+
+  .scroll-inner:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .scroll-card {
+    flex-shrink: 0;
+    width: 260px;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--color-line, #e2e8f0);
+    background: var(--color-surface, #fff);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .scroll-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  .scroll-img {
+    display: block;
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+  }
+
+  .scroll-label {
+    display: block;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-heading, #1e293b);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>

@@ -1,0 +1,245 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icon from "@/components/Icon.astro";
+import { site } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Base
+  title="Kibbler"
+  description="An ultrasonic-triggered automatic pet feeder built on an Arduino Uno with an HC-SR04 sensor, L293D motor driver, and PVC hopper."
+>
+  <div class="mx-auto max-w-5xl px-6 pt-36 pb-24 sm:px-12 md:px-24">
+    <a
+      href={withBase("/#projects")}
+      class="font-mono text-muted hover:text-accent inline-flex items-center gap-2 text-xs transition-colors"
+    >
+      <Icon name="arrow" size={14} class="rotate-180" /> back to portfolio
+    </a>
+
+    <!-- Header -->
+    <header class="mt-8 mb-12" data-reveal>
+      <p class="eyebrow">University of Minnesota · 2023</p>
+      <h1 class="mt-4 text-3xl font-semibold sm:text-4xl">Kibbler</h1>
+      <p class="text-muted mt-2 text-lg">An Ultrasonic-Triggered Automatic Pet Feeder</p>
+    </header>
+
+    <!-- Hero Images -->
+    <section class="mb-14" data-reveal>
+      <div class="grid gap-4 sm:grid-cols-3">
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/kibbler-electronics.png")}
+            alt="Kibbler electronics: Arduino Uno, HC-SR04 ultrasonic sensor, breadboard, and motor on a workbench"
+            class="h-full w-full object-cover"
+            loading="lazy"
+          />
+        </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/kibbler-wiring.png")}
+            alt="Kibbler wiring diagram showing Arduino Uno, HC-SR04 sensor, L293D motor driver, 16x2 LCD, and 9V battery on a breadboard"
+            class="h-full w-full object-cover"
+            loading="lazy"
+          />
+        </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/kibbler-assembled.png")}
+            alt="Assembled Kibbler: PVC hopper mounted on wooden frame with motor-driven dispenser"
+            class="h-full w-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- The Problem -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">The Problem</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Feeding household pets is a daily task that requires someone to be home at consistent
+        times. Commercial automatic feeders exist but tend to be expensive and inflexible. We set
+        out to build an affordable, sensor-triggered feeder that dispenses kibble automatically
+        when a pet approaches, using off-the-shelf components and an Arduino.
+      </p>
+    </section>
+
+    <!-- Our Solution -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Our Solution</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Kibbler is an automatic pet feeder that uses an HC-SR04 ultrasonic sensor to detect when
+        an animal approaches the feeding area. When the sensor reads a distance below a set
+        threshold, the Arduino Uno triggers an L293D motor driver that spins a DC motor to
+        dispense kibble from a PVC pipe hopper. A 16&times;2 LCD displays the current system state
+        so the owner can verify the feeder is armed and functioning. The entire system runs off a
+        9V battery supply.
+      </p>
+
+      <div class="mb-8 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+        <h3 class="text-heading mb-4 text-base font-semibold">System Pipeline</h3>
+        <div class="grid gap-6 sm:grid-cols-4">
+          <div class="text-center">
+            <p class="text-accent text-sm font-semibold">HC-SR04 Sensor</p>
+            <p class="text-body mt-1 text-[0.8rem]">Ultrasonic ping measures distance to approaching pet</p>
+          </div>
+          <div class="text-center">
+            <p class="text-accent text-sm font-semibold">Arduino Uno</p>
+            <p class="text-body mt-1 text-[0.8rem]">Reads distance, applies threshold, drives outputs</p>
+          </div>
+          <div class="text-center">
+            <p class="text-accent text-sm font-semibold">L293D Driver</p>
+            <p class="text-body mt-1 text-[0.8rem]">H-bridge controls DC motor direction and speed</p>
+          </div>
+          <div class="text-center">
+            <p class="text-accent text-sm font-semibold">Dispenser</p>
+            <p class="text-body mt-1 text-[0.8rem]">Motor-driven mechanism releases kibble from PVC hopper</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hardware -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Hardware</h2>
+      <div class="grid items-start gap-6 md:grid-cols-2">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-3 text-base font-semibold">Bill of Materials</h3>
+          <dl class="text-body space-y-3 text-[0.9rem]">
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">MCU:</dt>
+              <dd class="inline"> Arduino Uno (ATmega328P)</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Sensor:</dt>
+              <dd class="inline"> HC-SR04 ultrasonic distance sensor</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Motor Driver:</dt>
+              <dd class="inline"> L293D H-bridge IC</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Motor:</dt>
+              <dd class="inline"> DC motor for kibble dispensing mechanism</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Display:</dt>
+              <dd class="inline"> 16&times;2 character LCD</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Power:</dt>
+              <dd class="inline"> 9V battery</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Structure:</dt>
+              <dd class="inline"> PVC pipe hopper on a wooden frame with hose clamp mounts</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/kibbler-electronics.png")}
+            alt="Kibbler electronics on workbench: Arduino, HC-SR04, breadboard wiring, and DC motor"
+            class="w-full"
+            loading="lazy"
+          />
+          <p class="text-muted bg-[var(--color-bg-raised)] py-2 text-center text-xs">
+            Electronics assembly: Arduino Uno, HC-SR04 sensor, breadboard, and DC motor
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mechanical Design -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Mechanical Design</h2>
+      <div class="grid items-start gap-6 md:grid-cols-2">
+        <div>
+          <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+            The hopper is a PVC pipe mounted vertically on a wooden frame with hose clamps.
+            Kibble is loaded from the top and gravity feeds it toward the dispensing mechanism
+            at the base. A DC motor at the bottom drives a gate or auger that releases a
+            controlled portion when triggered. The wooden frame provides a stable base and
+            keeps the hopper upright, while the hose clamps allow height adjustment.
+          </p>
+        </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/kibbler-assembled.png")}
+            alt="Assembled Kibbler showing PVC hopper on wooden frame with motor at the base"
+            class="w-full"
+            loading="lazy"
+          />
+          <p class="text-muted bg-[var(--color-bg-raised)] py-2 text-center text-xs">
+            PVC hopper on wooden frame with motor-driven dispensing mechanism at the base
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- My Contributions -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">My Contributions</h2>
+      <ul class="text-body space-y-4 text-[0.95rem] leading-relaxed">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Managed the team: designed, built, and tested the robot to dispense kibble on demand.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Developed the design intent and organized goal execution and objectives using calendars
+            and work breakdown structures.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Wrote the C++ firmware for the Arduino: ultrasonic distance sensing, threshold-based
+            motor triggering via the L293D driver, and LCD status display.
+          </span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          <span>
+            Configured the electrical infrastructure: wired the HC-SR04 sensor, L293D motor driver,
+            LCD, and power supply on a breadboard connected to the Arduino.
+          </span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Results -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Results</h2>
+      <ul class="text-body space-y-3 text-[0.95rem]">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Provides users the luxury of never having to perform the daily task of feeding household pets
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Ultrasonic detection reliably triggers dispensing when a pet approaches within range
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          LCD provides real-time system state feedback for the owner
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Built entirely from affordable, off-the-shelf components
+        </li>
+      </ul>
+    </section>
+
+    <!-- Tech chips -->
+    <div class="border-line flex flex-wrap gap-3 border-t pt-8" data-reveal>
+      {["Arduino Uno", "C++", "HC-SR04", "L293D", "16x2 LCD", "Ultrasonic Sensing", "DC Motor"].map(t => (
+        <span class="chip">{t}</span>
+      ))}
+    </div>
+  </div>
+</Base>

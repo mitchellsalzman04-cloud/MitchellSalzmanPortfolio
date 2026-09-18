@@ -1,0 +1,283 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icon from "@/components/Icon.astro";
+import { site } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Base
+  title="Wireless RF Front End"
+  description="A complete 2.5 GHz RF front end for a TDD drone communication link, designed from link budget to component selection for a 5 km ice cream delivery sUAS."
+>
+  <div class="mx-auto max-w-5xl px-6 pt-36 pb-24 sm:px-12 md:px-24">
+    <a
+      href={withBase("/#projects")}
+      class="font-mono text-muted hover:text-accent inline-flex items-center gap-2 text-xs transition-colors"
+    >
+      <Icon name="arrow" size={14} class="rotate-180" /> back to portfolio
+    </a>
+
+    <!-- Header -->
+    <header class="mt-8 mb-12" data-reveal>
+      <p class="eyebrow">EE 5607 &middot; University of Minnesota &middot; Spring 2026</p>
+      <h1 class="mt-4 text-3xl font-semibold sm:text-4xl">RF Front End Design for sUAS Delivery</h1>
+      <p class="text-muted mt-2 text-lg">A complete 2.5 GHz RF front end for a time division duplex drone communication link over 5 km</p>
+      <p class="text-body mt-3 text-sm">
+        Mitchell Salzman
+      </p>
+      <p class="text-muted mt-1 text-xs">
+        Course: Wireless Hardware Systems Design (EE 5607)
+      </p>
+    </header>
+
+    <!-- Stats -->
+    <section class="mb-14" data-reveal>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div class="rounded-lg border-2 border-[var(--color-accent)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-lg font-bold">2.5 GHz</p>
+          <p class="text-accent mt-1 text-xs font-medium">Carrier frequency</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">5 km</p>
+          <p class="text-muted mt-1 text-xs">Operating range</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">40 MHz</p>
+          <p class="text-muted mt-1 text-xs">Total bandwidth</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-heading text-lg font-bold">TDD</p>
+          <p class="text-muted mt-1 text-xs">Duplexing</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- The Problem -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">The Problem</h2>
+      <p class="text-body mb-4 text-[0.95rem] leading-relaxed">
+        A small unmanned aircraft system needs to deliver ice cream within a 5 km operating
+        area while maintaining real-time pilot control and high-bandwidth video telemetry.
+        The communication link must support 4.7 MHz of control bandwidth and 37 MHz of
+        telemetry bandwidth on a shared carrier, with the entire RF front end designed from
+        the USRP radio frequency port to the antenna on both the ground station and the drone.
+      </p>
+      <p class="text-body text-[0.95rem] leading-relaxed">
+        The design must fit within strict payload constraints &mdash; 20 lb maximum including
+        ice cream and electronics &mdash; and a 35-foot LMR-400 coax run between the control
+        room equipment and the mast-mounted antenna.
+      </p>
+    </section>
+
+    <!-- Block Diagram -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">System Architecture</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The system uses a shared-carrier time division duplex architecture at 2.5 GHz.
+        Each platform uses a single antenna switched between the transmit and receive chains
+        with a 10 &mu;s guard interval. All modulation, demodulation, and frequency conversion
+        occur inside the USRP B205mini-i; the external RF front end provides filtering,
+        amplification, isolation, and noise performance needed to close the link budget.
+      </p>
+      <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/wireless-rf-block-diagram.png")}
+          alt="RF block diagram showing control room and drone chains: USRP to BPF, ATT, DA, PA, 35ft coax, switch, and antenna on the control station; USRP to BPF, ATT, PA, switch, and antenna on the drone, with LNA and BPF in each receive path"
+          class="block w-full bg-white p-4"
+        />
+      </div>
+      <p class="text-muted mt-2 text-center text-xs">
+        Complete RF block diagram &mdash; control station (top) and drone (bottom)
+      </p>
+    </section>
+
+    <!-- TDD Operation -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Time Division Duplex Operation</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The control station and drone alternate between transmitting and receiving with a
+        symmetric schedule. During transmit, the power amplifier is enabled and the LNA is
+        disabled; during receive, the PA is disabled and the LNA is enabled. A 10 &mu;s guard
+        interval between states ensures the switch settles and no RF power reaches the
+        sensitive receiver path.
+      </p>
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-3 text-base font-semibold">Control Station Schedule</h3>
+          <dl class="text-body space-y-3 text-[0.9rem]">
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">TX (500 &mu;s):</dt>
+              <dd class="inline"> PA on, LNA off &mdash; sends to drone</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Guard (10 &mu;s):</dt>
+              <dd class="inline"> Both off &mdash; switch settling</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">RX (500 &mu;s):</dt>
+              <dd class="inline"> LNA on, PA off &mdash; receives from drone</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-3 text-base font-semibold">Drone Schedule</h3>
+          <dl class="text-body space-y-3 text-[0.9rem]">
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">RX (500 &mu;s):</dt>
+              <dd class="inline"> LNA on, PA off &mdash; receives from station</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Guard (10 &mu;s):</dt>
+              <dd class="inline"> Both off &mdash; switch settling</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">TX (500 &mu;s):</dt>
+              <dd class="inline"> PA on, LNA off &mdash; sends to station</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- Link Budget -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Link Budget</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The design process started with a symbolic link budget and conservative assumptions
+        before any component was selected. Free-space path loss at 2.5 GHz over 5 km is
+        114.4 dB. Both uplink and downlink exceed the 15 dB SNR requirement with comfortable
+        margin.
+      </p>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-3 text-base font-semibold">Uplink (Control &rarr; Drone)</h3>
+          <dl class="text-body space-y-2 text-[0.9rem]">
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Received power:</dt>
+              <dd class="inline"> &minus;67.8 dBm</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Noise floor:</dt>
+              <dd class="inline"> &minus;96 dBm (NF &approx; 2 dB)</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">SNR:</dt>
+              <dd class="inline"> ~28 dB</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-6">
+          <h3 class="text-heading mb-3 text-base font-semibold">Downlink (Drone &rarr; Control)</h3>
+          <dl class="text-body space-y-2 text-[0.9rem]">
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Received power:</dt>
+              <dd class="inline"> &minus;76.8 dBm</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">Noise floor:</dt>
+              <dd class="inline"> &minus;96 dBm (NF &approx; 2 dB)</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-[var(--color-heading)] inline">SNR:</dt>
+              <dd class="inline"> ~19 dB</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- Component Selection -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Component Selection</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        Every component was selected after the link budget confirmed feasibility, ensuring
+        that each hardware decision traces back to a requirement. The mast-mounted LNA
+        placement keeps coax loss outside the noise-sensitive receive chain, preserving
+        signal-to-noise ratio.
+      </p>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">USRP B205mini-i</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            All baseband processing, modulation/demodulation, mixing, and gain control
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">BFCN-2500+ (BPF)</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            Bandpass filter limiting spectrum around 2.5 GHz, &minus;2 dB insertion loss
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">GVA-84+ / PHA-1H+ (Amplifiers)</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            Driver and power amplifiers providing +10 dB gain each in the transmit chain
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">SAV-581+ (LNA)</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            +20 dB gain low-noise amplifier, mast-mounted to minimize noise figure
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">HSWA2-30DR+ (Switch)</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            Fast SPDT RF switch for TDD operation with &minus;1 dB insertion loss
+          </p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4">
+          <p class="text-accent text-sm font-semibold">Antaira ANT-OM-2409</p>
+          <p class="text-body mt-1 text-[0.85rem]">
+            +9 dBi omnidirectional ground antenna, fits within the 30&Prime; mast volume
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Power & Energy -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Power & Energy</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The drone RF subsystem draws approximately 6 W, powered by a Tattu 16,000 mAh 6S
+        LiPo battery at 22.2 V. A switching regulator generates a 5 V rail for the USRP
+        and PA, and a linear regulator derives a 3.3 V rail for the LNA and RF switch,
+        separating noisy digital supply from sensitive receiver stages.
+      </p>
+      <div class="grid gap-4 sm:grid-cols-3">
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-2xl font-bold">~6 W</p>
+          <p class="text-muted mt-1 text-xs">RF subsystem power</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-2xl font-bold">50 h</p>
+          <p class="text-muted mt-1 text-xs">RF-only endurance</p>
+        </div>
+        <div class="rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-4 text-center">
+          <p class="text-accent text-2xl font-bold">1.9 kg</p>
+          <p class="text-muted mt-1 text-xs">Battery mass</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Design Approach -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Design Approach</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The process followed four stages: formulate requirements algebraically, choose a
+        carrier frequency and duplexing method, decompose the RF path into a link budget,
+        and select commercial parts whose gains, losses, and noise figures satisfy the
+        derived constraints. Every hardware decision traces back to a requirement, and
+        the architecture supports FCC compliance through conservative transmit power,
+        bandpass filtering, and documented operating parameters.
+      </p>
+    </section>
+
+    <!-- Tech chips -->
+    <div class="border-line flex flex-wrap gap-3 border-t pt-8" data-reveal>
+      {["USRP B205mini", "RF", "Link Budget", "TDD", "LNA", "PA", "BPF", "LMR-400 Coax", "2.5 GHz"].map(t => (
+        <span class="chip">{t}</span>
+      ))}
+    </div>
+  </div>
+</Base>

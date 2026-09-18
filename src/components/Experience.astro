@@ -1,5 +1,6 @@
 ---
 import Section from "@/components/Section.astro";
+import OrgMark from "@/components/OrgMark.astro";
 import { experience, TIMELINE_START } from "@/data/site";
 
 /**
@@ -8,26 +9,15 @@ import { experience, TIMELINE_START } from "@/data/site";
  * each row can carry multiple selectable bars, one per stint, so a set of
  * promotions at the same company reads as distinct segments on one line
  * instead of duplicate rows.
+ *
+ * Rows are split into two tracks — paid work and student orgs — because
+ * mixed together they implied four unbroken years of employment, which isn't
+ * what happened. Each track carries its own colour and its own heading.
  */
 const now = 2026.6;
 const span = now - TIMELINE_START;
 const pct = (year: number) => ((year - TIMELINE_START) / span) * 100;
-const ticks = [2018, 2020, 2022, 2024, 2026];
-
-/**
- * Company favicons via Google's
- * faviconV2 on gstatic, given the *full* page URL rather than a bare domain.
- * Domain-only lookups downgrade to http:// and miss some modern sites,
- * and the older www.google.com/s2/favicons host sits on common
- * tracker blocklists, so it silently fails for anyone running a blocker.
- *
- * `size` is the requested pixel size — ask for 2x the rendered box. If it
- * fails anyway, `onerror` drops the image and the monogram behind shows.
- */
-const faviconFor = (url: string, size: number) =>
-  `https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent(
-    url,
-  )}&size=${size}`;
+const ticks = [2022, 2023, 2024, 2025, 2026];
 
 // Group stints by company, preserving one row per company.
 const byCompany = new Map<string, typeof experience>();
@@ -41,27 +31,57 @@ for (const job of experience) {
 const groups = [...byCompany.entries()]
   .map(([company, jobs]) => ({
     company,
+    kind: jobs[0]!.kind,
     jobs: [...jobs].sort((a, b) => a.start - b.start),
     latest: Math.max(...jobs.map((j) => j.end ?? now)),
   }))
   .sort((a, b) => b.latest - a.latest);
 
+const TRACKS = [
+  { kind: "work" as const, label: "Employment", short: "Work" },
+  { kind: "club" as const, label: "Clubs & Organizations", short: "Clubs" },
+];
+
 // Flat, globally-ordered index shared by the bars above and the panels below,
 // so the two lists stay in lockstep for tab/panel wiring and keyboard nav.
+// The cursor walks the tracks in render order — employment, then clubs — so
+// arrow-key nav follows what's actually on screen.
 let cursor = 0;
-const groupsIndexed = groups.map((g) => ({
-  ...g,
-  jobs: g.jobs.map((job) => ({ job, index: cursor++ })),
-}));
-const flat = groupsIndexed.flatMap((g) => g.jobs);
+const tracks = TRACKS.map((track) => ({
+  ...track,
+  groups: groups
+    .filter((g) => g.kind === track.kind)
+    .map((g) => ({ ...g, jobs: g.jobs.map((job) => ({ job, index: cursor++ })) })),
+})).filter((t) => t.groups.length > 0);
+
+const flat = tracks.flatMap((t) => t.groups.flatMap((g) => g.jobs));
+
+// Open on the most recent stint, not merely the first bar of the most recent
+// company. Stints sort oldest-first *within* a company, so a plain index 0
+// landed on the 2025 Tempe summer while the 2026 role sat unselected beside
+// it — correct wiring, wrong default.
+const defaultIndex = flat.reduce((best, cur) => (cur.job.start > best.job.start ? cur : best), flat[0]!).index;
 ---
 
-<Section id="experience" title="Experiences">
+<Section id="experience" title="Experiences" eyebrow="Where I've Worked" tone="dark">
   <div data-reveal>
-    <p class="text-muted mb-8 max-w-xl text-sm">
-      Eight years, four countries, one thread running through it: what should
-      this system do next. Select a bar for the detail.
+    <p class="text-accent mb-5 flex items-center gap-2 text-sm font-medium">
+      <span class="inline-block animate-pulse" aria-hidden="true">👆</span>
+      Select a bar below to see the details
     </p>
+
+    {/* Legend. Colour is the entire mechanism for the work/club split, so it
+        gets named once rather than left to be inferred from the bars. */}
+    <ul class="font-mono mb-8 flex flex-wrap gap-x-5 gap-y-2 text-[0.65rem]">
+      {
+        TRACKS.map((t) => (
+          <li class={`tl-${t.kind} text-muted flex items-center gap-2`}>
+            <span class="tl-swatch block h-2 w-5 rounded-[2px]" aria-hidden="true" />
+            {t.label}
+          </li>
+        ))
+      }
+    </ul>
 
     <div class="scroller -mx-2 overflow-x-auto px-2 pb-2">
       {/* pr-5 reserves room for the "still running" arrow, which sits just
@@ -69,7 +89,7 @@ const flat = groupsIndexed.flatMap((g) => g.jobs);
           was otherwise clipped by the scroller. */}
       <div class="min-w-[260px] pr-5">
         {/* Year axis, offset to sit over the track only */}
-        <div class="grid grid-cols-[76px_1fr] items-end" aria-hidden="true">
+        <div class="grid grid-cols-[100px_1fr] items-end" aria-hidden="true">
           <span></span>
           <div class="border-line relative h-5 border-b">
             {
@@ -85,62 +105,65 @@ const flat = groupsIndexed.flatMap((g) => g.jobs);
           </div>
         </div>
 
-        {/* Rows: one per company, each with one bar per stint */}
-        <div role="tablist" aria-label="Roles" class="mt-2 flex flex-col gap-1" id="tl">
-          {
-            groupsIndexed.map((group) => (
-              <div class="grid w-full grid-cols-[76px_1fr] items-center gap-2 py-1">
-                <span class="tl-label font-mono flex items-center gap-1 truncate pl-1 text-[0.65rem]">
-                  <span
-                    class="tl-icon border-line bg-bg relative inline-flex size-4 shrink-0 items-center justify-center overflow-hidden rounded-[3px] border text-[0.5rem] leading-none"
-                    aria-hidden="true"
-                  >
-                    {group.company.charAt(0)}
-                    <img
-                      src={faviconFor(group.jobs[0]!.job.url, 32)}
-                      alt=""
-                      aria-hidden="true"
-                      width="12"
-                      height="12"
-                      loading="lazy"
-                      decoding="async"
-                      class="absolute inset-0 m-auto size-3"
-                      onerror="this.remove()"
-                    />
-                  </span>
-                  <span class="truncate">{group.jobs[0]!.job.shortName}</span>
+        {/* One tablist per track, so each carries its own accessible name.
+            Keyboard nav still spans both — the script collects every .tl-bar
+            on the page rather than walking a single list. */}
+        {
+          tracks.map((track) => (
+            <div class={`tl-${track.kind} mt-5 first:mt-2`}>
+              <div class="grid grid-cols-[100px_1fr] items-center gap-2">
+                <span class="font-mono tl-track-label pl-1 text-[0.6rem] tracking-[0.12em] uppercase">
+                  {track.short}
                 </span>
-                <span class="relative block h-5">
-                  {
-                    group.jobs.map(({ job, index }) => {
-                      const left = pct(job.start);
-                      const right = pct(job.end ?? now);
-                      return (
-                        <button
-                          role="tab"
-                          id={`tl-tab-${index}`}
-                          aria-controls={`tl-panel-${index}`}
-                          aria-selected={index === 0 ? "true" : "false"}
-                          tabindex={index === 0 ? 0 : -1}
-                          aria-label={`${job.role} at ${job.company}, ${job.period}`}
-                          class="tl-bar absolute top-1/2 -translate-y-1/2 rounded-[2px]"
-                          style={`left: ${left}%; width: ${Math.max(right - left, 1.5)}%`}
-                        >
-                          <span class="tl-fill block h-2.5 rounded-[2px] transition-colors duration-200" />
-                          {job.end === null && (
-                            <span class="tl-live absolute top-1/2 -translate-y-1/2 text-[0.7rem] leading-none" style="left: calc(100% + 5px)">
-                              →
-                            </span>
-                          )}
-                        </button>
-                      );
-                    })
-                  }
-                </span>
+                <span class="tl-rule block h-px" aria-hidden="true" />
               </div>
-            ))
-          }
-        </div>
+
+              <div role="tablist" aria-label={track.label} class="mt-1.5 flex flex-col gap-1">
+                {track.groups.map((group) => (
+                  <div class="grid w-full grid-cols-[100px_1fr] items-center gap-2 py-1">
+                    <span class="tl-label font-mono flex items-center gap-1.5 truncate pl-1 text-[0.65rem]">
+                      <OrgMark
+                        company={group.company}
+                        url={group.jobs[0]!.job.url}
+                        logo={group.jobs[0]!.job.logo}
+                        size={22}
+                      />
+                      <span class="truncate">{group.jobs[0]!.job.shortName}</span>
+                    </span>
+                    <span class="relative block h-5">
+                      {group.jobs.map(({ job, index }) => {
+                        const left = pct(job.start);
+                        const right = pct(job.end ?? now);
+                        return (
+                          <button
+                            role="tab"
+                            id={`tl-tab-${index}`}
+                            aria-controls={`tl-panel-${index}`}
+                            aria-selected={index === defaultIndex ? "true" : "false"}
+                            tabindex={index === defaultIndex ? 0 : -1}
+                            aria-label={`${job.role} at ${job.company}, ${job.period}`}
+                            class="tl-bar absolute top-1/2 -translate-y-1/2 rounded-[2px]"
+                            style={`left: ${left}%; width: ${Math.max(right - left, 1.5)}%`}
+                          >
+                            <span class="tl-fill block h-2.5 rounded-[2px] transition-colors duration-200" />
+                            {job.end === null && (
+                              <span
+                                class="tl-live absolute top-1/2 -translate-y-1/2 text-[0.7rem] leading-none"
+                                style="left: calc(100% + 5px)"
+                              >
+                                →
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
       </div>
     </div>
 
@@ -152,32 +175,16 @@ const flat = groupsIndexed.flatMap((g) => g.jobs);
             role="tabpanel"
             id={`tl-panel-${index}`}
             aria-labelledby={`tl-tab-${index}`}
-            hidden={index !== 0}
-            class="tl-panel"
+            hidden={index !== defaultIndex}
+            class={`tl-panel tl-${job.kind}`}
           >
             <h3 class="flex flex-wrap items-center gap-2.5 text-lg font-medium sm:text-xl">
-              <span
-                class="border-line bg-bg relative inline-flex size-6 shrink-0 items-center justify-center overflow-hidden rounded border text-[0.6rem] font-mono"
-                aria-hidden="true"
-              >
-                {job.company.charAt(0)}
-                <img
-                  src={faviconFor(job.url, 48)}
-                  alt=""
-                  aria-hidden="true"
-                  width="18"
-                  height="18"
-                  loading="lazy"
-                  decoding="async"
-                  class="absolute inset-0 m-auto size-[18px]"
-                  onerror="this.remove()"
-                />
-              </span>
+              <OrgMark company={job.company} url={job.url} logo={job.logo} size={40} />
               <span>
                 {job.role}{" "}
-                <span class="text-accent">
+                <span class="tl-ink">
                   @{" "}
-                  <a href={job.url} target="_blank" rel="noopener noreferrer" class="link">
+                  <a href={job.url} target="_blank" rel="noopener noreferrer" class="tl-link">
                     {job.company}
                   </a>
                 </span>
@@ -190,13 +197,31 @@ const flat = groupsIndexed.flatMap((g) => g.jobs);
             <ul class="mt-6 space-y-3">
               {job.bullets.map((b) => (
                 <li class="flex gap-3 text-[0.95rem]">
-                  <span class="text-accent mt-1 shrink-0" aria-hidden="true">
+                  <span class="tl-ink mt-1 shrink-0" aria-hidden="true">
                     ▸
                   </span>
                   <span>{b}</span>
                 </li>
               ))}
             </ul>
+            {job.testimonials && job.testimonials.length > 0 && (
+              <div class="tl-testimonials mt-8 border-t border-white/10 pt-6">
+                <p class="font-mono text-muted mb-4 text-xs uppercase tracking-widest">Member Reviews</p>
+                <div class="space-y-4">
+                  {job.testimonials.map((t) => (
+                    <blockquote class="tl-quote rounded-lg bg-white/[0.04] px-5 py-4">
+                      <p class="text-[0.9rem] italic leading-relaxed text-white/80">"{t.quote}"</p>
+                      <footer class="mt-2 text-sm">
+                        {" "}
+                        <a href={t.url} target="_blank" rel="noopener noreferrer" class="tl-link">
+                          {t.name}
+                        </a>
+                      </footer>
+                    </blockquote>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         ))
       }
@@ -205,6 +230,17 @@ const flat = groupsIndexed.flatMap((g) => g.jobs);
 </Section>
 
 <style>
+  /* One dial per track. Both are lifted off the light-palette tokens to clear
+     the charcoal band this section sits on — #0c5fcb and #0e9aa7 are legible
+     on white and mud on #16202b. Blue keeps its existing association with the
+     accent, so paid work is the colour the rest of the page already uses. */
+  .tl-work {
+    --tl-ink: #86b6ff;
+  }
+  .tl-club {
+    --tl-ink: #4ecec4;
+  }
+
   .scroller {
     scrollbar-width: thin;
     scrollbar-color: var(--color-line) transparent;
@@ -222,24 +258,54 @@ const flat = groupsIndexed.flatMap((g) => g.jobs);
   .scroller::-webkit-scrollbar-thumb:hover {
     background: var(--color-accent);
   }
+
+  .tl-swatch {
+    background: var(--tl-ink);
+  }
+  .tl-track-label {
+    color: color-mix(in srgb, var(--tl-ink) 72%, transparent);
+  }
+  .tl-rule {
+    background: linear-gradient(to right, color-mix(in srgb, var(--tl-ink) 40%, transparent), transparent);
+  }
+
+  /* Unselected bars stay neutral in both tracks. Tinting every bar made the
+     whole section read as two solid colour fields and cost the selected bar
+     its emphasis — the colour has to mean "this one" as well as "this kind". */
   .tl-fill {
-    background: var(--color-line);
+    background: rgba(255, 255, 255, 0.15);
   }
   .tl-label {
     color: var(--color-muted);
   }
   .tl-bar:hover .tl-fill {
-    background: color-mix(in srgb, var(--color-accent) 55%, var(--color-line));
+    background: color-mix(in srgb, var(--tl-ink) 55%, rgba(255, 255, 255, 0.15));
   }
   .tl-bar[aria-selected="true"] .tl-fill {
-    background: var(--color-accent);
+    background: var(--tl-ink);
   }
   .tl-live {
     color: var(--color-faint);
   }
   .tl-bar[aria-selected="true"] .tl-live {
-    color: var(--color-accent);
+    color: var(--tl-ink);
   }
+
+  .tl-ink {
+    color: var(--tl-ink);
+  }
+  .tl-link {
+    color: var(--tl-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, var(--tl-ink) 40%, transparent);
+    transition: text-decoration-color 0.2s var(--ease-swift);
+  }
+  .tl-link:hover {
+    text-decoration-color: currentColor;
+  }
+
   .tl-panel {
     animation: tl-in 0.3s var(--ease-swift);
   }

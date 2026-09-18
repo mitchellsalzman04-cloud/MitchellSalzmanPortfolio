@@ -1,32 +1,53 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   Design tokens — "Ink & Iris": neutral-cool ink under a periwinkle accent.
-   Adapted from the guilyx/v4 palette — retune freely.
+   Design tokens — "Clinical": navy ink on white, teal-to-azure accents.
 
-   The grounds were lifted a step in 2026-08 — the original #0d0e12 read as
-   flat black on OLED phones, where the raised surfaces and hairlines
-   disappeared into the background entirely. Same hue family, more air.
+   The layout grammar here (full-bleed bands, circle-arrow CTAs, eyebrow
+   labels, big-numeral stat rows) is borrowed from medical-device marketing
+   sites. The palette deliberately is NOT: Medtronic's electric ultramarine
+   (#0F0FEB) and violet-navy (#170F4F) were shifted into azure (#0C5FCB) and
+   blue-navy (#0F2340) so the site reads as its own thing rather than as an
+   official device-maker page. Mitchell interned there twice; the resemblance
+   had to stop short of ambiguity.
+
+   Previous palette ("Ink & Iris", periwinkle on near-black) is in git at
+   b081837 if this ever needs to go back.
 --------------------------------------------------------------------------- */
 @theme {
-  --color-bg: #12141b;
-  --color-bg-raised: #1a1d26;
-  --color-surface: #1a1d26;
-  --color-line: #2c3040;
-  --color-heading: #e8eaf0;
-  --color-body: #aeb3c2;
-  --color-muted: #858b9c;
-  --color-faint: #616779;
-  --color-accent: #8b95f0;
-  --color-accent-soft: rgba(139, 149, 240, 0.08);
-  /* colour of the hero flock; read by the canvas so palettes swap cleanly */
-  --color-agent: #858b9c;
+  --color-bg: #ffffff;
+  --color-bg-raised: #f4f6f8;
+  --color-surface: #ffffff;
+  --color-line: #dce3ea;
+  --color-heading: #0f2340;
+  --color-body: #3a4a5c;
+  --color-muted: #64748b;
+  --color-faint: #8a98a8;
+  --color-accent: #0c5fcb;
+  --color-accent-soft: rgba(12, 95, 203, 0.07);
+  --color-teal: #0e9aa7;
 
-  --font-display: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  /* Band grounds. Both are navy-tinted rather than neutral — a pure #1e1e1e
+     next to #0f2340 headings reads as two different blacks. */
+  --color-band-dark: #16202b;
+  --color-band-ink: #0a1018;
+
+  /* Hero flock colour, read by the canvas so palettes swap cleanly. */
+  --color-agent: #0e9aa7;
+
+  --font-display: "Figtree Variable", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
 
   --ease-swift: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+/* Gradients live outside @theme — Tailwind only generates utilities for
+   colour-ish tokens, and these are referenced directly by .band anyway. */
+:root {
+  --gradient-hero: linear-gradient(115deg, #0e9aa7 0%, #1257c7 45%, #0f2340 100%);
+  --gradient-accent: linear-gradient(120deg, #0c5fcb 0%, #0e9aa7 100%);
+  --hero-card: #eaf3f8;
 }
 
 /* ---------------------------------------------------------------------------
@@ -34,7 +55,7 @@
 --------------------------------------------------------------------------- */
 html {
   scroll-behavior: smooth;
-  color-scheme: dark;
+  color-scheme: light;
   /* Every size on the site is rem-based, so the root size is the one dial
      that scales type and spacing together. It has to be responsive: a flat
      120% is comfortable on a laptop and enormous on a phone, where it cost
@@ -68,29 +89,204 @@ body {
 }
 
 ::selection {
-  background-color: rgba(139, 149, 240, 0.25);
+  background-color: rgba(12, 95, 203, 0.18);
   color: var(--color-heading);
 }
 
 h1, h2, h3, h4 {
   @apply font-display text-heading;
   letter-spacing: -0.02em;
+  font-weight: 700;
 }
 
-/* Accessible focus */
+/* Accessible focus. Solid rather than dashed — on white, a dashed 2px ring
+   reads as a rendering artefact rather than a deliberate state. */
 :focus-visible {
-  outline: 2px dashed var(--color-accent);
+  outline: 2px solid var(--color-accent);
   outline-offset: 3px;
   border-radius: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+   Full-bleed bands
+
+   Sections span the viewport; .wrap re-centres their contents. This is why
+   Base.astro no longer holds a single max-width container — a wrapper that
+   clips at max-w-screen-xl makes edge-to-edge backgrounds impossible, so
+   the constraint moved down into each section instead.
+--------------------------------------------------------------------------- */
+.wrap {
+  @apply mx-auto w-full max-w-screen-xl px-6 sm:px-12 md:px-24;
+}
+
+.band {
+  @apply w-full;
+}
+.band-white  { background: var(--color-bg); }
+.band-grey   { background: var(--color-bg-raised); }
+.band-dark   { background: var(--color-band-dark); }
+.band-ink    { background: var(--color-band-ink); }
+.band-hero   { background: var(--gradient-hero); }
+.band-accent { background: var(--gradient-accent); }
+
+/* A dark band remaps the token utilities rather than asking each component to
+   know what it's sitting on. Without this, a section written against the
+   light palette (text-body #3a4a5c, border-line #dce3ea) is unreadable the
+   moment it moves onto charcoal.
+   `:is()` keeps these at one-class specificity, so `.on-light` below can
+   still override them on source order. */
+:is(.band-dark, .band-ink, .band-hero, .band-accent) {
+  color: rgba(255, 255, 255, 0.78);
+}
+:is(.band-dark, .band-ink, .band-hero, .band-accent) :is(h1, h2, h3, h4),
+:is(.band-dark, .band-ink, .band-hero, .band-accent) .text-heading {
+  color: #fff;
+}
+:is(.band-dark, .band-ink, .band-hero, .band-accent) .text-body {
+  color: rgba(255, 255, 255, 0.78);
+}
+/* .eyebrow carries its own colour declaration, so it needs naming here
+   explicitly — muted grey on an azure gradient was nearly invisible. */
+:is(.band-dark, .band-ink, .band-hero, .band-accent) :is(.text-muted, .eyebrow) {
+  color: rgba(255, 255, 255, 0.65);
+}
+:is(.band-dark, .band-ink, .band-hero, .band-accent) .text-faint {
+  color: rgba(255, 255, 255, 0.42);
+}
+:is(.band-dark, .band-ink, .band-hero, .band-accent) .text-accent {
+  color: #86b6ff;
+}
+:is(.band-dark, .band-ink, .band-hero, .band-accent) :is(.border-line, .border-accent) {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+:is(.band-dark, .band-ink, .band-hero, .band-accent) :is(.bg-bg-raised, .bg-surface) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+:is(.band-dark, .band-ink, .band-hero, .band-accent) .bg-accent {
+  background-color: #86b6ff;
+}
+:is(.band-dark, .band-ink, .band-hero, .band-accent) .chip {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.72);
+}
+:is(.band-dark, .band-ink, .band-hero, .band-accent) .card {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(255, 255, 255, 0.13);
+}
+:is(.band-dark, .band-ink, .band-hero, .band-accent) .card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: none;
+}
+:is(.band-dark, .band-ink, .band-hero, .band-accent) .link {
+  color: #86b6ff;
+}
+:is(.band-dark, .band-ink, .band-hero, .band-accent) .arrow-link {
+  color: #fff;
+  /* The circle fills with currentColor, so on a dark band it turns white —
+     which means the arrow inside it has to go dark to stay visible. */
+  --arrow-ink: #0f2340;
+}
+:is(.band-dark, .band-ink, .band-hero, .band-accent) :focus-visible {
+  outline-color: #fff;
+}
+
+/* Escape hatch: a pale card sitting ON a dark band needs its contents to opt
+   back into the light type scale. Declared after the band rules so it wins on
+   source order — both selectors carry the same specificity. */
+.on-light {
+  color: var(--color-body);
+}
+.on-light :is(h1, h2, h3, h4) {
+  color: var(--color-heading);
+}
+.on-light .text-muted,
+.on-light .eyebrow {
+  color: var(--color-muted);
+}
+.on-light .text-heading {
+  color: var(--color-heading);
+}
+.on-light .text-body {
+  color: var(--color-body);
+}
+.on-light .text-faint {
+  color: var(--color-faint);
+}
+.on-light .text-accent {
+  color: var(--color-accent);
+}
+.on-light :is(.border-line, .border-accent) {
+  border-color: var(--color-line);
+}
+.on-light .chip {
+  background: #fff;
+  border-color: var(--color-line);
+  color: var(--color-muted);
+}
+.on-light .arrow-link {
+  color: var(--color-accent);
+  --arrow-ink: #fff;
+}
+.on-light :focus-visible {
+  outline-color: var(--color-accent);
+}
+
+/* The hero's pale card, floated on the gradient band. */
+.hero-card {
+  background: var(--hero-card);
 }
 
 /* ---------------------------------------------------------------------------
    Reusable pieces
 --------------------------------------------------------------------------- */
 
+/* Eyebrow — small uppercase category label with a rule beneath it. The
+   single most repeated device on the sites this borrows from. */
+.eyebrow {
+  @apply text-muted font-sans;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.eyebrow::after {
+  content: "";
+  display: block;
+  width: 3.5rem;
+  height: 1px;
+  margin-top: 0.6rem;
+  background: currentColor;
+  opacity: 0.45;
+}
+
+/* Circle-arrow call to action. The arrow is a real element rather than a
+   pseudo-element so it can carry its own transform on hover. */
+.arrow-link {
+  @apply text-accent inline-flex items-center gap-2.5 font-sans font-semibold;
+  font-size: 0.92rem;
+  text-decoration: none;
+}
+.arrow-link .arrow-circle {
+  @apply inline-flex shrink-0 items-center justify-center rounded-full;
+  width: 1.55rem;
+  height: 1.55rem;
+  background: currentColor;
+  transition: transform 0.25s var(--ease-swift);
+}
+.arrow-link .arrow-circle svg {
+  width: 0.7rem;
+  height: 0.7rem;
+  stroke: var(--arrow-ink, #fff);
+}
+.arrow-link:hover .arrow-circle,
+.arrow-link:focus-visible .arrow-circle {
+  transform: translateX(4px);
+}
+
 /* Underline-slide link used for inline links */
 .link {
-  @apply text-accent relative inline-block;
+  @apply text-accent relative inline-block font-medium;
   text-decoration: none;
 }
 .link::after {
@@ -111,38 +307,80 @@ h1, h2, h3, h4 {
   transform-origin: left;
 }
 
-/* Ghost button */
+/* Solid pill button — the light theme's primary action. */
 .btn {
-  @apply font-mono text-sm text-accent inline-block rounded-sm border border-accent px-6 py-3;
-  background: transparent;
+  @apply inline-block rounded-full px-7 py-3 font-sans text-sm font-semibold text-white;
+  background: var(--color-accent);
   transition:
     background-color 0.25s var(--ease-swift),
-    transform 0.25s var(--ease-swift),
-    box-shadow 0.25s var(--ease-swift);
+    transform 0.25s var(--ease-swift);
 }
 .btn:hover,
 .btn:focus-visible {
-  background-color: var(--color-accent-soft);
+  background: #0a4ea8;
+  transform: translateY(-1px);
 }
 
-/* Mono tag chip */
+.btn-ghost {
+  @apply inline-block rounded-full border px-7 py-3 font-sans text-sm font-semibold;
+  border-color: currentColor;
+  background: transparent;
+  transition: background-color 0.25s var(--ease-swift);
+}
+.btn-ghost:hover,
+.btn-ghost:focus-visible {
+  background: var(--color-accent-soft);
+}
+.band-dark .btn-ghost:hover,
+.band-ink .btn-ghost:hover,
+.band-hero .btn-ghost:hover,
+.band-accent .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Tag chip */
 .chip {
-  @apply font-mono text-muted;
+  @apply border-line text-muted inline-block rounded-full border bg-white px-3 py-1 font-sans;
   font-size: 0.72rem;
-  letter-spacing: 0.02em;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Card — white on grey, hairline border, lifts on hover. */
+.card {
+  @apply border-line bg-surface rounded-lg border;
+  transition:
+    transform 0.3s var(--ease-swift),
+    box-shadow 0.3s var(--ease-swift);
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -12px rgba(15, 35, 64, 0.22);
+}
+
+/* Gradient panels stand in for photography. Three angles so a grid of them
+   doesn't read as one tile repeated. */
+.panel {
+  @apply relative overflow-hidden rounded-md;
+  background: var(--gradient-hero);
+}
+.panel-alt {
+  background: var(--gradient-accent);
+}
+.panel-deep {
+  background: linear-gradient(140deg, #0f2340 0%, #1257c7 100%);
 }
 
 /* ---------------------------------------------------------------------------
-   Scroll reveal — elements with [data-reveal] fade/rise in when they enter
-   the viewport. JS adds .is-visible; no-JS users see everything (default
-   hidden state only applies when html.has-js is set).
+   Scroll reveal — damped from the previous theme's 24px/0.6s. The sites this
+   borrows from barely move; a big rise reads as a different genre entirely.
 --------------------------------------------------------------------------- */
 html.has-js [data-reveal] {
   opacity: 0;
-  transform: translateY(24px);
+  transform: translateY(12px);
   transition:
-    opacity 0.6s var(--ease-swift),
-    transform 0.6s var(--ease-swift);
+    opacity 0.4s var(--ease-swift),
+    transform 0.4s var(--ease-swift);
   transition-delay: var(--reveal-delay, 0ms);
 }
 html.has-js [data-reveal].is-visible {
@@ -159,78 +397,50 @@ html.has-js [data-reveal].is-visible {
 }
 
 /* ---------------------------------------------------------------------------
-   Prose styling for blog posts (kept intentionally light — no plugin)
+   Prose styling for long-form pages (kept intentionally light — no plugin)
 --------------------------------------------------------------------------- */
 .prose {
   @apply text-body;
   max-width: 65ch;
 }
-.prose h2 {
-  @apply mt-12 mb-4 text-2xl;
-}
-.prose h3 {
-  @apply mt-8 mb-3 text-xl;
-}
-.prose p {
-  @apply my-4;
-}
-.prose ul,
-.prose ol {
-  @apply my-4 pl-6;
-}
-.prose ul {
-  list-style: none;
-}
+.prose h2 { @apply mt-12 mb-4 text-2xl; }
+.prose h3 { @apply mt-8 mb-3 text-xl; }
+.prose p { @apply my-4; }
+.prose ul, .prose ol { @apply my-4 pl-6; }
+.prose ul { list-style: none; }
 .prose ul li::before {
-  content: "▸";
+  content: "\25b8";
   color: var(--color-accent);
   display: inline-block;
   width: 1.2em;
   margin-left: -1.2em;
 }
-.prose ol {
-  list-style: decimal;
-}
-.prose li {
-  @apply my-1.5;
-}
-.prose a {
-  @apply text-accent;
-}
-.prose a:hover {
-  text-decoration: underline;
-}
-.prose blockquote {
-  @apply border-l-2 border-accent pl-4 text-muted italic my-6;
-}
+.prose ol { list-style: decimal; }
+.prose li { @apply my-1.5; }
+.prose a { @apply text-accent font-medium; }
+.prose a:hover { text-decoration: underline; }
+.prose blockquote { @apply border-accent text-muted my-6 border-l-2 pl-4 italic; }
 .prose code {
-  @apply font-mono text-[0.88em] text-heading;
-  background: var(--color-surface);
+  @apply text-heading font-mono text-[0.88em];
+  background: var(--color-bg-raised);
   padding: 0.15em 0.4em;
   border-radius: 4px;
 }
 .prose pre {
-  @apply my-6 rounded-lg border border-line p-5 overflow-x-auto text-sm;
+  @apply border-line my-6 overflow-x-auto rounded-lg border p-5 text-sm;
   background: var(--color-bg-raised) !important;
 }
-.prose pre code {
-  background: transparent;
-  padding: 0;
+.prose pre code { background: transparent; padding: 0; }
+.prose hr { @apply border-line my-10; }
+.prose img { @apply my-6 rounded-lg; max-width: 100%; }
+.prose video { @apply border-line my-6 rounded-lg border; max-width: 100%; }
+.prose figure { @apply my-6; }
+.prose figcaption { @apply text-faint mt-2 font-sans text-xs; }
+
+.rotate-video-ccw {
+  transform: rotate(-90deg);
 }
-.prose hr {
-  @apply border-line my-10;
-}
-.prose img {
-  @apply rounded-lg my-6;
-  max-width: 100%;
-}
-.prose video {
-  @apply rounded-lg my-6 border border-line;
-  max-width: 100%;
-}
-.prose figure {
-  @apply my-6;
-}
-.prose figcaption {
-  @apply font-mono text-faint mt-2 text-xs;
+
+.rotate-video-cw {
+  transform: rotate(90deg) scale(1.35);
 }

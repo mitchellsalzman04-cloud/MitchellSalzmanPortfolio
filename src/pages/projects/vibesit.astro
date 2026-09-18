@@ -1,0 +1,334 @@
+---
+import Base from "@/layouts/Base.astro";
+import Icon from "@/components/Icon.astro";
+import { site } from "@/data/site";
+import { withBase } from "@/lib/url";
+---
+
+<Base
+  title="VibeSit Insight"
+  description="A rehabilitation platform redesign for vibration therapy, built for VibeTech as Senior Design 2026."
+>
+  <div class="mx-auto max-w-5xl px-6 pt-36 pb-24 sm:px-12 md:px-24">
+    <a
+      href={withBase("/#projects")}
+      class="font-mono text-muted hover:text-accent inline-flex items-center gap-2 text-xs transition-colors"
+    >
+      <Icon name="arrow" size={14} class="rotate-180" /> back to portfolio
+    </a>
+
+    <!-- Header -->
+    <header class="mt-8 mb-12" data-reveal>
+      <p class="eyebrow">Senior Design 2026 · University of Minnesota</p>
+      <div class="mt-4 flex items-center gap-4">
+        <a href="https://www.vibetechglobal.com/" target="_blank" rel="noopener noreferrer">
+          <img
+            src={withBase("/media/vibesit-logo.jpeg")}
+            alt="VibeTech logo"
+            class="h-14 w-14 shrink-0 rounded-lg object-contain sm:h-16 sm:w-16"
+          />
+        </a>
+        <div>
+          <h1 class="text-3xl font-semibold sm:text-4xl">VibeSit Insight</h1>
+          <p class="text-muted mt-1 text-lg">A Rehabilitation Platform Redesign for Vibration Therapy</p>
+        </div>
+      </div>
+      <p class="text-body mt-3 text-sm">
+        Sabrina Simkhovich · Mitchell Salzman · Hunter Johnson · Johannes Winarta
+      </p>
+      <p class="text-muted mt-1 text-xs">
+        Advisors: Jeff Leismer &amp; Ahmet Turkmen · Client:
+        <a href="https://www.vibetechglobal.com/" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">VibeTech</a>
+      </p>
+
+      <!-- Hero images -->
+      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)]">
+          <img
+            src={withBase("/media/vibesit-team.jpg")}
+            alt="VibeTeam presenting at the 2026 Spring Design Show"
+            class="block h-full w-full object-cover"
+            loading="lazy"
+          />
+        </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--color-line)] bg-white">
+          <img
+            src={withBase("/media/vibesit-hero.png")}
+            alt="VibeTech VT3 device with VibeSit Insight app"
+            class="block h-full w-full object-contain p-4"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </header>
+
+    <!-- Abstract -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Abstract</h2>
+      <p class="text-body text-[0.95rem] leading-relaxed">
+        VibeTeam redesigned the companion iPad application for the VibeTech VT3 into VibeSit
+        Insight, a Swift/SwiftUI platform that guides patients and clinicians through a complete
+        rehabilitation program. The application delivers adaptive check in surveys, standardized
+        clinical tests for balance, mobility, and strength, a composite scoring system, and a
+        progress dashboard.
+      </p>
+    </section>
+
+    <!-- Background -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Background</h2>
+      <p class="text-body text-[0.95rem] leading-relaxed">
+        Lower limb rehabilitation is essential for patients recovering from surgery, managing
+        chronic conditions, or facing age related declines in strength and mobility, yet existing
+        tools rarely provide the infrastructure to objectively track outcomes over time. The
+        VibeTech VT3 device delivers resistance and vibration therapy while measuring force and
+        repetitions, but its original software lacked a structured workflow and centralized data
+        collection, leaving progress scattered across paper forms, spreadsheets, and clinician
+        notes. A redesigned application was needed to bridge the gap between a capable physical
+        therapy device and the clinical workflows required to make its data actionable.
+      </p>
+    </section>
+
+    <!-- Objectives -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Objectives</h2>
+      <ul class="text-body space-y-3 text-[0.95rem]">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Intuitive UI/UX for elderly users
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Treatment infrastructure
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Adaptive pre and post session surveys
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Progress dashboard with trend visualization
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Add Home Screen, User guide and Profile
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Implement data collection
+        </li>
+      </ul>
+
+      <!-- Figure 1: Patient using VT3 -->
+      <div class="mt-8 overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/vibesit-fig1-patient.jpeg")}
+          alt="Patient using the VibeTech VT3 device"
+          class="w-full"
+          loading="lazy"
+        />
+      </div>
+      <p class="text-muted mt-2 text-center text-xs">Figure 1. Device in use</p>
+    </section>
+
+    <!-- System Architecture Design -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">System Architecture Design</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The VibeSit Insight software stack connects a SwiftUI iPad application to a Python Flask
+        REST API via a secure ngrok tunnel, transmitting authenticated user survey, session, and
+        assessment data using HTTPS and JWT Bearer tokens. All patient records, treatment
+        configurations, and progress metrics are persisted in a MongoDB database, which the app
+        queries in real time to populate the Dashboard and Profile pages throughout the treatment
+        lifecycle.
+      </p>
+
+      <!-- Figure 2: System architecture -->
+      <div class="mb-2 overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/vibesit-fig2-architecture.jpeg")}
+          alt="System architecture: VT3 Device, iPad App, ngrok tunnel, Flask backend, MongoDB"
+          class="w-full bg-white p-4"
+          loading="lazy"
+        />
+      </div>
+      <p class="text-muted mb-8 text-center text-xs">Figure 2. System architecture</p>
+
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        App flow is organized into five functional phases that define the complete patient journey
+        from onboarding through completing treatment.
+      </p>
+
+      <!-- Figure 3: App flow diagram -->
+      <div class="mb-2 mx-auto max-w-lg overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/vibesit-fig3-appflow.png")}
+          alt="App flow diagram showing five functional phases"
+          class="w-full bg-white p-4"
+          loading="lazy"
+        />
+      </div>
+      <p class="text-muted mb-0 text-center text-xs">Figure 3. App flow diagram</p>
+    </section>
+
+    <!-- Implementation -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Implementation</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        VibeSit Insight was built in SwiftUI, with a MongoDB backend accessed via an authenticated
+        REST API. A cloud macOS environment (RentAMac) was provisioned to give all developers
+        remote access to Xcode where code was simulated on a virtual iPad.
+      </p>
+
+      <!-- Figure 4: Dashboard -->
+      <div class="mb-2 overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/vibesit-fig4-dashboard.jpeg")}
+          alt="Patient dashboard with session history and strength trend chart"
+          class="w-full"
+          loading="lazy"
+        />
+      </div>
+      <p class="text-muted mb-0 text-center text-xs">Figure 4. Patient dashboard with session history and strength trend chart</p>
+    </section>
+
+    <!-- Testing & Validation -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Testing and Validation</h2>
+      <p class="text-body mb-6 text-[0.95rem] leading-relaxed">
+        The system's functionality was tested by simulating therapy sessions to ensure proper
+        workflow performance and data accuracy. Each data point entered through the app was
+        verified to have a 1:1 match in the MongoDB backend, confirming that every survey
+        response, assessment result, and session metric was captured, stored, and retrievable as
+        expected. The testing proved that treatment plans and assessments were scheduled
+        appropriately, session information was correctly recorded, and data reports were
+        consistently generated from the dashboard.
+      </p>
+
+      <!-- Figure 5: Xcode + User Guide -->
+      <div class="mb-2 overflow-hidden rounded-lg border border-[var(--color-line)]">
+        <img
+          src={withBase("/media/vibesit-fig-testing.jpeg")}
+          alt="Xcode development environment with simulator running the app"
+          class="w-full"
+          loading="lazy"
+        />
+      </div>
+      <p class="text-muted mb-0 text-center text-xs">Figure 5. Xcode development environment with simulator running our code</p>
+    </section>
+
+    <!-- Before & After Comparison -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Before and After Comparison</h2>
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div>
+          <div class="mb-2 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-2">
+            <p class="mb-2 rounded bg-[var(--color-line)] py-1 text-center text-xs font-semibold uppercase tracking-wider text-[var(--color-heading)]">Before</p>
+            <img
+              src={withBase("/media/vibesit-fig5-before.jpeg")}
+              alt="Legacy VibeTech application screen"
+              class="w-full rounded"
+              loading="lazy"
+            />
+          </div>
+          <p class="text-muted text-center text-xs">Figure 5. Legacy application screen</p>
+        </div>
+        <div>
+          <div class="mb-2 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] p-2">
+            <p class="mb-2 rounded bg-[var(--color-accent)] py-1 text-center text-xs font-semibold uppercase tracking-wider text-white">After</p>
+            <img
+              src={withBase("/media/vibesit-fig7-after.jpeg")}
+              alt="Redesigned VibeSit Insight interface"
+              class="w-full rounded"
+              loading="lazy"
+            />
+          </div>
+          <p class="text-muted text-center text-xs">Figure 7. Redesigned VibeSit Insight interface</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Impact -->
+    <section class="mb-14" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Impact</h2>
+      <p class="text-body mb-4 text-[0.95rem] leading-relaxed">
+        VibeSit Insight transforms the VT3 from a standalone therapy device into a complete
+        clinical platform.
+      </p>
+      <p class="text-body mb-4 text-[0.95rem] leading-relaxed">
+        Patients gain an accessible interface designed for elderly users, with adaptive surveys
+        that reduce repetitive data entry, session by session progress visualization, and a
+        dashboard that makes their rehabilitation journey tangible and motivating.
+      </p>
+      <p class="text-body text-[0.95rem] leading-relaxed">
+        Clinicians gain standardized, SPPB aligned assessments, configurable treatment timelines,
+        and measurable longitudinal outcomes, replacing spreadsheets with a centralized, objective
+        data pipeline that supports confident treatment decisions.
+      </p>
+    </section>
+
+    <!-- Future Work -->
+    <section class="mb-8" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Future Work</h2>
+      <ul class="text-body space-y-3 text-[0.95rem]">
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Integrate VT3 hardware
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          AI predictive models to progress trends
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Implement adaptive treatment
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="text-accent mt-2 block h-2 w-2 shrink-0 rounded-full bg-current"></span>
+          Extend platform support to Android
+        </li>
+      </ul>
+    </section>
+
+    <!-- Resources -->
+    <section class="mb-8" data-reveal>
+      <h2 class="text-heading mb-4 text-xl font-semibold">Resources</h2>
+      <div class="flex flex-wrap gap-4">
+        <a
+          href={withBase("/media/vibesit-prd.xlsx")}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] px-4 py-3 text-sm font-medium text-[var(--color-heading)] transition-colors hover:border-[var(--color-accent)]"
+        >
+          <Icon name="external" size={14} />
+          Product Requirements Document
+        </a>
+        <a
+          href={withBase("/media/vibesit-final-report.docx")}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] px-4 py-3 text-sm font-medium text-[var(--color-heading)] transition-colors hover:border-[var(--color-accent)]"
+        >
+          <Icon name="external" size={14} />
+          Final Report
+        </a>
+        <a
+          href={withBase("/media/vibesit-poster.pdf")}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-raised)] px-4 py-3 text-sm font-medium text-[var(--color-heading)] transition-colors hover:border-[var(--color-accent)]"
+        >
+          <Icon name="external" size={14} />
+          Poster
+        </a>
+      </div>
+    </section>
+
+    <!-- Tech chips -->
+    <div class="border-line flex flex-wrap gap-3 border-t pt-8" data-reveal>
+      {["SwiftUI", "iOS", "Python", "Flask", "MongoDB", "ngrok", "REST API", "JWT", "HTTPS", "Xcode"].map(t => (
+        <span class="chip">{t}</span>
+      ))}
+    </div>
+  </div>
+</Base>

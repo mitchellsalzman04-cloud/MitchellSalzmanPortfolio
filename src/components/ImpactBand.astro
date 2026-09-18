@@ -1,0 +1,38 @@
+---
+/**
+ * The stat band, sitting directly under Experience.
+ *
+ * Borrowed in format from the "170+ trials / 79M+ patients / $2.7B R&D" strip
+ * on medical-device homepages — big light numerals on a near-black ground.
+ * Every figure comes from the resume; none are estimated or rounded up.
+ */
+import Band from "@/components/Band.astro";
+import { impact } from "@/data/site";
+---
+
+<Band tone="ink" class="py-20 md:py-24">
+  <div class="max-w-3xl" data-reveal>
+    <p class="eyebrow">By The Numbers</p>
+    <h2 class="mt-4 text-2xl font-bold sm:text-3xl">What the work moved</h2>
+  </div>
+
+  <dl class="mt-14 grid gap-10 sm:grid-cols-2 sm:gap-12 lg:grid-cols-3">
+    {
+      impact.map((s, i) => (
+        <div data-reveal style={`--reveal-delay: ${i * 90}ms`}>
+          {/* Light weight on purpose — the thin numeral is most of what makes
+              this strip read the way it does. */}
+          <dt class="font-display text-4xl leading-none font-light tracking-tight text-white sm:text-5xl">
+            {s.value}
+          </dt>
+          <dd class="mt-4">
+            <span class="block text-[0.9rem] leading-snug text-white/70">{s.label}</span>
+            <span class="mt-2 block text-[0.68rem] tracking-[0.14em] text-white/40 uppercase">
+              {s.at}
+            </span>
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+</Band>
