@@ -8,7 +8,7 @@ import Band from "@/components/Band.astro";
   <div class="grid items-start gap-8 md:grid-cols-[1fr_42%]" data-reveal>
     {/* ── Left column: copy ── */}
     <div>
-      <p class="eyebrow">Electrical Engineer · Medical Devices</p>
+      <p class="eyebrow">Electrical Engineer</p>
 
       <h1 class="mt-6 text-4xl sm:text-5xl lg:text-6xl">{site.name}</h1>
 
@@ -37,22 +37,9 @@ import Band from "@/components/Band.astro";
       </div>
 
       {/* ── Skills ── */}
-      <div class="mt-12 grid gap-6 sm:grid-cols-2 sm:gap-8">
-        <div>
-          <h3 class="text-[0.7rem] font-semibold uppercase tracking-widest text-muted mb-3">
-            Modeling & Tools
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            {skills.modeling.map((s) => <span class="chip">{s}</span>)}
-          </div>
-        </div>
-        <div>
-          <h3 class="text-[0.7rem] font-semibold uppercase tracking-widest text-muted mb-3">
-            Core Competencies
-          </h3>
-          <div class="flex flex-wrap gap-2">
-            {skills.core.map((s) => <span class="chip">{s}</span>)}
-          </div>
+      <div class="mt-12">
+        <div class="flex flex-wrap gap-2">
+          {[...skills.modeling, ...skills.core].map((s) => <span class="chip">{s}</span>)}
         </div>
       </div>
     </div>

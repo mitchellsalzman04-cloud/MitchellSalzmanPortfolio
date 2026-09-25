@@ -19,7 +19,7 @@ export const site = {
   url: "https://mitchellsalzman04-cloud.github.io/MitchellSalzmanPortfolio",
   email: "mitchellsalzman04@gmail.com",
   location: "Minneapolis, MN",
-  resume: "/resume.pdf", // TODO: drop the PDF in public/ — nothing is there yet
+  resume: "/resume.pdf",
   socials: [
     { label: "LinkedIn", url: "https://www.linkedin.com/in/mitchell-salzman", icon: "linkedin" },
   ],
@@ -446,6 +446,20 @@ export const projects: Project[] = [
     ],
   },
   {
+    title: "Portable Neural Recording",
+    blurb:
+      "A wearable recording device that captures continuous neural data from implanted DBS electrodes during the two-week gap between electrode placement and pulse generator surgery.",
+    bullets: [
+      "Captures brain activity at home during the two-week gap between DBS electrode placement and pulse generator surgery, a window that currently goes to waste",
+      "Lets clinicians trial multiple stimulation targets in a patient's real environment before committing to a permanent implant configuration",
+      "Seven-person team developing the device in collaboration with UMN Neurology, designing the anchor interface and miniaturized recorder",
+    ],
+    tech: ["Neural Recording", "Analog Front End", "PCB Design", "Signal Processing", "DBS"],
+    layer: "wip",
+    detailPage: "/projects/portable-eeg",
+    coverImage: { src: "/media/portable-eeg-cover.jpg", alt: "Deep brain stimulation electrode placement for neural recording" },
+  },
+  {
     title: "VO₂Go",
     blurb:
       "A deep learning model detecting ventilatory threshold from heart rate and demographics alone.",
@@ -620,21 +634,7 @@ export const projects: Project[] = [
     layer: "wip",
     interactive3d: true,
     detailPage: "/projects/syndex-v2",
-    coverImage: { src: "/media/syndex-v2-cover.svg", alt: "SynDex V2 concept: three-axis linear gantry with motors, ball joint, and pistol grip end effector" },
-  },
-  {
-    title: "Portable Neural Recording",
-    blurb:
-      "A wearable recording device that captures continuous neural data from implanted DBS electrodes during the two-week gap between electrode placement and pulse generator surgery.",
-    bullets: [
-      "Captures brain activity at home during the two-week gap between DBS electrode placement and pulse generator surgery, a window that currently goes to waste",
-      "Lets clinicians trial multiple stimulation targets in a patient's real environment before committing to a permanent implant configuration",
-      "Seven-person team developing the device in collaboration with UMN Neurology, designing the anchor interface and miniaturized recorder",
-    ],
-    tech: ["Neural Recording", "Analog Front End", "PCB Design", "Signal Processing", "DBS"],
-    layer: "wip",
-    detailPage: "/projects/portable-eeg",
-    coverImage: { src: "/media/portable-eeg-cover.jpg", alt: "Deep brain stimulation electrode placement for neural recording" },
+    coverImage: { src: "/media/syndex-v2-render.png", alt: "SynDex V2 3D render of the linear-driven haptic gantry" },
   },
 ];
 
@@ -872,13 +872,15 @@ export const coursework: CourseGroup[] = [
  * Structure mirrors Wajih Habrah's intro — two sentences, background +
  * degree, no bullet-list energy.
  */
-export const heroSummary = `I build the test systems that prove implantable
-  hardware works. My background combines R‍&D engineering at Medtronic and
-  Abbott with a master's degree in Electrical Engineering from the University
-  of Minnesota.`;
+export const heroSummary = `Most engineers ask "can we build it?" I start with
+  "should we, and for whom?" I'm an electrical engineer who thinks like a
+  product manager, with R&D experience at Medtronic and Abbott, and I founded
+  STRIVE Medical, a student medical device club. I graduate this winter and
+  I'm looking for an electrical or systems engineering role starting
+  January 2027.`;
 
 export const heroStats = [
-  "Medical device engineering since 2022",
+  "R&D engineering since 2022",
   "UMN MSE · 2026",
 ] as const;
 
@@ -913,7 +915,7 @@ export const skills = {
 export const contact = {
   title: "Get In Touch",
   body: `I finish my master's in December 2026 and I'm looking for full-time
-   R&D work in medical devices: test systems, embedded hardware,
-   verification. If you're building something that has to work the first time,
-   on a patient, I'd like to hear about it.`,
+   roles in R&D, product development, electrical, or systems engineering.
+   I love connecting with new people and am happy to discuss my
+   qualifications in greater detail. Feel free to connect!`,
 } as const;

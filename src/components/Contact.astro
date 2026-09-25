@@ -22,6 +22,16 @@ import ArrowLink from "@/components/ArrowLink.astro";
       <ArrowLink href={`mailto:${site.email}`}>{site.email}</ArrowLink>
     </div>
 
+    <div class="mt-6 flex flex-wrap items-center gap-x-8 gap-y-4">
+      <a href="tel:+16513083097" class="btn-ghost">Let's chat</a>
+      <ArrowLink href="tel:+16513083097">(651) 308-3097</ArrowLink>
+    </div>
+
+    <div class="mt-4 flex flex-wrap items-center gap-x-8 gap-y-4">
+      <a href={site.socials[0].url} class="btn-ghost">Let's connect</a>
+      <ArrowLink href={site.socials[0].url}>LinkedIn</ArrowLink>
+    </div>
+
     <p class="mt-10 text-[0.8rem] tracking-[0.14em] text-white/55 uppercase">
       {site.location}
     </p>
